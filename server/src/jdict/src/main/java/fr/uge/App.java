@@ -95,17 +95,37 @@ public class App {
             if(!parsedPage.toString().contains("== {{langue|fr}} ==")){
                 continue;
             }
-            System.out.println("====================== TITRE : " + title + " ======================");
+            //System.out.println("====================== TITRE : " + title + " ======================");
             parsePage(parsedPage.toString(), title);
+            // if(title.toUpperCase().equalsIgnoreCase("lire")){
+            //     dumpPageText(parsedPage.toString(), title);
+            //     return;
+            // }
 
         }
     }
 
-   
+   static void dumpPageText(String parsedPage, String title) throws XMLStreamException {
+        BufferedWriter writer;
+        try {
+            // Pour écrirer dans le fichier en utf8
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./server/files/dumpText.txt", false), StandardCharsets.UTF_8));
+            writer.write(title + "\n");
+            for (String ligne : parsedPage.split("\n")) {
+                System.out.println(ligne);
+                writer.write(ligne + "\n");
+            }
+            writer.close();
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la fermeture du fichier");
+            return;
+        }
+    }
 
     static void parsePage(String parsedPage,String title) throws XMLStreamException {
         BufferedWriter writer;
         Boolean getHashtags = false;
+        
         try{
         // Pour écrirer dans le fichier en utf8
         writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./server/files/dump-wikipedia.txt", true), StandardCharsets.UTF_8));
@@ -113,7 +133,7 @@ public class App {
         writer.write(title+"\n");
         for (String ligne : parsedPage.split("\n")) {
             System.out.println(ligne);
-            if(ligne.startsWith("=== {{") && ligne.endsWith("}} ===") && ligne.contains("|fr")){
+            if(ligne.startsWith("=== {{") && ligne.endsWith("}} ===") && ligne.contains("|fr}}")){
                 if(ligne.contains("verbe")){
                     writer.write("\tverbe\n");
                     getHashtags = true;
@@ -124,6 +144,7 @@ public class App {
             }else if (ligne.startsWith("=== {{") && ligne.endsWith("}} ===") && !ligne.contains("|fr")){
                 getHashtags = false;
             }
+            // Si on est dans une section et que la ligne commence exclusivement par # on l'écrit dans le fichier
             if(getHashtags && ligne.startsWith("#") && !ligne.startsWith("#*")){
                 ligne = ligne.substring(1);
                 writer.write("\t\t-"+ligne + "\n");
