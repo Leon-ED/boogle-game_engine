@@ -37,13 +37,10 @@ public class App {
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLEventReader eventReader = factory.createXMLEventReader(gzippedOut);
-        // unsinged int
 
-        long a = 0;
         String title = "";
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
-            a++;
 
 
             if (event.isStartElement()) {
