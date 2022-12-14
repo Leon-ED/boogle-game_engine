@@ -1,9 +1,13 @@
 package fr.uge;
 
-import java.io.File;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -34,17 +38,17 @@ public class App {
 
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLEventReader eventReader = factory.createXMLEventReader(gzippedOut);
-        int a = 0;
+        // unsinged int
+
+        long a = 0;
         String title = "";
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
             a++;
-            if (a == 1000000) {
-                break;
-            }
+
 
             if (event.isStartElement()) {
-                // On récupère le titre de la page
+                // On récupère le titre de la parsedPage
                 var startElement = event.asStartElement();
                 if (startElement.getName().getLocalPart().equals("title")) {
                     event = eventReader.nextEvent();
@@ -52,7 +56,7 @@ public class App {
                         title = event.asCharacters().getData();
                     }
                 }
-                // On vérifie que la page a comme namespace 0, sinon on passe à la page suivante
+                // On vérifie que la parsedPage a comme namespace 0, sinon on passe à la parsedPage suivante
                 if (startElement.getName().getLocalPart().equals("ns")) {
                     event = eventReader.nextEvent();
                     if (event.isCharacters()) {
@@ -69,7 +73,7 @@ public class App {
                 continue;
             }
             var startElement = event.asStartElement();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder parsedPage = new StringBuilder();
 
             // Si la balise n'est pas un texte, ça ne nous intéresse pas
             if (!startElement.getName().getLocalPart().equals("text")) {
@@ -85,110 +89,61 @@ public class App {
                         break;
                     }
                 }
-                sb.append(event.asCharacters().getData());
+                parsedPage.append(event.asCharacters().getData());
 
             }
 
-            if (!sb.toString().contains("== {{langue|fr}} ==")) {
+            if(!parsedPage.toString().contains("== {{langue|fr}} ==")){
                 continue;
             }
-            System.out.println("title == " + title);
-            System.out.println(sb.toString());
+            System.out.println("====================== TITRE : " + title + " ======================");
+            parsePage(parsedPage.toString(), title);
+
+        }
+    }
+
+   
+
+    static void parsePage(String parsedPage,String title) throws XMLStreamException {
+        BufferedWriter writer;
+        Boolean getHashtags = false;
+        try{
+        // Pour écrirer dans le fichier en utf8
+        writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./server/files/dump-wikipedia.txt", true), StandardCharsets.UTF_8));
+       
+        writer.write(title+"\n");
+        for (String ligne : parsedPage.split("\n")) {
+            System.out.println(ligne);
+            if(ligne.startsWith("=== {{") && ligne.endsWith("}} ===") && ligne.contains("|fr")){
+                if(ligne.contains("verbe")){
+                    writer.write("\tverbe\n");
+                    getHashtags = true;
+                }else if(ligne.contains("nom")){
+                    writer.write("\tnom\n");
+                    getHashtags = true;
+                }
+            }else if (ligne.startsWith("=== {{") && ligne.endsWith("}} ===") && !ligne.contains("|fr")){
+                getHashtags = false;
+            }
+            if(getHashtags && ligne.startsWith("#") && !ligne.startsWith("#*")){
+                ligne = ligne.substring(1);
+                writer.write("\t\t-"+ligne + "\n");
+            }
+        }
+
+            writer.close();
+        }catch(Exception e){
+            System.out.println("Erreur lors de la fermeture du fichier");
             return;
-
         }
+            
+
+            
+        
+
+
+    
+    
+   
     }
-
-    static String isNs0(XMLEventReader eventReader) throws XMLStreamException {
-        var title = "";
-        while (eventReader.hasNext()) {
-            var event = eventReader.nextEvent();
-
-            // get title of the page
-            if (event.isStartElement()) {
-                var startElement = event.asStartElement();
-                if (startElement.getName().getLocalPart().equals("title")) {
-                    event = eventReader.nextEvent();
-                    if (event.isCharacters()) {
-                        title = event.asCharacters().getData();
-                    }
-                }
-            }
-            if (event.isStartElement()) {
-                var startElement = event.asStartElement();
-                if (startElement.getName().getLocalPart().equals("ns")) {
-                    event = eventReader.nextEvent();
-                    if (event.isCharacters()) {
-                        if (event.asCharacters().getData().equals("0")) {
-                            // System.out.println("ns is 0 "+event.asCharacters().getData());
-                            return title;
-
-                        }
-                    }
-                }
-            }
-
-        }
-        return "";
-
-    }
-
-    static void parsePage(XMLEventReader eventReader) throws XMLStreamException {
-        while (eventReader.hasNext()) {
-            var event = eventReader.nextEvent();
-            if (event.isEndElement()) {
-                var endElement = event.asEndElement();
-                if (endElement.getName().getLocalPart().equals("page")) {
-                    return;
-                }
-            }
-            if (event.isStartElement()) {
-                var startElement = event.asStartElement();
-                if (startElement.getName().getLocalPart().equals("title")) {
-                    event = eventReader.nextEvent();
-                    if (event.isCharacters()) {
-                        System.out.println("title " + event.asCharacters().getData());
-                    }
-                }
-                if (startElement.getName().getLocalPart().equals("revision")) {
-                    parseRevision(eventReader);
-                }
-            }
-
-        }
-    }
-
-    static void parseRevision(XMLEventReader eventReader) throws XMLStreamException {
-        while (eventReader.hasNext()) {
-            var event = eventReader.nextEvent();
-            if (event.isEndElement()) {
-                var endElement = event.asEndElement();
-                if (endElement.getName().getLocalPart().equals("revision")) {
-                    return;
-                }
-            }
-            if (event.isStartElement()) {
-                var startElement = event.asStartElement();
-                if (startElement.getName().getLocalPart().equals("text")) {
-                    event = eventReader.nextEvent();
-                    // if (event.isCharacters()) {
-                    // System.out.println("text "+event.asCharacters().getData());
-                    // }
-                }
-            }
-
-        }
-    }
-
-    static void FilesINDirectory(String path) {
-        File folder = new File(path);
-        System.out.println(folder.getName());
-        File[] listOfFiles = folder.listFiles();
-        for (File file : listOfFiles) {
-            if (file.isFile()) {
-                System.out.println(file.getName());
-            }
-        }
-    }
-
 }
