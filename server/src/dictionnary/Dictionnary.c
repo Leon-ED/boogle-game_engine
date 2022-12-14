@@ -39,16 +39,6 @@ FileHeader getFileHeader(FILE *export_FILE){
 
 /** ===== DICTIONNARY BUILD ===== **/
 
-
-
-
-
-
-
-
-
-
-
 /**
  * @brief      Construit le dictionnaire
  * @param      input_name   Le nom du fichier d'entrée
@@ -164,7 +154,7 @@ int dictionnary_lookup(char dico_name[], char word[])
 
 int main(int argc, char *argv[]){
     printf("=== Dictionnaire ===\n");
-    int code = dictionnary_lookup("32.lex", "GENE");
+    int code = dictionnary_lookup("../../files/32.lex", "AALENIENNES");
     printf("Code %d\n", code);
     return 0;
 }
