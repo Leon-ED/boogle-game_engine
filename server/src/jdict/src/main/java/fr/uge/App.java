@@ -18,7 +18,7 @@ public class App {
         try {
             long time = System.currentTimeMillis();
             System.out.println("Début du parsing");
-            XMLManager.parse(input_PATH, output_PATH, OutputFormat.JSON);
+            XMLManager.exportToFile(input_PATH, output_PATH, OutputFormat.JSON);
             System.out.println("Temps d'execution: " + (System.currentTimeMillis() - time) + "ms");
             System.out.println("Min: " + (System.currentTimeMillis() - time) / 60000.000 + "min");
             System.out.println("SECONDES : " + (System.currentTimeMillis() - time) / 1000.000 + "s");

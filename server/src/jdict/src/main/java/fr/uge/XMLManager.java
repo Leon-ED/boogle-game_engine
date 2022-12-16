@@ -43,22 +43,7 @@ class XMLManager {
 
     }
 
-    static void parse(String inputPath, String outputPath, OutputFormat format) throws XMLStreamException {
-        switch (format) {
-            case TXT:
-                // parseToTXT(inputPath,outputPath);
-                break;
-            case JSON:
-                parseToJSON(inputPath, outputPath);
-                break;
-            case YAML:
-                // parseToYAML(inputPath,outputPath);
-                break;
-            default:
-                break;
-        }
 
-    }
 
     private static BufferedWriter openOutputFile(String outputPath) {
         try {
@@ -76,7 +61,7 @@ class XMLManager {
         }
     }
 
-    private static void parseToJSON(String inputPath, String outputPath) {
+     static void exportToFile(String inputPath, String outputPath, OutputFormat format) throws XMLStreamException {
         XMLStreamReader streamReader = open(inputPath);
 
         Boolean inPage = false;
@@ -84,8 +69,8 @@ class XMLManager {
         String title = "";
 
         StringBuilder textPage = new StringBuilder();
-        StringBuilder jsonPage = new StringBuilder();
-        Parser parser = new Parser();
+        StringBuilder exportText = new StringBuilder();
+        Parser parser = new Parser(format);
 
         int PAGE_BEFORE_WRITING = 10;
         int pageCounter = 0;
@@ -121,12 +106,12 @@ class XMLManager {
                     textPage.append(text);
 
                     toParse = false;
-                    parser.JSON(jsonPage, title, textPage.toString());
+                    parser.formatExport(exportText, title, textPage.toString());
                     pageCounter++;
 
                     if (pageCounter == PAGE_BEFORE_WRITING) {
-                        writer.write(jsonPage.toString());
-                        jsonPage.setLength(0);
+                        writer.write(exportText.toString());
+                        exportText.setLength(0);
                         pageCounter = 0;
                     }
                 }
@@ -144,6 +129,7 @@ class XMLManager {
 
     }
 
+    // TODO : Convertir à la nouvelle méthode utilisée dans la classe Parser (exemple pour le JSON)
     private static String parsePageToTXT(String parsedPage, String title) {
 
         Boolean getHashtags = false;
