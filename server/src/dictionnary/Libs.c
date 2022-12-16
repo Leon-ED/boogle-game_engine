@@ -1,4 +1,5 @@
-#include "include/Libs.h"
+#include "include/libs.h"
+#include <string.h>
 
 /**
  * @brief      Compte le nombre de lignes dans un fichier
@@ -20,19 +21,31 @@ int number_of_lines(FILE *file)
     return nb_lines;
 }
 
+
+
 /**
- * @brief Teste la réussite de l'ouverture d'un fichier
- * @param file Le fichier
- * @param filename Le nom du fichier
- * @return 0 si le fichier s'est ouvert correctement, 1 sinon
- * 
+ * @brief      Renvoie le header du fichier
+ * @param      export_FILE  Le fichier
+ * @return     Le header
+ */
+FileHeader getFileHeader(FILE *export_FILE){
+    FileHeader header;
+    fseek(export_FILE, 0, SEEK_SET);
+    fread(&header, sizeof(FileHeader), 1, export_FILE);
+    return header;
+}
+
+
+/**
+ * @brief Créé une cellule 
+ * @param letter : lettre de la cellule
+ * @param first_child : index du premier enfant
+ * @param nSibling : nombre de cellules frères
  **/
-int fopen_test(FILE *file, char *filename)
-{
-    if (file == NULL)
-    {
-        printf("ERREUR : Erreur lors de l'ouverture du fichier %s\n", filename);
-        return 1;
-    }
-    return 0;
+Cell newCell(char letter, int first_child, int nSibling){
+    Cell cell;
+    cell.letter = letter;
+    cell.first_child = first_child;
+    cell.nSibling = nSibling;
+    return cell;
 }

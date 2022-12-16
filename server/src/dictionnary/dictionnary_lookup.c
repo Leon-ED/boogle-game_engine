@@ -1,68 +1,10 @@
-
-#include "include/Libs.h"
-#include "include/Dictionnary.h"
-#include "include/Trees.h"
-#include "string.h"
-
-
-/** ===== FONCTIONS GENERALES ===== **/
-
 /**
- * @brief Créé une cellule 
- * @param letter : lettre de la cellule
- * @param first_child : index du premier enfant
- * @param nSibling : nombre de cellules frères
+ * @brief Cherche la lettre dans le dictionnaire et renvoie la cellule correspondante
+ * @authors Léon EDMEE, Denis DELMAS  
  **/
-Cell newCell(char letter, int first_child, int nSibling){
-    Cell cell;
-    cell.letter = letter;
-    cell.first_child = first_child;
-    cell.nSibling = nSibling;
-    return cell;
-}
 
-
-/**
- * @brief      Renvoie le header du fichier
- * @param      export_FILE  Le fichier
- * @return     Le header
- */
-FileHeader getFileHeader(FILE *export_FILE){
-    FileHeader header;
-    fseek(export_FILE, 0, SEEK_SET);
-    fread(&header, sizeof(FileHeader), 1, export_FILE);
-    return header;
-}
-
-
-
-
-/** ===== DICTIONNARY BUILD ===== **/
-
-/**
- * @brief      Construit le dictionnaire
- * @param      input_name   Le nom du fichier d'entrée
- * @param      output_name  Le nom du fichier de sortie
- */
-void dictionnary_build(char input_name[], char output_name[])
-{
-    // On ouvre les fichiers et on teste leur ouverture
-    FILE *input_FILE = fopen(input_name, "r");
-    FILE *output_FILE = fopen(output_name, "w");
-    if (!fopen_test(input_FILE, input_name) || !fopen_test(output_FILE, output_name))
-        exit(EXIT_FAILURE);
-
-    // On récupère le nombre de lignes du fichier d'entrée
-    int nb_lines = number_of_lines(input_FILE);
-
-}
-
-
-
-
-
-/** ===== DICTIONNARY LOOKUP ===== **/
-
+#include "include/dictionnary.h"
+#include <string.h>
 
 /**
  * @brief Cherche la lettre dans le dictionnaire et renvoie la cellule correspondante
@@ -80,10 +22,10 @@ Cell cell_from_letter(FILE *dico_lex, char letter, int taille_cellule){
         if(cell.nSibling <= 0){
             break;
         }
-        printf("\t\t L : %c , nbSib : %d, 1stChild : %d\n", cell.letter, cell.nSibling, cell.first_child);
+        //printf("\t\t L : %c , nbSib : %d, 1stChild : %d\n", cell.letter, cell.nSibling, cell.first_child);
         fread(&cell, taille_cellule, 1, dico_lex);
     }
-    printf("\t\t L : %c , nbSib : %d, 1stChild : %d\n", cell.letter, cell.nSibling, cell.first_child);
+    //printf("\t\t L : %c , nbSib : %d, 1stChild : %d\n", cell.letter, cell.nSibling, cell.first_child);
     if(letter == '\0' && cell.letter == '\0'){
         return newCell('\0', -2, -2);
     }
@@ -103,14 +45,13 @@ Cell cell_from_letter(FILE *dico_lex, char letter, int taille_cellule){
  * 
  *  @return 0 si le mot est trouvé, 1 si le mot est un préfixe d'un mot du dictionnaire, 2 si le mot n'est pas trouvé 
  **/
-int dictionnary_lookup(char dico_name[], char word[])
+int dictionnary_lookup(FILE *dico_lex, char word[])
 {
     #define FOUND 0 
     #define NOT_FOUND 2
     #define FOUND_PREFIX 1
 
     // Ouvre le fichier, récupère ses infos et se place au début du fichier
-    FILE *dico_lex = fopen(dico_name, "rb");
     FileHeader header = getFileHeader(dico_lex);
     Cell cell;
     
@@ -119,14 +60,14 @@ int dictionnary_lookup(char dico_name[], char word[])
 
     fseek(dico_lex, size_header, SEEK_SET);
     // On se place au début du fichier, après le header et on boucle sur chaque lettre du mot à chercher
-    printf("=== MOT A CHERCHER === %s ===\n", word);
+    // printf("=== MOT A CHERCHER === %s ===\n", word);
     for (int i = 0; i < strnlen(word, 99); i++)
     {
         char letter = word[i];
-        printf("%d : On cherche : %c \n", i, letter);
+        //printf("%d : On cherche : %c \n", i, letter);
         // On réupère la cellule correspondant à la lettre dans les frères
         cell = cell_from_letter(dico_lex, letter, size_cell);
-        printf("On a trouve  : %c , nbSib : %d, 1stChild : %d\n", cell.letter, cell.nSibling, cell.first_child);
+        //printf("On a trouve  : %c , nbSib : %d, 1stChild : %d\n", cell.letter, cell.nSibling, cell.first_child);
 
         // On a pas trouvé la lettre donc on renvoie NOT_FOUND
         if(cell.nSibling == -1 || cell.first_child == -1 || cell.letter != letter ){
@@ -151,10 +92,20 @@ int dictionnary_lookup(char dico_name[], char word[])
 
 
 
+int main(int argc, char** argv)
+{
+    if(argc < 3){
+        printf("Erreur : 2 arguments attendus (%d passés)\n", argc);
+        printf("Syntaxe : $ dictionnary_lookup <fichier.lex> <MOT>\n");
+        return 0;
+    }
+    FILE *dico_LEX = fopen(argv[1],"rb");
+    if(dico_LEX == NULL){
+        printf("Erreur : Erreur lors de l'ouverture du fichier, le chemin spécifié (%s) est-il correct ? \n",argv[1]);
+        return 0;
+    }
+    printf("%d",dictionnary_lookup(dico_LEX,argv[2]));
 
-int main(int argc, char *argv[]){
-    printf("=== Dictionnaire ===\n");
-    int code = dictionnary_lookup("../../files/32.lex", "AALENIENNES");
-    printf("Code %d\n", code);
-    return 0;
-}
+
+    return EXIT_SUCCESS;
+ }

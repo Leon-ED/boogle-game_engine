@@ -1,4 +1,4 @@
-#include "include/Trees.h"
+#include "include/trees.h"
 
 
 CSTree newTree(Element elem, CSTree firstChild, CSTree nextSibling){ 
