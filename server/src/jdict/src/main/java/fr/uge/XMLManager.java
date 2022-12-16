@@ -129,44 +129,6 @@ class XMLManager {
 
     }
 
-    // TODO : Convertir à la nouvelle méthode utilisée dans la classe Parser (exemple pour le JSON)
-    private static String parsePageToTXT(String parsedPage, String title) {
-
-        Boolean getHashtags = false;
-        StringBuilder result = new StringBuilder();
-        try {
-            // Pour écrirer dans le fichier en utf8
-
-            result.append(title + "\n");
-            for (String ligne : parsedPage.split("\n")) {
-
-                // Si la ligne contient le pattern === {{type|fr}} ===
-                if (ligne.startsWith("=== {{") && ligne.endsWith("}} ===") && ligne.contains("|fr}}")) {
-                    // On ajoute le type (nom,verbe,adjectif, etc...) à la ligne
-                    result.append("\t" + ligne.split("\\|")[1] + "\n");
-                    // On accepte de lire les lignes commencant par # à partir de maintenant
-                    getHashtags = true;
-
-                    // Si la ligne ne contient pas le pattern === {{type|fr}} ===, on ne veut plus
-                    // lire les lignes commencant par #
-                } else if (ligne.startsWith("=== {{") && ligne.endsWith("}} ===") && !ligne.contains("|fr")) {
-                    getHashtags = false;
-                }
-                // Si la ligne commence par # et qu'on a accepté de lire les lignes commencant
-                // par #, on ajoute la ligne à la liste des mots
-                if (getHashtags && ligne.startsWith("#") && !ligne.startsWith("#*")) {
-                    ligne = ligne.substring(1);
-                    result.append("\t\t-" + ligne + "\n");
-                }
-            }
-
-        } catch (Exception e) {
-            System.out.println("Erreur lors de la fermeture du fichier");
-            e.printStackTrace();
-            return null;
-        }
-        return result.toString();
-
-    }
+    
 
 }

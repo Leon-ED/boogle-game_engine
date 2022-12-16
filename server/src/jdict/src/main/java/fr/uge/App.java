@@ -1,6 +1,5 @@
 package fr.uge;
 
-import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 
 public class App {
