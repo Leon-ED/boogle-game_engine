@@ -5,28 +5,28 @@ import javax.xml.stream.XMLStreamException;
 
 public class App {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         // list all files in the directory from the path
+
         String input_PATH = "./server/files/dump-wikipedia.xml.bz2";
-        String output_PATH = "./server/files/dumps/dump-wikipedia.txt";
-        if(args.length == 2){
+        String output_PATH = "./server/files/dumps/dump-wikipedia.json";
+        if (args.length == 2) {
             input_PATH = args[0];
             output_PATH = args[1];
         }
-        XMLEventReader eventReader = XMLManager.open(input_PATH);
-        if(eventReader == null){
-            System.out.println("L'eventReader est null");
-            return;
-        }
-        try{
-        XMLManager.parse(eventReader,output_PATH);
-        }catch(XMLStreamException e){
-            System.out.println("Erreur lors du parsing du fichier XML"); 
+
+        try {
+            long time = System.currentTimeMillis();
+            System.out.println("Début du parsing");
+            XMLManager.parse(input_PATH, output_PATH, OutputFormat.JSON);
+            System.out.println("Temps d'execution: " + (System.currentTimeMillis() - time) + "ms");
+            System.out.println("Min: " + (System.currentTimeMillis() - time) / 60000.000 + "min");
+            System.out.println("SECONDES : " + (System.currentTimeMillis() - time) / 1000.000 + "s");
+
+        } catch (XMLStreamException e) {
+            System.out.println("Erreur lors du parsing du fichier XML");
             return;
         }
     }
-
-
-
 
 }
