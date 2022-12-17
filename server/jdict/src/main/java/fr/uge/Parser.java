@@ -30,20 +30,22 @@ public record Parser(OutputFormat formatExport) {
         for (String line : text.split("\n")) {
 
             // Ligne de définition en français
-            if (line.startsWith("=== {{") && (line.contains("|fr|") || line.endsWith("|fr}} ==="))) {
-                String[] category = line.split("\\|");
+            if (line.startsWith("=== {{")) {
+                if (line.contains("|fr|") || line.endsWith("|fr}} ===")) {
+                    String[] category = line.split("\\|");
 
-                    // Evite de se retrouver avec plusieurs fois la même catégorie
-                    if(!definitions.has(category[1])){
-                        definitions.put(category[1], definitionsList);
-                    }
-                        lookingForDefinition = true;
-            }
-            // Ligne ne contenant pas de définition en français
-            if (line.startsWith("=== {{") && !line.contains("|fr|") && !line.endsWith("|fr}} ===")) {
-                lookingForDefinition = false;
-                // On vide la liste des définitions pour en accueillir de nouvelles
-                definitionsList = new JSONArray();
+                        // Evite de se retrouver avec plusieurs fois la même catégorie
+                        if(!definitions.has(category[1])){
+                            definitions.put(category[1], definitionsList);
+                        }
+                            lookingForDefinition = true;
+                }
+                // Ligne ne contenant pas de définition en français
+                if (!line.contains("|fr|") && !line.endsWith("|fr}} ===")) {
+                    lookingForDefinition = false;
+                    // On vide la liste des définitions pour en accueillir de nouvelles
+                    definitionsList = new JSONArray();
+                }
             }
 
             // Si on recherche les définitions et que la ligne commence par '# ' on l'ajoute
