@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -16,6 +18,7 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
+import org.json.JSONObject;
 
 class XMLManager {
 
@@ -77,12 +80,18 @@ class XMLManager {
         int pageCounter = 0;
         String tagName = "";
 
-        try (BufferedWriter writer = openOutputFile(outputPath)) {
+        ZonedDateTime now = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuuMMdd'T'HHmmss'Z'");
+        String formattedDate = now.format(formatter);
+    
+
+        exportText.append(new JSONObject().put("description", "definition file").put("created_on", formattedDate).put("language", "fr")+"\n");
+
+    try(BufferedWriter writer = openOutputFile(outputPath)) {
 
             while (streamReader.hasNext()) {
                 int event = streamReader.next();
                 // On cherche le début d'une page
-
                 if (event == XMLEvent.START_ELEMENT) {
 
                     tagName = streamReader.getLocalName();
