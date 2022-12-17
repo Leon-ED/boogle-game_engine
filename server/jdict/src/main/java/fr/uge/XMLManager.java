@@ -98,6 +98,7 @@ class XMLManager {
                     // La page n'est pas en français : pas intéressante
                     String text = streamReader.getElementText();
                     if (!text.contains("== {{langue|fr}} ==")) {
+                        text = "";
                         toParse = false;
                         inPage = false;
                         continue;

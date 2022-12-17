@@ -29,15 +29,14 @@ public record Parser(OutputFormat formatExport) {
         for (String line : text.split("\n")) {
 
             // Ligne de définition en français
-            if (line.startsWith("=== {{") && (line.contains(" |fr|") || line.endsWith("|fr}} ==="))) {
+            if (line.startsWith("=== {{") && (line.contains("|fr|") || line.endsWith("|fr}} ==="))) {
                 String[] category = line.split("\\|");
 
-                // S'il y a plus 3 elem, c'est que c'est une catégorie spéciale :
-                // TODO : L'inclure dans le JSON et l'implémenter correctement
-                if (category.length == 3) {
-                    definitions.put(category[1], definitionsList);
-                    lookingForDefinition = true;
-                }
+                    // Evite de se retrouver avec plusieurs fois la même catégorie
+                    if(!definitions.has(category[1])){
+                        definitions.put(category[1], definitionsList);
+                    }
+                        lookingForDefinition = true;
             }
             // Ligne ne contenant pas de définition en français
             if (line.startsWith("=== {{") && !line.contains("|fr|") && !line.endsWith("|fr}} ===")) {
