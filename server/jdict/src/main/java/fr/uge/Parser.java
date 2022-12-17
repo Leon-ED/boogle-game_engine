@@ -14,6 +14,7 @@ public record Parser(OutputFormat formatExport) {
         }
     }
 
+
     private void JSON(StringBuilder page, String title, String text) {
         // !!! On return rien car on ajoute directement au StringBuilder passé en
         // référence !!!

@@ -43,8 +43,6 @@ class XMLManager {
 
     }
 
-
-
     private static BufferedWriter openOutputFile(String outputPath) {
         try {
             // Pour écrirer dans le fichier en utf8
@@ -53,6 +51,10 @@ class XMLManager {
             // StandardOpenOption.TRUNCATE_EXISTING : si le fichier existe, le tronquer
             // buffer size : 8192
             // set buffer size to 8199
+
+            // return new BufferedWriter(new FileWriter(outputPath), (int)Math.pow(1024, 3)
+            // );
+
             return Files.newBufferedWriter(Path.of(outputPath), StandardCharsets.UTF_8, StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
@@ -61,7 +63,7 @@ class XMLManager {
         }
     }
 
-     static void exportToFile(String inputPath, String outputPath, OutputFormat format) throws XMLStreamException {
+    static void exportToFile(String inputPath, String outputPath, OutputFormat format) throws XMLStreamException {
         XMLStreamReader streamReader = open(inputPath);
 
         Boolean inPage = false;
@@ -72,52 +74,60 @@ class XMLManager {
         StringBuilder exportText = new StringBuilder();
         Parser parser = new Parser(format);
 
-        int PAGE_BEFORE_WRITING = 10;
         int pageCounter = 0;
+        String tagName = "";
 
         try (BufferedWriter writer = openOutputFile(outputPath)) {
 
             while (streamReader.hasNext()) {
                 int event = streamReader.next();
                 // On cherche le début d'une page
-                if (event == XMLEvent.START_ELEMENT && streamReader.getLocalName().equals("page")) {
-                    inPage = true;
-                }
-                // On sauvegarde le titre de la page
-                if (event == XMLEvent.START_ELEMENT && streamReader.getLocalName().equals("title") && inPage) {
-                    title = streamReader.getElementText();
-                }
-                // Au autorise la lecture de la page car elle est ns = 0
-                if (event == XMLEvent.START_ELEMENT && streamReader.getLocalName().equals("ns")
-                        && streamReader.getElementText().equals("0") && inPage) {
-                    // System.out.println("ns = 0");
-                    toParse = true;
-                }
-                // On sauvegarde le texte de la page
-                if (event == XMLEvent.START_ELEMENT && streamReader.getLocalName().equals("text") && toParse) {
-                    // La page n'est pas en français : pas intéressante
-                    String text = streamReader.getElementText();
-                    if (!text.contains("== {{langue|fr}} ==")) {
-                        text = "";
+
+                if (event == XMLEvent.START_ELEMENT) {
+
+                    tagName = streamReader.getLocalName();
+                    if (tagName.equals("page")) {
+                        inPage = true;
+
+                    }
+                    // On sauvegarde le titre de la page
+                    if (tagName.equals("title") && inPage) {
+                        title = streamReader.getElementText();
+                    }
+                    // Au autorise la lecture de la page car elle est ns = 0
+                    if (tagName.equals("ns")
+                            && streamReader.getElementText().equals("0") && inPage) {
+                        // System.out.println("ns = 0");
+                        toParse = true;
+                    }
+                    // On sauvegarde le texte de la page
+                    if (tagName.equals("text") && toParse) {
+                        // La page n'est pas en français : pas intéressante
+                        String text = streamReader.getElementText();
+                        if (!text.contains("== {{langue|fr}} ==")) {
+                            text = "";
+                            toParse = false;
+                            inPage = false;
+                            continue;
+                        }
+                        // System.out.println(title);
+                        textPage.append(text);
+
                         toParse = false;
-                        inPage = false;
-                        continue;
-                    }
-                    // System.out.println(title);
-                    textPage.append(text);
+                        parser.formatExport(exportText, title, textPage.toString());
+                        pageCounter++;
+                        if(pageCounter == 2_500){
+                            writer.append(exportText.toString());
+                            exportText.setLength(0);
+                        }
+                        if(pageCounter == 5000){
+                            break;
+                        }
 
-                    toParse = false;
-                    parser.formatExport(exportText, title, textPage.toString());
-                    pageCounter++;
-
-                    if (pageCounter == PAGE_BEFORE_WRITING) {
-                        writer.write(exportText.toString());
-                        exportText.setLength(0);
-                        pageCounter = 0;
                     }
-                }
-                // On a fini de lire la page
-                if (event == XMLEvent.END_ELEMENT && streamReader.getLocalName().equals("page")) {
+
+                    // On a fini de lire la page
+                } else if (event == XMLEvent.END_ELEMENT && streamReader.getLocalName().equals("page")) {
                     inPage = false;
                     textPage.setLength(0);
                 }
@@ -129,7 +139,5 @@ class XMLManager {
         }
 
     }
-
-    
 
 }
