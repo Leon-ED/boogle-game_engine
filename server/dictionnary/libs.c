@@ -18,6 +18,7 @@ int number_of_lines(FILE *file)
             nb_lines++;
         }
     }
+    fseek(file, 0, SEEK_SET);
     return nb_lines;
 }
 
