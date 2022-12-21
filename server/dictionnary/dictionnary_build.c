@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "include/dictionnary_build.h"
 
-
 /**
  * @brief Insère un mot dans l'arbre dans l'ordre alphabétique
  * @param t Arbre dans lequel insérer le mot
@@ -12,30 +11,46 @@
 void insertWord(CSTree *t, char *word)
 {
   printf("word: %s ", word);
+  // Aucun élément trouvé alors on l'insère nous même
   if (*t == NULL)
   {
     *t = newTree(word[0], NULL, NULL);
     if (word[1] != '\0')
       insertWord(&(*t)->firstChild, word + 1);
   }
+  // Si c'est la même lettre, on l'insère pas et on continue dans les fils avec la lettre suivante
   else if ((*t)->elem == word[0])
   {
     if (word[1] != '\0')
       insertWord(&(*t)->firstChild, word + 1);
   }
+  // Pour insérer dans l'ordre alphabétique
   else if ((*t)->elem > word[0])
   {
-    // printf("AU DESSUS");
-    // printf("word: %c, char %c ", word[0], (*t)->elem);
     CSTree new = newTree(word[0], NULL, *t);
     *t = new;
     if (word[1] != '\0')
       insertWord(&(*t)->firstChild, word + 1);
   }
-  else
+  else // On a rien trouvé, on continue dans les frères
   {
     insertWord(&(*t)->nextSibling, word);
   }
+}
+
+/**
+ * @brief Remplace les \n par des \0 dans l'arbre
+ * @param t Arbre dans lequel remplacer les \n par des \0
+ * @return void
+ */
+void replaceEOL(CSTree *t)
+{
+  if (*t == NULL)
+    return;
+  if ((*t)->elem == '\n')
+    (*t)->elem = '\0';
+  replaceEOL(&(*t)->firstChild);
+  replaceEOL(&(*t)->nextSibling);
 }
 
 
@@ -60,20 +75,16 @@ void dictionnary_build(char *dico_path, char *dico_lex_path)
   printf("nb_words: %d \n", header.nb_words);
 
   char line[256];
-  int i = 0;
   CSTree tree = NULL;
+  // On parcourt le fichier dico.txt et on insère les mots dans l'arbre
   while (fgets(line, sizeof(line), dico))
   {
     insertWord(&tree, line);
-    i++;
   }
+  replaceEOL(&tree);
   printPrefix(tree);
   fclose(dico);
 }
-
-
-
-
 
 int main(int argc, char *argv[])
 {
