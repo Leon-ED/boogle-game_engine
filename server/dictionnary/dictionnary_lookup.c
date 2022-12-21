@@ -3,7 +3,7 @@
  * @authors Léon EDMEE, Denis DELMAS
  **/
 
-#include "include/dictionnary.h"
+#include "include/dictionnary_lookup.h"
 #include <string.h>
 
 /**
