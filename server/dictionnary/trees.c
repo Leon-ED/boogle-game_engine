@@ -1,5 +1,6 @@
 #include "include/trees.h"
 
+
 CSTree newTree(Element elem, CSTree firstChild, CSTree nextSibling)
 {
     CSTree t = malloc(sizeof(Node));
@@ -13,10 +14,10 @@ CSTree newTree(Element elem, CSTree firstChild, CSTree nextSibling)
 
 CSTree example()
 {
-    CSTree a = newTree(5,
-                       newTree(2, NULL, NULL),
-                       newTree(3, NULL, NULL));
-    CSTree b = newTree(8, NULL, a);
+    CSTree a = newTree('A',
+                       newTree('B', NULL, NULL),
+                       newTree('C', NULL, NULL));
+    CSTree b = newTree('D', NULL, a);
     return b;
 }
 
@@ -24,7 +25,7 @@ void printPrefix(CSTree t)
 {
     if (t == NULL)
         return;
-    printf("%d ", t->elem);
+    printf("%c ", t->elem);
     printPrefix(t->firstChild);
     printPrefix(t->nextSibling);
 }
@@ -34,9 +35,9 @@ void printStatic(StaticTree t, unsigned int i)
 {
     if (i >= t.nNodes)
         return;
-    printf("%d ", t.nodeArray[i].elem);
-    printStatic(t, t.nodeArray[i].firstChild);
-    printStatic(t, t.nodeArray[i].firstChild + 1);
+    printf("%c ", t.nodeArray[i].elem);
+    printStatic(t, i + 1);
+    printStatic(t, i + t.nodeArray[i].nSiblings + 1);
 }
 
 int size(CSTree t)
@@ -84,7 +85,7 @@ StaticTree exportStaticTree(CSTree t)
     return st;
 }
 
-// Renvoie le premier fr`ere de t contenant l’´el´ement e (ou t lui-mˆeme), NULL si aucun n’existe.
+// Renvoie le premier frere de t contenant l’element e (ou t lui-mˆeme), NULL si aucun n’existe.
 CSTree siblingLookup(CSTree t, Element e)
 {
     if (t == NULL)
