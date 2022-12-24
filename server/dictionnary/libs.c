@@ -49,3 +49,4 @@ Cell newCell(char letter, int first_child, int nSibling)
     cell.nSibling = nSibling;
     return cell;
 }
+
