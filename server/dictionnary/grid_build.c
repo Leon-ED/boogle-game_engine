@@ -85,7 +85,7 @@ int grid_build(FILE *file, int num_lines, int num_columns)
 
     // Free the memory allocated for the array
     free(counts);
-    printf("GRID_BUILD : Grille générée avec succès ! \n");
+    // printf("GRID_BUILD : Grille générée avec succès ! \n");
     return 0;
 }
 
