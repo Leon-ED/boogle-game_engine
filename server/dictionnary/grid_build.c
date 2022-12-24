@@ -53,19 +53,19 @@ int grid_build(FILE *file, int num_lines, int num_columns)
             // On prends une lettre au pif
             int index = rand() % letter_count;
             Letter_occurence *elem = &counts[index];
-            printf("index : %d, lettre : %s \n", index, (*elem).letter);
+            // printf("index : %d, lettre : %s \n", index, (*elem).letter);
             // Ensuite on prends un nombre au hasard entre 0 et le nombre total d'occurence
             int random = rand() % total_count;
-            printf("random : %d \n", random);
+            // printf("random : %d \n", random);
             char letter[2];
             while (1)
             {
             // Si le nombre est inférieur ou égal au nombre d'occurence de la lettre, on prends cette lettre
             if(random <= (*elem).count)
             {
-                printf(" avant copy : random : %d, count : %d \n", random, (*elem).count);
-                strncpy(letter, (*elem).letter, 2);
-                printf(" après copy : random : %d, count : %d \n", random, (*elem).count);
+                // printf(" avant copy : random : %d, count : %d \n", random, (*elem).count);
+                printf("%s ", (*elem).letter);	
+                // printf(" après copy : random : %d, count : %d \n", random, (*elem).count);
                 break;
             }
             // Sinon on continue avec la lettre suivante
@@ -79,9 +79,8 @@ int grid_build(FILE *file, int num_lines, int num_columns)
         
 
             //printf("%c ", letter[0] + 32); Minuscule : pour tester sur le solveur de grille du prof (marche pas avec qu)
-            printf("%s ", letter);
         }
-        printf("\n");
+        // printf("\n"); Pour avoir l'affichage 2D pour le débug
     }
 
     // Free the memory allocated for the array
