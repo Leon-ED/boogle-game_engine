@@ -6,27 +6,25 @@
 #include <math.h>
 #include <time.h>
 
-
-
 /**
  * @brief Créé une grille de lettres aléatoires en fonction d'un fichier de lettres et de leur nombre d'occurence
  * @param file : fichier de lettres et de leur nombre d'occurence
  * @param num_lines : nombre de lignes à avoir dans la grille
  * @param num_columns : nombre de colonnes à avoir dans la grille
  * @return 0 si tout s'est bien passé, sinon une erreur
- * 
- * 
- * @todo : Faire en sorte d'avoir un peu plus de a,e 
+ *
+ *
+ * @todo : Faire en sorte d'avoir un peu plus de a,e
  * **/
 int grid_build(FILE *file, int num_lines, int num_columns)
 {
     // Allocation mémoire
     const int letter_count = number_of_lines(file);
-    Letter_occurence *counts = malloc(letter_count * sizeof(letter_count));
-    if (counts == NULL)
-    {
-        return MEMORY_ERROR; 
-    }
+    Letter_occurence counts[letter_count];
+    // if (counts == NULL)
+    // {
+    //     return MEMORY_ERROR;
+    // }
     int total_count = 0;
 
     // On lit le fichier ligne par ligne et on récupère les 2 premières caractères et le nombre d'occurence
@@ -43,7 +41,6 @@ int grid_build(FILE *file, int num_lines, int num_columns)
 
     // Seed pour avoir des nombres aléatoires différents à chaque fois
     srand(time(NULL));
-
     // Pour chaque ligne
     for (int i = 0; i < num_lines; i++)
     {
@@ -60,32 +57,30 @@ int grid_build(FILE *file, int num_lines, int num_columns)
             char letter[2];
             while (1)
             {
-            // Si le nombre est inférieur ou égal au nombre d'occurence de la lettre, on prends cette lettre
-            if(random <= (*elem).count)
-            {
-                // printf(" avant copy : random : %d, count : %d \n", random, (*elem).count);
-                printf("%s ", (*elem).letter);	
-                // printf(" après copy : random : %d, count : %d \n", random, (*elem).count);
-                break;
+                // Si le nombre est inférieur ou égal au nombre d'occurence de la lettre, on prends cette lettre
+                if (random <= (*elem).count)
+                {
+                    // printf(" avant copy : random : %d, count : %d \n", random, (*elem).count);
+                    printf("%s ", (*elem).letter);
+                    // printf(" après copy : random : %d, count : %d \n", random, (*elem).count);
+                    break;
+                }
+                // Sinon on continue avec la lettre suivante
+                else
+                {
+                    index = rand() % letter_count;
+                    elem = &counts[index];
+                    random = rand() % total_count;
+                }
             }
-            // Sinon on continue avec la lettre suivante
-            else
-            {
-               index = rand() % letter_count;
-                elem = &counts[index];
-                random = rand() % total_count;
-            }
-            }
-        
 
-            //printf("%c ", letter[0] + 32); Minuscule : pour tester sur le solveur de grille du prof (marche pas avec qu)
+            // printf("%c ", letter[0] + 32); Minuscule : pour tester sur le solveur de grille du prof (marche pas avec qu)
         }
         // printf("\n"); Pour avoir l'affichage 2D pour le débug
     }
-
     // Free the memory allocated for the array
-    free(counts);
-    // printf("GRID_BUILD : Grille générée avec succès ! \n");
+    // free(counts);
+    // printf("fini \n");
     return 0;
 }
 
@@ -113,7 +108,10 @@ int main(int argc, char *argv[])
         printf("GRID_BUILD: Erreur lors de l'ouverture du fichier, le chemin spécifié (%s) est-il correct ? \n", argv[1]);
         return FILE_NOT_FOUND;
     }
+    // printf("GRID_BUILD : Fichier ouvert avec succès ! \n");
     grid_build(freq_FILE, atoi(argv[2]), atoi(argv[3]));
+    // printf("GRID_BUILD : Grille générée avec succès ! \n");
+    printf("\n");
 
     return 0;
 }
