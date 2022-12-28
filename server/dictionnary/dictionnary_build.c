@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "include/dictionnary_build.h"
+#include <time.h>
 
 /**
  * @brief Insère un mot dans l'arbre dans l'ordre alphabétique
@@ -10,7 +11,7 @@
  **/
 void insertWord(CSTree *t, char *word)
 {
-  printf("word: %s ", word);
+  //printf("word: %s ", word);
   // Aucun élément trouvé alors on l'insère nous même
   if (*t == NULL)
   {
@@ -39,19 +40,44 @@ void insertWord(CSTree *t, char *word)
 }
 
 /**
- * @brief Remplace les \n par des \0 dans l'arbre
- * @param t Arbre dans lequel remplacer les \n par des \0
+ * @brief Insère un \0 à la fin du mot
+ * @param t Arbre dans lequel insérer le \0
+ * @param word Mot à trouver
  * @return void
- */
-void replaceEOL(CSTree *t)
+ **/
+void insertEOW(char *word, CSTree *t)
 {
+  // Si l'arbre est nul on mets un \0
   if (*t == NULL)
-    return;
-  if ((*t)->elem == '\n')
-    (*t)->elem = '\0';
-  replaceEOL(&(*t)->firstChild);
-  replaceEOL(&(*t)->nextSibling);
+  {
+    (*t) = newTree('\0', NULL, NULL);
+  }
+  // Si on a trouvé une lettre, on continue dans les fils
+  else if ((*t)->elem == word[0])
+  {
+    insertEOW(word + 1, &(*t)->firstChild);
+  }
+  // Si on a pas trouvé la lettre, on continue dans les frères
+  else
+  {
+    insertEOW(word, &(*t)->nextSibling);
+  }
 }
+void writeStaticTreeRec(StaticTree t, FILE *dico_LEX, unsigned int i)
+{
+  if (i < t.nNodes)
+  {
+    fwrite(&t.nodeArray[i], sizeof(ArrayCell), 1, dico_LEX);
+    writeStaticTreeRec(t, dico_LEX, i + 1);
+  }
+}
+void writeStaticTree(StaticTree t, FILE *dico_LEX,FileHeader header)
+{
+  fseek(dico_LEX, 0, SEEK_SET);
+  fwrite(&header, sizeof(FileHeader), 1, dico_LEX);
+  writeStaticTreeRec(t, dico_LEX, 0);
+}
+
 
 
 /**
@@ -66,24 +92,42 @@ void dictionnary_build(char *dico_path, char *dico_lex_path)
   FILE *dico_lex = fopen(dico_lex_path, "wb");
   FileHeader header;
   header.nb_words = number_of_lines(dico);
-  printf("nb_words: %d \n", header.nb_words);
+  //printf("nb_words: %d \n", header.nb_words);
   if (dico == NULL || dico_lex == NULL)
   {
-    printf("Erreur : Impossible de trouver l'un des deux fichiers, etes-vous sur de leur emplacement ? !\n");
+    //printf("Erreur : Impossible de trouver l'un des deux fichiers, etes-vous sur de leur emplacement ? !\n");
     exit(1);
   }
-  printf("nb_words: %d \n", header.nb_words);
+  //printf("nb_words: %d \n", header.nb_words);
 
   char line[256];
   CSTree tree = NULL;
   // On parcourt le fichier dico.txt et on insère les mots dans l'arbre
   while (fgets(line, sizeof(line), dico))
   {
+    if (line[strlen(line) - 1] == '\n')
+    {
+      line[strlen(line) - 1] = '\0';
+      //printf("%c \n", line[strlen(line) - 1]);
+    }
     insertWord(&tree, line);
+    insertEOW(line, &tree);
   }
-  replaceEOL(&tree);
-  printPrefix(tree);
+  // replaceEOL(&tree);
+
+  //printf("\n");
+  //printPrefix(tree);
   fclose(dico);
+  StaticTree staticTree = exportStaticTree(tree);
+  //printStatic(staticTree, 0);
+  header.cell_size = sizeof(ArrayCell);
+  header.nb_Cells = staticTree.nNodes;
+  header.size = sizeof(FileHeader);
+  printf("cell_size: %d \n", header.cell_size);
+  printf("size: %d \n", header.size);
+  printf("nb_Cells: %d \n", header.nb_Cells);
+  printf("nb_words: %d \n", header.nb_words);
+  writeStaticTree(staticTree, dico_lex, header);
 }
 
 int main(int argc, char *argv[])
