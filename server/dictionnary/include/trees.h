@@ -29,8 +29,9 @@ typedef struct
 
 typedef struct
 {
-    ArrayCell *nodeArray;
     unsigned int nNodes;
+    ArrayCell *nodeArray;
+
 } StaticTree;
 
 void printPrefix(CSTree t);

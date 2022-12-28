@@ -1,6 +1,5 @@
 #include "include/trees.h"
 
-
 CSTree newTree(Element elem, CSTree firstChild, CSTree nextSibling)
 {
     CSTree t = malloc(sizeof(Node));
@@ -31,14 +30,17 @@ void printPrefix(CSTree t)
 }
 
 // Imprime le contenu d'un Static Tree (dans l'ordre du tableau)
-void printStatic(StaticTree t, unsigned int i)
-{
-    if (i >= t.nNodes)
-        return;
-    printf("%c ", t.nodeArray[i].elem);
-    printStatic(t, i + 1);
-    printStatic(t, i + t.nodeArray[i].nSiblings + 1);
+void printStatic(StaticTree t, unsigned int i) {
+    i = 0;
+    printf("\nindex\t\tElement\t\tFirst Child\t\tsiblings\n");
+    while (i < t.nNodes) {
+        // printf("%c \n",t.nodeArray[i].elem);
+        // printf("i: %d \n",i);
+        printf("%d\t\t%c\t\t%d\t\t%d\n", i, t.nodeArray[i].elem, t.nodeArray[i].firstChild, t.nodeArray[i].nSiblings);
+        i ++;
+    }
 }
+
 
 int size(CSTree t)
 {
@@ -58,18 +60,22 @@ int nChildren(CSTree t)
 {
     if (t == NULL)
         return 0;
-    return 1 + nChildren(t->nextSibling);
+    return 1 + nChildren(t->firstChild);
 }
 void exportStaticTreeRec(CSTree t, int *i, ArrayCell *nodeArray)
 {
     if (t != NULL)
     {
         nodeArray[*i].elem = t->elem;
-        nodeArray[*i].firstChild = *i + 1;
-        nodeArray[*i].nSiblings = nSibling(t->firstChild);
+        // le 1er fils est après les frères et leurs fils
+        if(t->firstChild == NULL)
+            nodeArray[*i].firstChild = NONE;
+        else
+            nodeArray[*i].firstChild = *i + size(t->nextSibling) + 1 ;
+        nodeArray[*i].nSiblings = nSibling(t) - 1;
         (*i)++;
-        exportStaticTreeRec(t->firstChild, i, nodeArray);
         exportStaticTreeRec(t->nextSibling, i, nodeArray);
+        exportStaticTreeRec(t->firstChild, i, nodeArray);
     }
 }
 
@@ -83,6 +89,16 @@ StaticTree exportStaticTree(CSTree t)
     exportStaticTreeRec(t, &i, st.nodeArray);
 
     return st;
+}
+
+ArrayCell cons(Element e, int firstChild, int nSiblings)
+{
+    ArrayCell c;
+    c.elem = e;
+    c.firstChild = firstChild;
+    c.nSiblings = nSiblings;
+    return c;
+
 }
 
 // Renvoie le premier frere de t contenant l’element e (ou t lui-mˆeme), NULL si aucun n’existe.
