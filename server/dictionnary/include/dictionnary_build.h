@@ -6,5 +6,4 @@
 #include "string.h"
 
 
-// void dictionnary_build(char input_name[], char output_name[]);
-void dictionnary_build(char *dico_path, char *dico_lex_path);
+int dictionnary_build(FILE *dico, FILE *dico_lex);
