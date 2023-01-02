@@ -1,4 +1,4 @@
-package fr.uge;
+package fr.uge.jdict;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,7 +17,7 @@ class CharTableMaker {
             definition_PATH = args[0];
             output_PATH = args[1];
         }
-        TreeMap<String, Integer> freqs = createCharTable(definition_PATH, output_PATH);
+        TreeMap<String, Integer> freqs = createCharTable(definition_PATH);
         if (freqs == null) {
             System.out.println("JDICT : Une erreur a eu lieu lors de la création de la table de fréquences");
         }
@@ -25,7 +25,12 @@ class CharTableMaker {
 
     }
 
-    private static TreeMap<String, Integer> createCharTable(String definition_PATH, String output_PATH) {
+    /***
+     * {@summary} Crée une table de fréquences des lettres et des paires de lettres
+     * @param definition_PATH : chemin du fichier de définitions 
+     * @return TreeMap<String, Integer> : table de fréquences des lettres et des paires de lettres triée par ordre alphabétique
+     */
+    private static TreeMap<String, Integer> createCharTable(String definition_PATH) {
         TreeMap<String, Integer> charTable = new TreeMap<>();
         try (BufferedReader reader = Files.newBufferedReader(Path.of(definition_PATH))) {
             while (reader.readLine() != null) {
@@ -57,6 +62,11 @@ class CharTableMaker {
 
     }
 
+    /***
+     * {@summary} Ecrit la table de fréquences dans un fichier
+     * @param charTable TreeMap<String, Integer> : table de fréquences des lettres et des paires de lettres triée par ordre alphabétique
+     * @param output_PATH : chemin du fichier de sortie 
+     */
     private static void writeCharTable(TreeMap<String, Integer> charTable, String output_PATH) {
         try (BufferedWriter writer = Files.newBufferedWriter(Path.of(output_PATH))) {
             for (String key : charTable.keySet()) {
@@ -73,6 +83,11 @@ class CharTableMaker {
         }
     }
 
+    /***
+     * {@summary} Vérifie si un caractère doit être affiché ou non
+     * @param c char : caractère à vérifier
+     * @return boolean : true si le caractère est imprimable, false sinon
+     */
     private static boolean isPrintable(char c) {
         return c >= 32 && c <= 126;
     }
