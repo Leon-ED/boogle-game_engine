@@ -1,0 +1,1 @@
+set CLASSPATH=%CLASSPATH%;E:\Emplacements\Bureau\boogle\real\server\jdict\target\jdict-jar-with-dependencies.jar;

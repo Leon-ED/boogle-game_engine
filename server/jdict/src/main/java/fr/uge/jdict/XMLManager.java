@@ -1,4 +1,4 @@
-package fr.uge;
+package fr.uge.jdict;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -125,13 +126,15 @@ class XMLManager {
                         toParse = false;
                         parser.formatExport(exportText, title, textPage.toString());
                         pageCounter++;
-                        if(pageCounter == 2_500){
-                            writer.append(exportText.toString());
-                            exportText.setLength(0);
-                        }
-                        if(pageCounter == 5000){
-                            break;
-                        }
+                        writer.append(exportText.toString());
+                        exportText.setLength(0);
+                        // if(pageCounter == 2_500){
+                        //     writer.append(exportText.toString());
+                        //     exportText.setLength(0);
+                        // }
+                        // if(pageCounter == 5000){
+                        //     break;
+                        // }
 
                     }
 

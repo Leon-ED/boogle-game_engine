@@ -1,4 +1,4 @@
-package fr.uge;
+package fr.uge.jdict;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -7,13 +7,8 @@ public class App {
     public static void main(String[] args) {
         // list all files in the directory from the path
 
-        String input_PATH = "./server/files/dump-wikipedia.xml.bz2";
-        String output_PATH = "./server/files/dumps/dump-wikipedia.json";
-        if (args.length == 2) {
-            input_PATH = args[0];
-            output_PATH = args[1];
-        }
-
+        String input_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dump-wikipedia.xml.bz2";
+        String output_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-wikipedia.json";    
         try {
             long time = System.currentTimeMillis();
             System.out.println("Début du parsing");

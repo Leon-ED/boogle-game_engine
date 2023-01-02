@@ -1,4 +1,4 @@
-package fr.uge;
+package fr.uge.jdict;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,12 +8,10 @@ public record Parser(OutputFormat formatExport) {
     void formatExport(StringBuilder page, String title, String text) {
         switch (formatExport) {
             case JSON -> JSON(page, title, text);
-            case TXT -> TXT(page, title, text);
             default -> throw new IllegalArgumentException("Format non supporté");
 
         }
     }
-
 
     private void JSON(StringBuilder page, String title, String text) {
         // !!! On return rien car on ajoute directement au StringBuilder passé en
