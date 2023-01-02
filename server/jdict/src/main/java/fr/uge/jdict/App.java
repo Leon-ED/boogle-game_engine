@@ -7,8 +7,8 @@ public class App {
     public static void main(String[] args) {
         // list all files in the directory from the path
 
-        String input_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dump-wikipedia.xml.bz2";
-        String output_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-wikipedia.json";    
+        String input_PATH = "/Applications/XAMPP/xamppfiles/htdocs/boogle/server/files/dump-wikipedia.xml.bz2";
+        String output_PATH = "/Applications/XAMPP/xamppfiles/htdocs/boogle/server/files/dumps/dump-wikipedia.json";    
         try {
             long time = System.currentTimeMillis();
             System.out.println("Début du parsing");

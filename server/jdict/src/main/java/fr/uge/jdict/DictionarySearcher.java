@@ -12,8 +12,8 @@ public class DictionarySearcher {
 
     public static void main(String[] args) throws Exception {
         DictionarySearcher searcher = new DictionarySearcher();
-        String definitions_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-wikipedia.json";
-        String index_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\index.txt";
+        String index = "/Applications/XAMPP/xamppfiles/htdocs/boogle/server/files/definitions.index";
+        String json = "/Applications/XAMPP/xamppfiles/htdocs/boogle/server/files/dumps/dump-wikipedia.json";  
         String word = "";
         OutputFormat format = OutputFormat.JSON;
         if(!args[0].equals("definitions")){
@@ -28,7 +28,7 @@ public class DictionarySearcher {
         }
 
 
-        searcher.search(definitions_PATH, index_PATH, word,format);
+        searcher.search(json, index, word,format);
         
     }
 

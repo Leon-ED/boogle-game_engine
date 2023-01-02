@@ -21,8 +21,9 @@ public record IndexMaker() {
 
     public static void main(String[] args) throws IOException {
         IndexMaker indexMaker = new IndexMaker();
-        String output_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-wikipedia.json";
-        indexMaker.createIndex(output_PATH, "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\index.txt");
+        String index = "/Applications/XAMPP/xamppfiles/htdocs/boogle/server/files/definitions.index";
+        String json = "/Applications/XAMPP/xamppfiles/htdocs/boogle/server/files/dumps/dump-wikipedia.json";  
+        indexMaker.createIndex(json, index);
     }
 
     private String normalize(String word) {
