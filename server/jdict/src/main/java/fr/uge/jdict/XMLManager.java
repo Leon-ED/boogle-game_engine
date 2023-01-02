@@ -103,7 +103,13 @@ class XMLManager {
                     // On sauvegarde le titre de la page
                     if (tagName.equals("title") && inPage) {
                         title = streamReader.getElementText();
+                        if(title.contains(" ")){
+                            title = "";
+                            inPage = false;
+                            continue;
+                        }
                     }
+
                     // Au autorise la lecture de la page car elle est ns = 0
                     if (tagName.equals("ns")
                             && streamReader.getElementText().equals("0") && inPage) {
