@@ -137,6 +137,9 @@ int main(int argc, char *argv[]) {
     int num_columns = atoi(argv[3]);
     char lettres[argc-4];
     for (int i =4; i<argc; i++) {
+        if (strcmp(argv[i], "QU") == 0)
+            lettres[i-4] = *"~";
+        else
         lettres[i-4] = argv[i][0];
     }
 
