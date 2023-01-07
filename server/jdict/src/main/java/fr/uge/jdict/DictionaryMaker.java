@@ -1,5 +1,6 @@
 package fr.uge.jdict;
 
+import java.io.File;
 import java.nio.file.Path;
 
 public class DictionaryMaker {
@@ -24,6 +25,7 @@ public class DictionaryMaker {
                 System.exit(1);
             bzip_PATH = args[2];
             json_PATH = args[3];
+
             langue = args[0];
             if(!langue.equals("fr")){
                 System.out.println("Seulement le français est supporté pour le moment");
@@ -31,10 +33,15 @@ public class DictionaryMaker {
             }
 
         }
+        File bzipFILE = new File(bzip_PATH);
+        if (!bzipFILE.exists() || !bzipFILE.isFile()) {
+            System.out.println("Le fichier " + bzip_PATH + " n'existe pas");
+            System.exit(1);
+        }
         System.out.println("Début du parsing");
-        String index_PATH = Path.of(json_PATH).getParent().toString() + "\\dictionary.index";
+        String index_PATH = Path.of(json_PATH).getParent().toString() + File.separator +"dictionary.index";
         System.out.println("index_PATH: " + index_PATH);
-        IndexMaker.getIndexMaker("E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dictionary.index",
+        IndexMaker.getIndexMaker(index_PATH,
                 json_PATH);
         try {
             XMLManager.exportToFile(bzip_PATH, json_PATH, OutputFormat.JSON, langue);

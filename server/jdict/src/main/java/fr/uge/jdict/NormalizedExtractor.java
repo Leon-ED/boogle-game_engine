@@ -2,6 +2,7 @@ package fr.uge.jdict;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,25 +18,29 @@ public class NormalizedExtractor {
     public static void main(String[] args) {
         String definition_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json";
         boolean stdoutput = false;
-        String definitionsCategories = "";
+        String definitionsCategories = null;
         // On teste si on récupère la sortie standard
         if (System.console() == null) {
             stdoutput = true;
         }
-        if (args.length < 1) {
-            System.out.println("Usage NormalizedExtractor definitions [categories]");
+        if (args.length < 2) {
+            System.out.println("Usage NormalizedExtractor definitions <fichier definitions> [categories]");
             System.exit(1);
         }
-        if (args.length > 1) {
-            definitionsCategories = args[1];
+        if (args.length >= 2) {
+            definition_PATH = args[1];
+        }
+        if (args.length >= 3) {
+            definitionsCategories = args[2];
         }
 
-        extract(definitionsCategories.split(",", 0), definition_PATH, stdoutput);
+        extract(definitionsCategories, definition_PATH, stdoutput);
 
     }
 
-    private static void extract(String categories[], String definitions_PATH, boolean stdoutput) {
+    private static void extract(String categoriesARG, String definitions_PATH, boolean stdoutput) {
         String language = null;
+        String categories[] = categoriesARG == null ? null : categoriesARG.split(","); 
         Set<String> wordSet = new TreeSet<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
@@ -51,6 +56,11 @@ public class NormalizedExtractor {
                     continue;
                 }
                 JSONObject categoriesJSON = definition.getJSONObject("definitions");
+                if(categories == null){
+                    String normalizedWord = DictionaryNormalized.normalize(definition.getString("title"));
+                    wordSet.add(normalizedWord);
+                    continue;
+                }
                 for (String type : categories) {
                     if (categoriesJSON.has(type.trim())) {
                         String normalizedWord = DictionaryNormalized.normalize(definition.getString("title"));
@@ -73,7 +83,7 @@ public class NormalizedExtractor {
                 System.out.println(word);
             }
         } else {
-            String saveFile_PATH = Paths.get(definitions_PATH).getParent().toString() + "\\words_list_" + language
+            String saveFile_PATH = Paths.get(definitions_PATH).getParent().toString() + File.separator +"words_list_" + language
                     + ".txt";
             saveToFile(wordSet, Path.of(saveFile_PATH));
         }

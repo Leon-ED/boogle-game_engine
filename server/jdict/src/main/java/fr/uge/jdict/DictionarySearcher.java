@@ -14,15 +14,23 @@ public class DictionarySearcher {
         String index_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dictionary.index";
         String word = "";
         OutputFormat format = OutputFormat.JSON;
-        if (!args[0].equals("definitions")) {
-            System.out.println(args[0]);
-            throw new IllegalArgumentException("Le premier argument doit être 'definitions'");
-        }
-        word = args[1];
-        if (word.contains(":")) {
-            String[] split = word.split(":");
-            word = split[1];
-            format = OutputFormat.valueOf(split[0].toUpperCase());
+        if (args.length < 4) {
+            System.out.println(
+                    "Usage: DictionarySearcher definitions <format:word> <fichier index> <fichier definitions>");
+            System.exit(1);
+        } else {
+            if (!args[0].equals("definitions")) {
+                System.out.println(args[0]);
+                throw new IllegalArgumentException("Le premier argument doit être 'definitions'");
+            }
+            word = args[1];
+            if (word.contains(":")) {
+                String[] split = word.split(":");
+                word = split[1];
+                format = OutputFormat.valueOf(split[0].toUpperCase());
+            }
+            index_PATH = args[2];
+            definitions_PATH = args[3];
         }
 
         searcher.search(definitions_PATH, index_PATH, word, format);

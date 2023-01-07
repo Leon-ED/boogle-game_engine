@@ -2,6 +2,7 @@ package fr.uge.jdict;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,10 +23,18 @@ class CharTableMaker {
             // return;
         } else if (args.length >= 2) {
             definition_PATH = args[0];
-            output_PATH = args[1];
         }else{
             definition_PATH = args[0];
-            output_PATH = Paths.get(definition_PATH).getParent().toString() + "\\frequences.txt";
+        }
+        File definition_FILE  = new File(definition_PATH);
+        if(!definition_FILE.exists() || definition_FILE.isDirectory()) {
+            System.out.println("JDICT : Le fichier de définitions n'existe pas");
+            return;
+        }
+        if(args.length >= 2) {
+            output_PATH = args[1];
+        }else{
+        output_PATH = Paths.get(definition_PATH).getParent().toString() + File.separator + "frequences.txt";
         }
 
         TreeMap<String, Integer> freqs = createCharTable(definition_PATH);
