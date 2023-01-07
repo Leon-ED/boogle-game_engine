@@ -4,22 +4,28 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.TreeMap;
-
-import javax.sound.sampled.Line;
 
 class CharTableMaker {
 
     public static void main(String[] args) {
         String definition_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-wikipedia.json";
         String output_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\frequences.txt";
-        boolean stdoutput = true;
+        boolean stdoutput = false;
         if(System.console() == null) {
             stdoutput = true;
         }
-        if (args.length == 2) {
+        if (args.length < 1) {
+            System.out.println("Usage: CharTableMaker <input.json>");
+            // System.exit(1);
+            // return;
+        } else if (args.length >= 2) {
             definition_PATH = args[0];
             output_PATH = args[1];
+        }else{
+            definition_PATH = args[0];
+            output_PATH = Paths.get(definition_PATH).getParent().toString() + "\\frequences.txt";
         }
 
         TreeMap<String, Integer> freqs = createCharTable(definition_PATH);
