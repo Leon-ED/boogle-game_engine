@@ -34,12 +34,10 @@ class XMLManager {
         }
         // utf 8
 
-
         try {
             CompressorInputStream gzippedOut = new CompressorStreamFactory()
                     .createCompressorInputStream(CompressorStreamFactory.BZIP2, file);
             XMLInputFactory factory = XMLInputFactory.newInstance();
-
 
             eventReader = factory.createXMLStreamReader(gzippedOut, "UTF-8");
         } catch (Exception e) {
@@ -60,9 +58,9 @@ class XMLManager {
         }
     }
 
-    static void exportToFile(String inputPath, String outputPath, OutputFormat format,String langue) throws XMLStreamException {
+    static void exportToFile(String inputPath, String outputPath, OutputFormat format, String langue)
+            throws XMLStreamException {
         XMLStreamReader streamReader = open(inputPath);
-
 
         Boolean inPage = false;
         Boolean toParse = false;
@@ -78,12 +76,13 @@ class XMLManager {
         ZonedDateTime now = ZonedDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuuMMdd'T'HHmmss'Z'");
         String formattedDate = now.format(formatter);
-    
-        JSONObject header = new JSONObject().put("description", "definition file").put("created_on", formattedDate).put("language", langue);
-        exportText.append(header.toString()+"\n");
+
+        JSONObject header = new JSONObject().put("description", "definition file").put("created_on", formattedDate)
+                .put("language", langue);
+        exportText.append(header.toString() + "\n");
         IndexMaker.getIndexMaker().setOffset(exportText.length());
 
-    try(BufferedWriter writer = openOutputFile(outputPath)) {
+        try (BufferedWriter writer = openOutputFile(outputPath)) {
 
             while (streamReader.hasNext()) {
                 int event = streamReader.next();
@@ -98,7 +97,7 @@ class XMLManager {
                     // On sauvegarde le titre de la page
                     if (tagName.equals("title") && inPage) {
                         title = streamReader.getElementText();
-                        if(title.contains(" ")){
+                        if (title.contains(" ")) {
                             title = "";
                             inPage = false;
                             continue;
@@ -115,7 +114,7 @@ class XMLManager {
                     if (tagName.equals("text") && toParse) {
                         // La page n'est pas en français : pas intéressante
                         String text = streamReader.getElementText();
-                        if (!text.contains("== {{langue|"+langue+"}} ==")) {
+                        if (!text.contains("== {{langue|" + langue + "}} ==")) {
                             text = "";
                             toParse = false;
                             inPage = false;
@@ -130,11 +129,11 @@ class XMLManager {
                         pageCounter++;
                         writer.append(exportText.toString());
                         exportText.setLength(0);
-                        if(pageCounter == 2_500){
+                        if (pageCounter == 2_500) {
                             writer.append(exportText.toString());
                             exportText.setLength(0);
                         }
-                        if(pageCounter == 5000){
+                        if (pageCounter == 5000) {
                             break;
                         }
 

@@ -19,7 +19,7 @@ public class IndexMaker {
 
     private static IndexMaker instance;
 
-    private IndexMaker(String index_PATH, String json_PATH){
+    private IndexMaker(String index_PATH, String json_PATH) {
         this.index_PATH = Objects.requireNonNull(index_PATH);
         this.json_PATH = Objects.requireNonNull(json_PATH);
         this.map = new TreeMap<>(new Comparator<String>() {
@@ -30,86 +30,73 @@ public class IndexMaker {
         });
     }
 
-    public static IndexMaker getIndexMaker(String index_PATH, String json_PATH){
-        if(instance == null){
+    public static IndexMaker getIndexMaker(String index_PATH, String json_PATH) {
+        if (instance == null) {
             instance = new IndexMaker(index_PATH, json_PATH);
         }
         return instance;
     }
 
-    public static IndexMaker getIndexMaker(){
-        if(instance == null)
+    public static IndexMaker getIndexMaker() {
+        if (instance == null)
             throw new IllegalStateException("IndexMaker not initialized");
         return instance;
     }
 
-
-    public void setOffset(int offset){
+    public void setOffset(int offset) {
         this.positionOffset = offset;
     }
 
-
-
-
-
-
-    private record Entry(int start,int end, String line){
-        
+    private record Entry(int start, int end, String line) {
 
     }
 
-    public void addTitle(String title, int length){
-        Integer[] array = new Integer[]{positionOffset, positionOffset + length};
+    public void addTitle(String title, int length) {
+        Integer[] array = new Integer[] { positionOffset, positionOffset + length };
         map.put(title, array);
-        if(title.equalsIgnoreCase("ACCUEIL"))
-        System.out.println(title + " : " + array[0] + " - " + array[1]);
+        if (title.equalsIgnoreCase("ACCUEIL"))
+            System.out.println(title + " : " + array[0] + " - " + array[1]);
         positionOffset += length;
 
     }
-    
-
-
-
-
 
     public static void main(String[] args) throws IOException {
-        IndexMaker indexMaker = getIndexMaker("E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dictionary.index", "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json");
-        // String output_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json";
+        IndexMaker indexMaker = getIndexMaker(
+                "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dictionary.index",
+                "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json");
+        // String output_PATH =
+        // "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json";
         indexMaker.createIndex();
     }
-
-
-
 
     public void createIndex() throws IOException {
         try (FileInputStream reader = new FileInputStream(json_PATH)) {
             Entry entry = null;
-                String line;
-                    while((entry = readLine(reader)) != null){
-                        line = entry.line();
-                        if(!line.contains("title")){
-                            continue;
-                        }
-                        JSONObject json = new JSONObject(line);
-                        String title = json.getString("title");
-                        // convert title to utf-8
-                        title = new String(title.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                        int startPOS = entry.start();
-                        int endPOS = entry.end();
+            String line;
+            while ((entry = readLine(reader)) != null) {
+                line = entry.line();
+                if (!line.contains("title")) {
+                    continue;
+                }
+                JSONObject json = new JSONObject(line);
+                String title = json.getString("title");
+                // convert title to utf-8
+                title = new String(title.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                int startPOS = entry.start();
+                int endPOS = entry.end();
 
-                        Integer[] array = new Integer[]{startPOS, endPOS};
-                        map.put(title, array);
-                        // System.out.println(title + " : "+ startPOS + " - " + endPOS);
-                    }            
+                Integer[] array = new Integer[] { startPOS, endPOS };
+                map.put(title, array);
+                // System.out.println(title + " : "+ startPOS + " - " + endPOS);
+            }
         }
         writeIndex(index_PATH, map);
 
     }
 
-    public void writeIndex() throws IOException{
+    public void writeIndex() throws IOException {
         writeIndex(index_PATH, map);
     }
-
 
     private void writeIndex(String out, Map<String, Integer[]> map) throws IOException {
         System.out.println("Writing index");
@@ -127,20 +114,19 @@ public class IndexMaker {
                 writer.write((map.get(word)[1] >> 8) & 0xFF);
                 writer.write(map.get(word)[1] & 0xFF);
 
-                if(word.equalsIgnoreCase("ACCUEIL")){
-                System.out.println(word + " : "+ map.get(word)[0] + " - " + map.get(word)[1]);
+                if (word.equalsIgnoreCase("ACCUEIL")) {
+                    System.out.println(word + " : " + map.get(word)[0] + " - " + map.get(word)[1]);
                 }
             }
 
-        System.out.println("Ecriture dans :" + out);
+            System.out.println("Ecriture dans :" + out);
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
 
     }
-    
 
     // Méthode pour lire une ligne du fichier (en ignorant les retours à la ligne)
     private Entry readLine(FileInputStream file) throws IOException {
@@ -159,7 +145,7 @@ public class IndexMaker {
         if (c == -1 && line.toString().length() == 0) {
             return null;
         }
-        return new Entry(startPOS,endPOS,line.toString());
+        return new Entry(startPOS, endPOS, line.toString());
     }
 
 }

@@ -3,10 +3,10 @@ package fr.uge.jdict;
 import java.text.Normalizer;
 
 public class DictionaryNormalized {
-    
+
     public static int compareNormalized(String o1, String o2) {
         int i = normalize(o1).compareTo(normalize(o2));
-        if(i == 0){
+        if (i == 0) {
             return o1.compareTo(o2);
         }
         return i;
@@ -17,7 +17,5 @@ public class DictionaryNormalized {
         string = string.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
         return string.toUpperCase();
     }
-
-
 
 }

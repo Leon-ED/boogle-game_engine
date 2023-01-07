@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TreeMap;
 
 class CharTableMaker {
@@ -27,8 +25,10 @@ class CharTableMaker {
 
     /***
      * {@summary} Crée une table de fréquences des lettres et des paires de lettres
-     * @param definition_PATH : chemin du fichier de définitions 
-     * @return TreeMap<String, Integer> : table de fréquences des lettres et des paires de lettres triée par ordre alphabétique
+     * 
+     * @param definition_PATH : chemin du fichier de définitions
+     * @return TreeMap<String, Integer> : table de fréquences des lettres et des
+     *         paires de lettres triée par ordre alphabétique
      */
     private static TreeMap<String, Integer> createCharTable(String definition_PATH) {
         TreeMap<String, Integer> charTable = new TreeMap<>();
@@ -64,13 +64,15 @@ class CharTableMaker {
 
     /***
      * {@summary} Ecrit la table de fréquences dans un fichier
-     * @param charTable TreeMap<String, Integer> : table de fréquences des lettres et des paires de lettres triée par ordre alphabétique
-     * @param output_PATH : chemin du fichier de sortie 
+     * 
+     * @param charTable   TreeMap<String, Integer> : table de fréquences des lettres
+     *                    et des paires de lettres triée par ordre alphabétique
+     * @param output_PATH : chemin du fichier de sortie
      */
     private static void writeCharTable(TreeMap<String, Integer> charTable, String output_PATH) {
         try (BufferedWriter writer = Files.newBufferedWriter(Path.of(output_PATH))) {
             for (String key : charTable.keySet()) {
-                if(!isPrintable(key.charAt(0))){
+                if (!isPrintable(key.charAt(0))) {
                     continue;
                 }
                 writer.write(key + " " + charTable.get(key) + " \n");
@@ -85,6 +87,7 @@ class CharTableMaker {
 
     /***
      * {@summary} Vérifie si un caractère doit être affiché ou non
+     * 
      * @param c char : caractère à vérifier
      * @return boolean : true si le caractère est imprimable, false sinon
      */
