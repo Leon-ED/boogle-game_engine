@@ -23,7 +23,6 @@ public record Parser(OutputFormat formatExport) {
         JSONObject definitions = new JSONObject();
         JSONArray definitionsList = new JSONArray();
         Boolean lookingForDefinition = false;
-
         // On parcours chaque ligne du texte
         for (String line : text.split("\n")) {
 
@@ -45,10 +44,9 @@ public record Parser(OutputFormat formatExport) {
                     definitionsList = new JSONArray();
                 }
             }
-
             // Si on recherche les définitions et que la ligne commence par '# ' on l'ajoute
             // à la liste sauf le #
-            if (lookingForDefinition && line.startsWith("# ")) {
+            if (lookingForDefinition && line.startsWith("#") && !(line.startsWith("#*") || line.startsWith("##")) && line.length() > 2) {
                 definitionsList.put(line.substring(2));
             }
 

@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -33,12 +32,16 @@ class XMLManager {
             System.out.println("Le fichier n'existe pas, vérifiez le chemin");
             return null;
         }
+        // utf 8
+
 
         try {
             CompressorInputStream gzippedOut = new CompressorStreamFactory()
                     .createCompressorInputStream(CompressorStreamFactory.BZIP2, file);
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            eventReader = factory.createXMLStreamReader(gzippedOut);
+
+
+            eventReader = factory.createXMLStreamReader(gzippedOut, "UTF-8");
         } catch (Exception e) {
             System.out.println("Le fichier a bien été trouvé mais il y a eu une erreur lors de sa lecture");
             return null;
@@ -49,16 +52,6 @@ class XMLManager {
 
     private static BufferedWriter openOutputFile(String outputPath) {
         try {
-            // Pour écrirer dans le fichier en utf8
-            // charset utf 8
-            // StandardOpenOption.CREATE : créer le fichier s'il n'existe pas
-            // StandardOpenOption.TRUNCATE_EXISTING : si le fichier existe, le tronquer
-            // buffer size : 8192
-            // set buffer size to 8199
-
-            // return new BufferedWriter(new FileWriter(outputPath), (int)Math.pow(1024, 3)
-            // );
-
             return Files.newBufferedWriter(Path.of(outputPath), StandardCharsets.UTF_8, StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
@@ -69,6 +62,7 @@ class XMLManager {
 
     static void exportToFile(String inputPath, String outputPath, OutputFormat format) throws XMLStreamException {
         XMLStreamReader streamReader = open(inputPath);
+
 
         Boolean inPage = false;
         Boolean toParse = false;
@@ -134,13 +128,13 @@ class XMLManager {
                         pageCounter++;
                         writer.append(exportText.toString());
                         exportText.setLength(0);
-                        // if(pageCounter == 2_500){
-                        //     writer.append(exportText.toString());
-                        //     exportText.setLength(0);
-                        // }
-                        // if(pageCounter == 5000){
-                        //     break;
-                        // }
+                        if(pageCounter == 2_500){
+                            writer.append(exportText.toString());
+                            exportText.setLength(0);
+                        }
+                        if(pageCounter == 5000){
+                            break;
+                        }
 
                     }
 
