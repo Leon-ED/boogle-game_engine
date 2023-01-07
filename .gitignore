@@ -2,6 +2,8 @@
 *.xml.bz2
 dumps/
 target/
+*.xml
+*.exe
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

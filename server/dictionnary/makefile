@@ -25,4 +25,4 @@ clean:
 	rm -f $(SOURCEDIR)/*.o
 
 
-all: dictionnary_build dictionnary_lookup grid_build grid_path score_basic
+all: dictionnary_build dictionnary_lookup grid_build grid_path score_basic clean
