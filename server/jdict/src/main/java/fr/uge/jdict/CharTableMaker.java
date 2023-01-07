@@ -6,21 +6,31 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.TreeMap;
 
+import javax.sound.sampled.Line;
+
 class CharTableMaker {
 
     public static void main(String[] args) {
         String definition_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-wikipedia.json";
         String output_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\frequences.txt";
+        boolean stdoutput = true;
+        if(System.console() == null) {
+            stdoutput = true;
+        }
         if (args.length == 2) {
             definition_PATH = args[0];
             output_PATH = args[1];
         }
+
         TreeMap<String, Integer> freqs = createCharTable(definition_PATH);
         if (freqs == null) {
             System.out.println("JDICT : Une erreur a eu lieu lors de la création de la table de fréquences");
         }
-        writeCharTable(freqs, output_PATH);
-
+        if (stdoutput) {
+            freqs.forEach((k, v) -> System.out.println(k + "  " + v));
+        }else{
+        writeCharTable(freqs, output_PATH );
+        }
     }
 
     /***
@@ -34,12 +44,19 @@ class CharTableMaker {
         TreeMap<String, Integer> charTable = new TreeMap<>();
         try (BufferedReader reader = Files.newBufferedReader(Path.of(definition_PATH))) {
             while (reader.readLine() != null) {
-                String line = reader.readLine().toUpperCase();
+            
+                String line = reader.readLine();
+                if(line == null) {
+                    break;
+                }
+                line = line.toUpperCase();
                 for (int i = 0; i < line.length(); i++) {
                     char character = line.charAt(i);
-                    if (!Character.isLetter(character)) {
+                    if (!Character.isLetter(character) || !isPrintable(character)) {
                         continue;
                     }
+
+
                     String elem = character + "";
                     if (line.charAt(i) == 'Q' && line.charAt(i + 1) == 'U') {
                         elem = "QU";
