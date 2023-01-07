@@ -128,7 +128,7 @@ int grid_path(char word[], int num_lines, int num_columns, char lettres[]) {
 int main(int argc, char *argv[]) {
     // Si le nombre d'arguments est incorrect
     if (argc-2 < 3) {
-        printf("Usage: %s <word> <num_lines> <num_columns> <letters>\n", argv[0]);
+        printf("Usage: %s <word> <num_lines> <num_columns> <grille>\n", argv[0]);
         return 1;
     }
 
