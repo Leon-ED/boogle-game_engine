@@ -4,40 +4,85 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.text.Normalizer;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import org.json.JSONObject;
 
-public record IndexMaker() {
+public class IndexMaker {
+    private final String index_PATH;
+    private final String json_PATH;
+    private final Map<String, Integer[]> map;
+    private int positionOffset = 0;
+
+    private static IndexMaker instance;
+
+    private IndexMaker(String index_PATH, String json_PATH){
+        this.index_PATH = Objects.requireNonNull(index_PATH);
+        this.json_PATH = Objects.requireNonNull(json_PATH);
+        this.map = new TreeMap<>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return DictionaryNormalized.compareNormalized(o1, o2);
+            }
+        });
+    }
+
+    public static IndexMaker getIndexMaker(String index_PATH, String json_PATH){
+        if(instance == null){
+            instance = new IndexMaker(index_PATH, json_PATH);
+        }
+        return instance;
+    }
+
+    public static IndexMaker getIndexMaker(){
+        if(instance == null)
+            throw new IllegalStateException("IndexMaker not initialized");
+        return instance;
+    }
+
+
+    public void setOffset(int offset){
+        this.positionOffset = offset;
+    }
+
+
+
+
+
 
     private record Entry(int start,int end, String line){
         
 
     }
 
+    public void addTitle(String title, int length){
+        Integer[] array = new Integer[]{positionOffset, positionOffset + length};
+        map.put(title, array);
+        if(title.equalsIgnoreCase("ACCUEIL"))
+        System.out.println(title + " : " + array[0] + " - " + array[1]);
+        positionOffset += length;
+
+    }
+    
+
+
+
+
 
     public static void main(String[] args) throws IOException {
-        IndexMaker indexMaker = new IndexMaker();
-        String output_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json";
-        indexMaker.createIndex(output_PATH, "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\index.txt");
+        IndexMaker indexMaker = getIndexMaker("E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dictionary.index", "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json");
+        // String output_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json";
+        indexMaker.createIndex();
     }
 
 
 
 
-    public void createIndex(String in, String out) throws IOException {
-        // HashMap<String, Integer[]> map = new HashMap<>();
-        Map<String, Integer[]> map = new TreeMap<String, Integer[]>(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return DictionaryNormalized.compareNormalized(o1, o2);
-            }
-          });
-        try (FileInputStream reader = new FileInputStream(in)) {
+    public void createIndex() throws IOException {
+        try (FileInputStream reader = new FileInputStream(json_PATH)) {
             Entry entry = null;
                 String line;
                     while((entry = readLine(reader)) != null){
@@ -55,24 +100,20 @@ public record IndexMaker() {
                         Integer[] array = new Integer[]{startPOS, endPOS};
                         map.put(title, array);
                         // System.out.println(title + " : "+ startPOS + " - " + endPOS);
-                    }
-
-                    // // On trie la map par ordre alphabétique
-                    // map.entrySet()
-                    // .stream()
-                    // .sorted((e1,e2) -> normalize(e1.getKey()).compareTo(normalize(e2.getKey())))
-                    // .forEach(e -> sortedMap.put(e.getKey(), e.getValue()));
-                    // // .forEach(e -> System.out.println("Z : "+e.getKey() + " : "+ e.getValue()[0] + " - " + e.getValue()[1]));
-
-
-            
+                    }            
         }
-        writeIndex(out, map);
+        writeIndex(index_PATH, map);
 
     }
 
+    public void writeIndex() throws IOException{
+        writeIndex(index_PATH, map);
+    }
+
+
     private void writeIndex(String out, Map<String, Integer[]> map) throws IOException {
         System.out.println("Writing index");
+        System.out.println("Ecriture dans :" + out);
         try (FileOutputStream writer = new FileOutputStream(out)) {
             writer.write("DICTINDX".getBytes());
             for (String word : map.keySet()) {
@@ -85,8 +126,17 @@ public record IndexMaker() {
                 writer.write((map.get(word)[1] >> 16) & 0xFF);
                 writer.write((map.get(word)[1] >> 8) & 0xFF);
                 writer.write(map.get(word)[1] & 0xFF);
+
+                if(word.equalsIgnoreCase("ACCUEIL")){
                 System.out.println(word + " : "+ map.get(word)[0] + " - " + map.get(word)[1]);
+                }
             }
+
+        System.out.println("Ecriture dans :" + out);
+
+        }catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
         }
 
     }

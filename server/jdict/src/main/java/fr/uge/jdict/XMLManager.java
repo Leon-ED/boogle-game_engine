@@ -60,7 +60,7 @@ class XMLManager {
         }
     }
 
-    static void exportToFile(String inputPath, String outputPath, OutputFormat format) throws XMLStreamException {
+    static void exportToFile(String inputPath, String outputPath, OutputFormat format,String langue) throws XMLStreamException {
         XMLStreamReader streamReader = open(inputPath);
 
 
@@ -79,8 +79,9 @@ class XMLManager {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuuMMdd'T'HHmmss'Z'");
         String formattedDate = now.format(formatter);
     
-
-        exportText.append(new JSONObject().put("description", "definition file").put("created_on", formattedDate).put("language", "fr")+"\n");
+        JSONObject header = new JSONObject().put("description", "definition file").put("created_on", formattedDate).put("language", langue);
+        exportText.append(header.toString()+"\n");
+        IndexMaker.getIndexMaker().setOffset(exportText.length());
 
     try(BufferedWriter writer = openOutputFile(outputPath)) {
 
@@ -114,7 +115,7 @@ class XMLManager {
                     if (tagName.equals("text") && toParse) {
                         // La page n'est pas en français : pas intéressante
                         String text = streamReader.getElementText();
-                        if (!text.contains("== {{langue|fr}} ==")) {
+                        if (!text.contains("== {{langue|"+langue+"}} ==")) {
                             text = "";
                             toParse = false;
                             inPage = false;
@@ -124,7 +125,8 @@ class XMLManager {
                         textPage.append(text);
 
                         toParse = false;
-                        parser.formatExport(exportText, title, textPage.toString());
+                        // parser.formatExport(exportText, title, textPage.toString());
+                        parser.toJSON(exportText, title, textPage.toString(), langue);
                         pageCounter++;
                         writer.append(exportText.toString());
                         exportText.setLength(0);

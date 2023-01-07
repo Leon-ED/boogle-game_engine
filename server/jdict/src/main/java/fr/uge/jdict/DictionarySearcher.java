@@ -12,7 +12,7 @@ public class DictionarySearcher {
     public static void main(String[] args) throws Exception {
         DictionarySearcher searcher = new DictionarySearcher();
         String definitions_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json";
-        String index_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\index.txt";
+        String index_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dictionary.index";
         String word = "";
         OutputFormat format = OutputFormat.JSON;
         if(!args[0].equals("definitions")){
@@ -103,7 +103,7 @@ public class DictionarySearcher {
                     if(!searchSiblings){
                         return;
                     }else{
-                        //searchSiblingsDefinitions(index,definitions,word,midPos,format);
+                        searchSiblingsDefinitions(index,definitions,word,midPos,format);
                         return;
                         }
                 }
@@ -123,7 +123,7 @@ public class DictionarySearcher {
 
     public void searchSiblingsDefinitions(RandomAccessFile index, RandomAccessFile definitions, String word, int midPos,OutputFormat format) throws IOException{
         // lit les prochains index pour trouver les frères
-        int start = midPos ;
+        int start = midPos+1;
         while(true){
             // on lit l'index
             index.seek(start * 8);
@@ -141,10 +141,34 @@ public class DictionarySearcher {
                 System.out.println("Word found : ");
                 System.out.println(OutputFormat.convert(json.toString(),format));
             
+        }else{
+            break;
         }
-        start--;
-
+        start++;
     }
+     start = midPos-1;
+    while(true){
+        // on lit l'index
+        index.seek(start * 8);
+        int startDef = index.readInt();
+        int endDef = index.readInt();
+
+        // on lit la définition
+        definitions.seek(startDef);
+        String definition = new String(definitions.readLine().getBytes(), StandardCharsets.UTF_8);
+        JSONObject json = new JSONObject(definition);
+        String title = json.getString("title");
+        String normalizedTitle = DictionaryNormalized.normalize(title);
+        System.out.println("word : " + word + " title : " + normalizedTitle);
+        if(normalizedTitle.equals(word)){
+            System.out.println("Word found : ");
+            System.out.println(OutputFormat.convert(json.toString(),format));
+        
+    }else{
+        break;
+    }
+    start--;
+}
 
     }
 }
