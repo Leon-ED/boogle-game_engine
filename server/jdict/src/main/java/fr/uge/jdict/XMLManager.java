@@ -97,7 +97,8 @@ class XMLManager {
                     // On sauvegarde le titre de la page
                     if (tagName.equals("title") && inPage) {
                         title = streamReader.getElementText();
-                        if (title.contains(" ")) {
+                        // On ne le prends pas s'il contient un espace, un ou plusieurs chiffres ou s'il fait moins de 2
+                        if (title.contains(" ") || title.matches(".*\\d+.*") || title.length() < 2 ) {
                             title = "";
                             inPage = false;
                             continue;

@@ -25,6 +25,10 @@ public class DictionaryMaker {
             bzip_PATH = args[2];
             json_PATH = args[3];
             langue = args[0];
+            if(!langue.equals("fr")){
+                System.out.println("Seulement le français est supporté pour le moment");
+                System.exit(1);
+            }
 
         }
         System.out.println("Début du parsing");

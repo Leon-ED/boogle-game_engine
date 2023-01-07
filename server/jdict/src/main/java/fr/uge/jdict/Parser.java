@@ -4,14 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public record Parser(OutputFormat formatExport) {
-    @Deprecated
-    void formatExport(StringBuilder page, String title, String text, String langue) {
-        switch (formatExport) {
-            case JSON -> toJSON(page, title, text, langue);
-            default -> throw new IllegalArgumentException("Format non supporté");
-
-        }
-    }
 
     public void toJSON(StringBuilder page, String title, String text, String langue) {
         // !!! On return rien car on ajoute directement au StringBuilder passé en
@@ -27,8 +19,8 @@ public record Parser(OutputFormat formatExport) {
         for (String line : text.split("\n")) {
 
             // Ligne de définition en français
-            if (line.startsWith("=== {{")) {
-                if (line.contains("|" + langue + "|") || line.endsWith("|" + langue + "}} ===")) {
+            if (line.startsWith("=== {{") || line.startsWith("==={{")) {
+                if (line.contains("|" + langue + "|") || line.endsWith("|" + langue + "}} ===") || line.endsWith("|" + langue + "}}===")) {
                     String[] category = line.split("\\|");
                     categoryTitle = category[1];
 
@@ -68,38 +60,4 @@ public record Parser(OutputFormat formatExport) {
         page.append(json.toString() + "\n");
     }
 
-    @Deprecated
-    private static void TXT(StringBuilder page, String title, String text) {
-
-        Boolean lookingForDefinition = false;
-        // On parcours chaque ligne du texte
-        for (String line : text.split("\n")) {
-
-            // Ligne de définition en français
-            if (line.startsWith("=== {{") && (line.contains(" |fr|") || line.endsWith("|fr}} ==="))) {
-                String[] category = line.split("\\|");
-
-                // S'il y a plus 3 elem, c'est que c'est une catégorie spéciale :
-                if (category.length == 3) {
-                    page.append("\t" + category[1] + "\n");
-                    lookingForDefinition = true;
-                }
-            }
-            // Ligne ne contenant pas de définition en français
-            if (line.startsWith("=== {{") && !line.contains("|fr|") && !line.endsWith("|fr}} ===")) {
-                lookingForDefinition = false;
-            }
-
-            // Si on recherche les définitions et que la ligne commence par '# ' on l'ajoute
-            // à la liste sauf le #
-            if (lookingForDefinition && line.startsWith("# ")) {
-                page.append("\t\t-" + line.substring(2) + "\n");
-            }
-
-        }
-        // On a finit de parser les balises <text> </text> de la page on l'ajoute au
-        // StringBuilder passé en référence
-        page.append("\n");
-
-    }
 }
