@@ -85,21 +85,24 @@
             const url = "../server/api/verify.php";
             const grille = document.getElementById('grille');
             const lettres = grille.querySelectorAll('.case');
+            const nbCol = document.getElementById('nbCol');
+            const nbRows = document.getElementById('nbRows');
             let grilleArray = [];   
             lettres.forEach((lettre) => {
                 grilleArray.push(lettre.innerHTML);
             });
-            const params = `?word=${wordValue}&grille=${grilleArray}`;
+            const params = `?word=${wordValue}&grille=${grilleArray}&nbCol=${nbCol.value}&nbRows=${nbRows.value}`;
             fetch(url + params)
             .then((response) => response.json())
             .then((data) => {
-                if(data.code == 0){
-                    alert('Le mot est présent dans la grille');
+                if(data.code === 0){
+                    alert('Le mot est existe dans le dictionnaire');
                 }
-                else if(data.code == 1){
-                    alert('Le mot n\'est pas présent dans la grille');
+                else if(data.code === 1){
+                    alert('Le mot est un préfixe d\'un mot du dictionnaire');
                 }else{
-                    alert('Le mot n\'est pas dans le dictionnaire');
+
+                    alert('Le mot n\'existe pas dans le dictionnaire');
                 }
 
             })
