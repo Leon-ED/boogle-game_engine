@@ -25,7 +25,7 @@ int grid_build(FILE *file, int num_lines, int num_columns)
     // {
     //     return MEMORY_ERROR;
     // }
-    int total_count = 0;
+    float total_count = 0.0f;
 
     // On lit le fichier ligne par ligne et on récupère les 2 premières caractères et le nombre d'occurence
     // On mets tout ça dans le tableau
@@ -33,54 +33,36 @@ int grid_build(FILE *file, int num_lines, int num_columns)
     int i = 0;
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        sscanf(line, "%2s %d", counts[i].letter, &counts[i].count);
+        char *letter = malloc(2 * sizeof(char));
+        float item_pc;
+        sscanf(line, "%2s %f", counts[i].letter, &item_pc);
+        total_count += item_pc;
+        counts[i].count = total_count;
+
         i++;
-        total_count += counts[i].count;
+        // counts[i].count = total_count + counts[i].count;
+        // printf("%s %f \n", counts[i].letter, counts[i].count);
     }
     fclose(file);
-
-    // Seed pour avoir des nombres aléatoires différents à chaque fois
     srand(time(NULL));
-    // Pour chaque ligne
+
     for (int i = 0; i < num_lines; i++)
     {
-        // Pour chaque colonne
         for (int j = 0; j < num_columns; j++)
         {
-            // On prends une lettre au pif
-            int index = rand() % letter_count;
-            Letter_occurence *elem = &counts[index];
-            // printf("index : %d, lettre : %s \n", index, (*elem).letter);
-            // Ensuite on prends un nombre au hasard entre 0 et le nombre total d'occurence
-            int random = rand() % total_count;
-            // printf("random : %d \n", random);
-            char letter[2];
-            while (1)
+
+            float random = rand() % 101;
+            for (int i = 0; i < letter_count; i++)
             {
-                // Si le nombre est inférieur ou égal au nombre d'occurence de la lettre, on prends cette lettre
-                if (random <= (*elem).count)
+                if (random <= counts[i].count)
                 {
-                    // printf(" avant copy : random : %d, count : %d \n", random, (*elem).count);
-                    printf("%s ", (*elem).letter);
-                    // printf(" après copy : random : %d, count : %d \n", random, (*elem).count);
+                    printf("%s ", counts[i].letter);
                     break;
                 }
-                // Sinon on continue avec la lettre suivante
-                else
-                {
-                    index = rand() % letter_count;
-                    elem = &counts[index];
-                    random = rand() % total_count;
-                }
             }
-
-            // printf("%c ", letter[0] + 32); Minuscule : pour tester sur le solveur de grille du prof (marche pas avec qu)
         }
-        // printf("\n"); Pour avoir l'affichage 2D pour le débug
     }
-    // Free the memory allocated for the array
-    // free(counts);
-    // printf("fini \n");
+
     return 0;
 }
 
