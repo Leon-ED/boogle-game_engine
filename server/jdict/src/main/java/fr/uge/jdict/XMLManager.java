@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -33,12 +32,14 @@ class XMLManager {
             System.out.println("Le fichier n'existe pas, vérifiez le chemin");
             return null;
         }
+        // utf 8
 
         try {
             CompressorInputStream gzippedOut = new CompressorStreamFactory()
                     .createCompressorInputStream(CompressorStreamFactory.BZIP2, file);
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            eventReader = factory.createXMLStreamReader(gzippedOut);
+
+            eventReader = factory.createXMLStreamReader(gzippedOut, "UTF-8");
         } catch (Exception e) {
             System.out.println("Le fichier a bien été trouvé mais il y a eu une erreur lors de sa lecture");
             return null;
@@ -49,16 +50,6 @@ class XMLManager {
 
     private static BufferedWriter openOutputFile(String outputPath) {
         try {
-            // Pour écrirer dans le fichier en utf8
-            // charset utf 8
-            // StandardOpenOption.CREATE : créer le fichier s'il n'existe pas
-            // StandardOpenOption.TRUNCATE_EXISTING : si le fichier existe, le tronquer
-            // buffer size : 8192
-            // set buffer size to 8199
-
-            // return new BufferedWriter(new FileWriter(outputPath), (int)Math.pow(1024, 3)
-            // );
-
             return Files.newBufferedWriter(Path.of(outputPath), StandardCharsets.UTF_8, StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
@@ -67,7 +58,8 @@ class XMLManager {
         }
     }
 
-    static void exportToFile(String inputPath, String outputPath, OutputFormat format) throws XMLStreamException {
+    static void exportToFile(String inputPath, String outputPath, OutputFormat format, String langue)
+            throws XMLStreamException {
         XMLStreamReader streamReader = open(inputPath);
 
         Boolean inPage = false;
@@ -84,11 +76,13 @@ class XMLManager {
         ZonedDateTime now = ZonedDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuuMMdd'T'HHmmss'Z'");
         String formattedDate = now.format(formatter);
-    
 
-        exportText.append(new JSONObject().put("description", "definition file").put("created_on", formattedDate).put("language", "fr")+"\n");
+        JSONObject header = new JSONObject().put("description", "definition file").put("created_on", formattedDate)
+                .put("language", langue);
+        exportText.append(header.toString() + "\n");
+        IndexMaker.getIndexMaker().setOffset(exportText.length());
 
-    try(BufferedWriter writer = openOutputFile(outputPath)) {
+        try (BufferedWriter writer = openOutputFile(outputPath)) {
 
             while (streamReader.hasNext()) {
                 int event = streamReader.next();
@@ -103,7 +97,14 @@ class XMLManager {
                     // On sauvegarde le titre de la page
                     if (tagName.equals("title") && inPage) {
                         title = streamReader.getElementText();
+                        // On ne le prends pas s'il contient un espace, un ou plusieurs chiffres ou s'il fait moins de 2
+                        if (title.contains(" ") || title.matches(".*\\d+.*") || title.length() < 2 ) {
+                            title = "";
+                            inPage = false;
+                            continue;
+                        }
                     }
+
                     // Au autorise la lecture de la page car elle est ns = 0
                     if (tagName.equals("ns")
                             && streamReader.getElementText().equals("0") && inPage) {
@@ -114,7 +115,7 @@ class XMLManager {
                     if (tagName.equals("text") && toParse) {
                         // La page n'est pas en français : pas intéressante
                         String text = streamReader.getElementText();
-                        if (!text.contains("== {{langue|fr}} ==")) {
+                        if (!text.contains("== {{langue|" + langue + "}} ==")) {
                             text = "";
                             toParse = false;
                             inPage = false;
@@ -124,17 +125,18 @@ class XMLManager {
                         textPage.append(text);
 
                         toParse = false;
-                        parser.formatExport(exportText, title, textPage.toString());
+                        // parser.formatExport(exportText, title, textPage.toString());
+                        parser.toJSON(exportText, title, textPage.toString(), langue);
                         pageCounter++;
                         writer.append(exportText.toString());
                         exportText.setLength(0);
-                        // if(pageCounter == 2_500){
-                        //     writer.append(exportText.toString());
-                        //     exportText.setLength(0);
-                        // }
-                        // if(pageCounter == 5000){
-                        //     break;
-                        // }
+                        if (pageCounter == 2_500) {
+                            writer.append(exportText.toString());
+                            exportText.setLength(0);
+                        }
+                        if (pageCounter == 5000) {
+                            break;
+                        }
 
                     }
 
