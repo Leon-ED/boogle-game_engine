@@ -88,7 +88,7 @@ int grid_path(char word[], int num_lines, int num_columns, char lettres[]) {
                         if (j+l < 0 || j+l >= num_lines) { continue; }
                         if (k+m < 0 || k+m >= num_columns) { continue; }
                         if (word[i+1] == matrix[j+l][k+m]) {
-                            //printf("letter %c found at %d %d\n", word[i+1], j+l, k+m);
+                            printf("letter %c found at %d %d\n", word[i+1], j+l, k+m);
                             found += 1;
                             index_used[index] = word[i];
                             found_neighbour = 1;
@@ -97,7 +97,7 @@ int grid_path(char word[], int num_lines, int num_columns, char lettres[]) {
                     }
                 }
                 if (found_neighbour == 0) {
-                    //printf("letter %c not found\n", word[i+1]);
+                    printf("letter %c not found\n", word[i+1]);
                     return 1;
                 }
 
@@ -143,8 +143,8 @@ int main(int argc, char *argv[]) {
         lettres[i-4] = argv[i][0];
     }
 
-    printf("\n[valeur de sortie = %d]\n", grid_path(word, num_lines, num_columns, lettres));
+    // printf("\n[valeur de sortie = %d]\n", grid_path(word, num_lines, num_columns, lettres));
 
-    return 0;
+    return grid_path(word, num_lines, num_columns, lettres);
 }
 
