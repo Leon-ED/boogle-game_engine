@@ -10,7 +10,7 @@ typedef struct
 {
     int rows;
     int cols;
-    char grid[];
+    char *letters;
 } Grid;
 
 
@@ -28,7 +28,7 @@ bool findWordInGrid(Grid *grid, int row, int col, const char *word)
         return false;
 
     // Si le caractère de la grille ne correspond pas à celui du mot, on retourne false
-    if(grid->grid[row*grid->cols + col] != *word)
+    if(grid->letters[row*grid->cols + col] != *word)
         return false;
 
 
@@ -36,8 +36,8 @@ bool findWordInGrid(Grid *grid, int row, int col, const char *word)
     printf("(%d, %d) ", row, col);
 
     // On marque la position actuelle comme visitée
-    char tmp = grid->grid[row*grid->cols + col];
-    grid->grid[row*grid->cols + col] = '*';
+    char tmp = grid->letters[row*grid->cols + col];
+    grid->letters[row*grid->cols + col] = '*';
 
     // On vérifie récursivement les positions adjacentes et diagonales
     bool found = findWordInGrid(grid, row + 1, col, word + 1) ||
@@ -50,7 +50,7 @@ bool findWordInGrid(Grid *grid, int row, int col, const char *word)
                  findWordInGrid(grid, row - 1, col + 1, word + 1);
 
     // On remet le caractère de la grille à sa valeur initiale
-    grid->grid[row*grid->cols + col] = tmp;
+    grid->letters[row*grid->cols + col] = tmp;
 
     return found;
 }
@@ -65,20 +65,48 @@ int main(int argc, char **argv)
     }
 
     // Récupération des arguments
-    const char *word = argv[1];
+    char *word = argv[1];
+    // replace in word all QU by &
+    for (int i = 0; i < strlen(word); i++)
+    {
+        if (word[i] == 'Q' && word[i + 1] == 'U')
+        {
+            word[i] = '&';
+            // shift the rest of the string
+            for (int j = i + 1; j < strlen(word); j++)
+            {
+                word[j] = word[j + 1];
+            }
+        }
+    }
+
     int rows = atoi(argv[2]);
-    (argv[2]);
     int cols = atoi(argv[3]);
     Grid grid;
     grid.rows = rows;
     grid.cols = cols;
+    grid.letters = malloc(rows*cols*sizeof(char));
     char letters[argc - 4];
     for (int i = 4; i < argc; i++)
     {
         letters[i - 4] = argv[i][0];
-        printf("%c", letters[i - 4]);
+        printf("%c ", letters[i - 4]);
+         if (strcmp(argv[i], "QU") == 0){
+            letters[i - 4] = '&';
+            continue;
+        }
+        letters[i - 4] = argv[i][0];
     }
-    strcpy(grid.grid, letters);
+    strcpy(grid.letters, letters);
+    printf("\n");
+    // Affichage de la grille
+    printf("Grille de %d lignes et %d colonnes: ", rows, cols);
+    for (size_t i = 0; i < rows*cols; i++)
+    {
+        printf("%c ", grid.letters[i]);
+    }
+    printf("\n");
+
     // strcpy(grid.grid, argv[4]);
         // Recherche du mot dans la grille
     bool found = false;
