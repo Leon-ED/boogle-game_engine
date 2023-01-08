@@ -4,6 +4,6 @@
 struct Letter_occurence
 {
     char letter[2];
-    int count;
+    float count;
 };
 typedef struct Letter_occurence Letter_occurence;

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boogle</title>
+</head>
+<body>
+    <h1>Choisir données:</h1>
+    <div id="form-Choose">
+        <div>
+            <div>
+                <label for="langue">Français</label>
+                <input type="radio" name="langue" id="langue" value="fr" checked>
+        </div>
+        <div>
+            <label for="nbCol">Nombre de colonnes</label>
+            <input type="number" name="nbCol" id="nbCol" value="4" min="2" max="10">
+            <label for="nbRows">Nombre de lignes</label>
+            <input type="number" name="nbRows" id="nbRows" value="4" min="2" max="10">           
+        </div>
+        <input type="submit" value="Valider" id="form-submit">
+    </div>
+    <h1>Grille :</h1>
+    <section>
+        <div id="grille">
+
+        </div>
+        <label for="word">Mot à chercher</label>
+        <input type="text" name="word" id="word">
+        <input type="submit" value="Chercher" id="word-submit">
+
+    </section>
+    
+    <script defer>
+        const form = document.getElementById('form-submit');
+        const nbCol = document.getElementById('nbCol');
+        const nbRows = document.getElementById('nbRows');
+        const langue = document.getElementById('langue');
+
+        form.addEventListener('click', (e) => {
+            e.preventDefault();
+            const nbColValue = nbCol.value;
+            const nbRowsValue = nbRows.value;
+            const langueValue = langue.value;
+            console.log(nbColValue, nbRowsValue, langueValue);
+            const url = "../server/api/grille.php";
+            const params = `?nbCol=${nbColValue}&nbRows=${nbRowsValue}&langue=${langueValue}`;
+            fetch(url + params)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                data = data.grille
+                const grille = document.getElementById('grille');
+                grille.innerHTML = '';
+
+                for(var i = 0; i < nbRowsValue ; i++){
+                    const line = document.createElement('div');
+                    console.log(line);
+                    line.classList.add('ligne');
+                    for(var j = 0; j < nbColValue ; j++){
+                        var lettre = data[i][j];
+                        console.log(lettre);
+                        const div = document.createElement('div');
+                        div.classList.add('case');
+                        div.innerHTML = lettre;
+                        line.appendChild(div);
+                    }
+                    grille.appendChild(line);
+                }
+
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+    <script defer>
+        const word = document.getElementById('word-submit');
+        word.addEventListener('click', (e) => {
+            e.preventDefault();
+            const wordValue = document.getElementById('word').value;
+            console.log(wordValue);
+            const url = "../server/api/verify.php";
+            const grille = document.getElementById('grille');
+            const lettres = grille.querySelectorAll('.case');
+            let grilleArray = [];   
+            lettres.forEach((lettre) => {
+                grilleArray.push(lettre.innerHTML);
+            });
+            const params = `?word=${wordValue}&grille=${grilleArray}`;
+            fetch(url + params)
+            .then((response) => response.json())
+            .then((data) => {
+                if(data.code == 0){
+                    alert('Le mot est présent dans la grille');
+                }
+                else if(data.code == 1){
+                    alert('Le mot n\'est pas présent dans la grille');
+                }else{
+                    alert('Le mot n\'est pas dans le dictionnaire');
+                }
+
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+
+
+    </script>
+    <style>
+        .case{
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            display: inline-block;
+            text-align: center;
+            line-height: 50px;
+        }
+        .ligne{
+            margin-bottom: 10px;
+        }
+
+
+    </style>
+
+</body>
+</html>

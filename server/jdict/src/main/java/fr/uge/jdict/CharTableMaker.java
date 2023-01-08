@@ -37,7 +37,7 @@ class CharTableMaker {
         output_PATH = Paths.get(definition_PATH).getParent().toString() + File.separator + "frequences.txt";
         }
 
-        TreeMap<String, Integer> freqs = createCharTable(definition_PATH);
+        TreeMap<String, Float> freqs = createCharTable(definition_PATH);
         if (freqs == null) {
             System.out.println("JDICT : Une erreur a eu lieu lors de la création de la table de fréquences");
         }
@@ -48,6 +48,21 @@ class CharTableMaker {
         }
     }
 
+
+    private static void convertToPercent(TreeMap<String, Float> charTable) {
+        int sum = 0;
+        for (String key : charTable.keySet()) {
+            sum += charTable.get(key);
+        }
+        System.out.println(sum);
+        for (String key : charTable.keySet()) {
+            charTable.put(key, charTable.get(key)*100.0f / sum);
+        }
+    }
+
+
+
+
     /***
      * {@summary} Crée une table de fréquences des lettres et des paires de lettres
      * 
@@ -55,8 +70,8 @@ class CharTableMaker {
      * @return TreeMap<String, Integer> : table de fréquences des lettres et des
      *         paires de lettres triée par ordre alphabétique
      */
-    private static TreeMap<String, Integer> createCharTable(String definition_PATH) {
-        TreeMap<String, Integer> charTable = new TreeMap<>();
+    private static TreeMap<String, Float> createCharTable(String definition_PATH) {
+        TreeMap<String, Float> charTable = new TreeMap<>();
         try (BufferedReader reader = Files.newBufferedReader(Path.of(definition_PATH))) {
             while (reader.readLine() != null) {
             
@@ -78,9 +93,9 @@ class CharTableMaker {
                     }
 
                     if (charTable.containsKey(elem)) {
-                        charTable.put(elem, charTable.get(elem) + 1);
+                        charTable.put(elem, charTable.get(elem) + 1.0f);
                     } else {
-                        charTable.put(elem, 1);
+                        charTable.put(elem, 1.0f);
                     }
                 }
             }
@@ -101,7 +116,8 @@ class CharTableMaker {
      *                    et des paires de lettres triée par ordre alphabétique
      * @param output_PATH : chemin du fichier de sortie
      */
-    private static void writeCharTable(TreeMap<String, Integer> charTable, String output_PATH) {
+    private static void writeCharTable(TreeMap<String, Float> charTable, String output_PATH) {
+        convertToPercent(charTable);
         try (BufferedWriter writer = Files.newBufferedWriter(Path.of(output_PATH))) {
             for (String key : charTable.keySet()) {
                 if (!isPrintable(key.charAt(0))) {
