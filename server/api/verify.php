@@ -8,13 +8,24 @@ if (!isset($_GET["word"]) || !isset($_GET["grille"]) || !isset($_GET["nbCol"]) |
     die;
 }
 
+
+//Si sur windows
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    $ext = ".exe";
+}else{
+    $ext = "";
+}
+$DS = DIRECTORY_SEPARATOR;
+
+
+
 $word = $_GET["word"];
 $grille = implode(" ", explode(",", $_GET["grille"]));
 $nbCols = $_GET["nbCol"];
 $nbRows = $_GET["nbRows"];
 
 // var_dump($grille);
-$cmd = "..\\dictionnary\\executables\\dictionnary_lookup.exe ..\\files\\dumps\\dico_lexe.lex $word";
+$cmd = "..".$DS."dictionnary".$DS."executables".$DS."dictionnary_lookup".$DS." ..".$DS."files".$DS."dumps".$DS."dico_lexe.lex $word";
 exec($cmd, $output, $return);
 $output = intval($output[0]);
 
