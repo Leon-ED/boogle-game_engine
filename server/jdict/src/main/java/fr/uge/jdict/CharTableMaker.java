@@ -54,15 +54,10 @@ class CharTableMaker {
         for (String key : charTable.keySet()) {
             sum += charTable.get(key);
         }
-        System.out.println(sum);
         for (String key : charTable.keySet()) {
             charTable.put(key, charTable.get(key)*100.0f / sum);
         }
     }
-
-
-
-
     /***
      * {@summary} Crée une table de fréquences des lettres et des paires de lettres
      * 
