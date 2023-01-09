@@ -134,9 +134,9 @@ class XMLManager {
                             writer.append(exportText.toString());
                             exportText.setLength(0);
                         }
-                        if (pageCounter == 5000) {
-                            break;
-                        }
+                        // if (pageCounter == 5000) {
+                        //     break;
+                        // }
 
                     }
 
