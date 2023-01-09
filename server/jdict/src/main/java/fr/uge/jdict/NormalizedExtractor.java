@@ -50,6 +50,7 @@ public class NormalizedExtractor {
         String line;
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(definitions_PATH), StandardCharsets.UTF_8)) {
             while ((line = reader.readLine()) != null) {
+
                 JSONObject definition = new JSONObject(line);
                 if (!definition.has("title")) {
                     language = definition.getString("language");
