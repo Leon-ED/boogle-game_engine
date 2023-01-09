@@ -94,10 +94,10 @@ public class DictionarySearcher {
                 } else {
                     normalizedTitle = title;
                 }
-                System.out.println("word : " + word + " title : " + normalizedTitle);
+                // System.out.println("word : " + word + " title : " + normalizedTitle);
 
                 if (normalizedTitle.equals(word)) {
-                    System.out.println("Word found : ");
+                    // System.out.println("Word found : ");
                     // System.out.println(json.toString());
                     System.out.println(OutputFormat.convert(json.toString(), format));
 
@@ -118,6 +118,7 @@ public class DictionarySearcher {
             }
 
             System.out.println("Aucune définition trouvée pour le mot " + word + "");
+            System.exit(1);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -138,9 +139,9 @@ public class DictionarySearcher {
             JSONObject json = new JSONObject(definition);
             String title = json.getString("title");
             String normalizedTitle = DictionaryNormalized.normalize(title);
-            System.out.println("word : " + word + " title : " + normalizedTitle);
+            // System.out.println("word : " + word + " title : " + normalizedTitle);
             if (normalizedTitle.equals(word)) {
-                System.out.println("Word found : ");
+                // System.out.println("Word found : ");
                 System.out.println(OutputFormat.convert(json.toString(), format));
 
             } else {
@@ -160,9 +161,9 @@ public class DictionarySearcher {
             JSONObject json = new JSONObject(definition);
             String title = json.getString("title");
             String normalizedTitle = DictionaryNormalized.normalize(title);
-            System.out.println("word : " + word + " title : " + normalizedTitle);
+            // System.out.println("word : " + word + " title : " + normalizedTitle);
             if (normalizedTitle.equals(word)) {
-                System.out.println("Word found : ");
+                // System.out.println("Word found : ");
                 System.out.println(OutputFormat.convert(json.toString(), format));
 
             } else {
