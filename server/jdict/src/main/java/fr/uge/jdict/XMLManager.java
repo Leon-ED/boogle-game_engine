@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -45,6 +46,12 @@ class XMLManager {
             return null;
         }
         return eventReader;
+
+    }
+
+    public static boolean isValidtitle(String title) {
+        List<Character> bannedChars = List.of(':', '/', '\\', '?', '*', '<', '>', '|', '"', ' ','-','_',')','(','[',']','{','}','!','@','#','$','%','^','&','*','=','+','`','~',';','.',',','\'');
+        return  title.chars().noneMatch(c -> bannedChars.contains((char) c));
 
     }
 
@@ -98,7 +105,7 @@ class XMLManager {
                     if (tagName.equals("title") && inPage) {
                         title = streamReader.getElementText();
                         // On ne le prends pas s'il contient un espace, un ou plusieurs chiffres ou s'il fait moins de 2
-                        if (title.contains(" ") || title.matches(".*\\d+.*") || title.length() < 2 ) {
+                        if (isValidtitle(title)) {
                             title = "";
                             inPage = false;
                             continue;
