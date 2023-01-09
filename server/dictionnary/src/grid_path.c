@@ -48,7 +48,7 @@ bool findWordInGrid(Grid *grid, int row, int col, const char *word, int *index_f
     grid->letters[row*grid->cols + col] = tmp;
 
     if (found)
-        index_founded[strlen(word)-1] = grid->cols*row+col;
+        index_founded[strlen(word)] = grid->cols*row+col;
 
     return found;
 }
