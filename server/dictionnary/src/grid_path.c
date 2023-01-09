@@ -127,5 +127,5 @@ int main(int argc, char **argv)
         printf("Mot non trouvé dans la grille\n");
     }
 
-    return 0;
+    return !found;
 }
