@@ -21,8 +21,12 @@ grid_path: $(SOURCEDIR)/grid_path.c $(SOURCEDIR)/libs.c
 score_basic: $(SOURCEDIR)/score_basic.c
 	$(CC) -o $(BUILDDIR)/score_basic $(SOURCEDIR)/score_basic.c
 
+score_len: $(SOURCEDIR)/score_len.c
+	$(CC) -o $(BUILDDIR)/score_len $(SOURCEDIR)/score_len.c
+
+
 clean:
 	rm -f $(SOURCEDIR)/*.o
 
 
-all: dictionnary_build dictionnary_lookup grid_build grid_path score_basic clean
+all: dictionnary_build dictionnary_lookup grid_build grid_path score_basic score_len clean
