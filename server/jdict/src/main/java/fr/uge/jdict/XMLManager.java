@@ -50,8 +50,11 @@ class XMLManager {
     }
 
     public static boolean isValidtitle(String title) {
-        List<Character> bannedChars = List.of(':', '/', '\\', '?', '*', '<', '>', '|', '"', ' ','-','_',')','(','[',']','{','}','!','@','#','$','%','^','&','*','=','+','`','~',';','.',',','\'');
-        return  title.chars().noneMatch(c -> bannedChars.contains((char) c));
+        List<Character> bannedChars = 
+        List.of(':', '/', '\\', '?', '*', '<', '>', '|', '"', ' ','-','_',')',
+        '(','[',']','{','}','!','@','#',
+        '$','%','^','&','*','=','+','`','~',';','.',',','\'','0','1','2','3','4','5','6','7','8','9');
+        return  !title.chars().noneMatch(c -> bannedChars.contains((char) c)) || title.length() < 2;
 
     }
 
