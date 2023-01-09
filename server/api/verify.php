@@ -31,13 +31,13 @@ exec($cmd, $output, $return);
 $output = intval($output[0]);
 // var_dump($output);
 // var_dump($return);
-// if($output == 2):
-// echo json_encode(array(
-//     "word" => $word,
-//     "code" => $output,
-// ));
-// die;
-// endif;
+if($output == 2):
+echo json_encode(array(
+    "word" => $word,
+    "code" => $output,
+));
+die;
+endif;
 
 $cmd = "..".$DS."dictionnary".$DS."executables".$DS."grid_path".$ext." $word $nbRows $nbCols $grille";
 exec($cmd, $output, $return);
