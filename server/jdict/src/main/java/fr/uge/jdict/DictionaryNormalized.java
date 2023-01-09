@@ -13,9 +13,13 @@ public class DictionaryNormalized {
     }
 
     public static String normalize(String word) {
-        String string = Normalizer.normalize(word, Normalizer.Form.NFD);
-        string = string.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        String string = 
+        Normalizer
+        .normalize(word, Normalizer.Form.NFD)
+        .replaceAll("[^\p{ASCII}]", "");
         return string.toUpperCase();
     }
+
+
 
 }
