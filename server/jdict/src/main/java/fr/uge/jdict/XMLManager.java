@@ -50,8 +50,11 @@ class XMLManager {
     }
 
     public static boolean isValidtitle(String title) {
-        List<Character> bannedChars = List.of(':', '/', '\\', '?', '*', '<', '>', '|', '"', ' ','-','_',')','(','[',']','{','}','!','@','#','$','%','^','&','*','=','+','`','~',';','.',',','\'');
-        return  title.chars().noneMatch(c -> bannedChars.contains((char) c));
+        List<Character> bannedChars = 
+        List.of(':', '/', '\\', '?', '*', '<', '>', '|', '"', ' ','-','_',')',
+        '(','[',']','{','}','!','@','#',
+        '$','%','^','&','*','=','+','`','~',';','.',',','\'','0','1','2','3','4','5','6','7','8','9');
+        return  !title.chars().noneMatch(c -> bannedChars.contains((char) c)) || title.length() < 2;
 
     }
 
@@ -89,8 +92,8 @@ class XMLManager {
         exportText.append(header.toString() + "\n");
         IndexMaker.getIndexMaker().setOffset(exportText.length());
 
-        try (BufferedWriter writer = openOutputFile(outputPath)) {
-
+        try (BufferedWriter writer = openOutputFile(outputPath)) {  
+            writer.write(exportText.toString());
             while (streamReader.hasNext()) {
                 int event = streamReader.next();
                 // On cherche le début d'une page
@@ -105,6 +108,7 @@ class XMLManager {
                     if (tagName.equals("title") && inPage) {
                         title = streamReader.getElementText();
                         // On ne le prends pas s'il contient un espace, un ou plusieurs chiffres ou s'il fait moins de 2
+            
                         if (isValidtitle(title)) {
                             title = "";
                             inPage = false;
@@ -133,14 +137,13 @@ class XMLManager {
 
                         toParse = false;
                         // parser.formatExport(exportText, title, textPage.toString());
-                        parser.toJSON(exportText, title, textPage.toString(), langue);
                         pageCounter++;
-                        writer.append(exportText.toString());
+                        writer.write(parser.toJSON(exportText, title, textPage.toString(), langue));
                         exportText.setLength(0);
-                        if (pageCounter == 2_500) {
-                            writer.append(exportText.toString());
-                            exportText.setLength(0);
-                        }
+                        // if (pageCounter == 2_500) {
+                        //     writer.append(exportText.toString());
+                        //     exportText.setLength(0);
+                        // }
                         // if (pageCounter == 5000) {
                         //     break;
                         // }

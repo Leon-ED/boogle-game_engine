@@ -50,6 +50,7 @@ public class NormalizedExtractor {
         String line;
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(definitions_PATH), StandardCharsets.UTF_8)) {
             while ((line = reader.readLine()) != null) {
+
                 JSONObject definition = new JSONObject(line);
                 if (!definition.has("title")) {
                     language = definition.getString("language");
@@ -62,7 +63,7 @@ public class NormalizedExtractor {
                     continue;
                 }
                 for (String type : categories) {
-                    if (categoriesJSON.has(type.trim())) {
+                    if (categoriesJSON.has(type)) {
                         String normalizedWord = DictionaryNormalized.normalize(definition.getString("title"));
                         wordSet.add(normalizedWord);
                         break;

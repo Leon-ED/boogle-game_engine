@@ -16,7 +16,7 @@ public class DictionaryNormalized {
         String string = 
         Normalizer
         .normalize(word, Normalizer.Form.NFD)
-        .replaceAll("[^\p{ASCII}]", "");
+        .replaceAll("[^\\p{ASCII}]", "");
         return string.toUpperCase();
     }
 
