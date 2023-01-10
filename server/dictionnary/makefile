@@ -24,6 +24,8 @@ score_basic: $(SOURCEDIR)/score_basic.c
 score_len: $(SOURCEDIR)/score_len.c
 	$(CC) -o $(BUILDDIR)/score_len $(SOURCEDIR)/score_len.c
 
+solve: $(SOURCEDIR)/solve.c $(SOURCEDIR)/dictionnary_lookup.c $(SOURCEDIR)/trees.c $(SOURCEDIR)/libs.c
+	$(CC) -o $(BUILDDIR)/solve $(SOURCEDIR)/dictionnary_lookup.c $(SOURCEDIR)/trees.c $(SOURCEDIR)/libs.c -DEXTERNAL_DRIVER
 
 clean:
 	rm -f $(SOURCEDIR)/*.o

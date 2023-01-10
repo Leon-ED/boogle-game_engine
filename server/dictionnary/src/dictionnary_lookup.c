@@ -96,6 +96,7 @@ int dictionnary_lookup(FILE *dico_lex, char word[])
     return FOUND_PREFIX;
 }
 
+#ifndef EXTERNAL_DRIVER
 int main(int argc, char **argv)
 {
     if (argc < 3)
@@ -114,3 +115,4 @@ int main(int argc, char **argv)
 
     return EXIT_SUCCESS;
 }
+#endif
