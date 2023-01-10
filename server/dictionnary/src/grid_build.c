@@ -21,10 +21,10 @@ int grid_build(FILE *file, int num_lines, int num_columns)
     // Allocation mémoire
     const int letter_count = number_of_lines(file);
     Letter_occurence counts[letter_count];
-    // if (counts == NULL)
-    // {
-    //     return MEMORY_ERROR;
-    // }
+    if (counts == NULL)
+    {
+        return MEMORY_ERROR;
+    }
     float total_count = 0.0f;
 
     // On lit le fichier ligne par ligne et on récupère les 2 premières caractères et le nombre d'occurence
@@ -63,7 +63,7 @@ int grid_build(FILE *file, int num_lines, int num_columns)
         }
     }
 
-    return 0;
+    return OK;
 }
 
 int main(int argc, char *argv[])
@@ -90,10 +90,7 @@ int main(int argc, char *argv[])
         printf("GRID_BUILD: Erreur lors de l'ouverture du fichier, le chemin spécifié (%s) est-il correct ? \n", argv[1]);
         return FILE_NOT_FOUND;
     }
-    // printf("GRID_BUILD : Fichier ouvert avec succès ! \n");
-    grid_build(freq_FILE, atoi(argv[2]), atoi(argv[3]));
-    // printf("GRID_BUILD : Grille générée avec succès ! \n");
+    int build_result = grid_build(freq_FILE, atoi(argv[2]), atoi(argv[3]));
     printf("\n");
-
-    return 0;
+    return build_result;
 }

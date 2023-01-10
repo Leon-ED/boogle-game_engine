@@ -1,6 +1,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-char **create_matrix(int num_lines, int num_columns, char **lettres) ;
 
-int grid_path(char word[], int num_lines, int num_columns, char lettres[]) ;
+#define QU '&'
+#define VISITED '@'
+#define FOUND 0
+#define NOT_FOUND 1
+// Définition de la structure de données représentant la grille de caractères
+
+typedef struct
+{
+    int rows;
+    int cols;
+    char *letters;
+    int size;
+} Grid;
+
+int grid_path(char *word, Grid *grid);

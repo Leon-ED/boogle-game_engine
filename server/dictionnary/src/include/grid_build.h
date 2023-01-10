@@ -1,5 +1,5 @@
 /**
- *@brief Relie une lettre à son nombre d'occurence 
+ *@brief Relie une lettre à son nombre d'occurence
  **/
 struct Letter_occurence
 {

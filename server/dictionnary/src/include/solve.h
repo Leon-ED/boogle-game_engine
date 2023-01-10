@@ -1,5 +1,20 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "grid_path.h"
 #include "dictionnary_lookup.h"
 
-void solve(int taille_mot, int rows, int cols, char *lettres, FILE *dico_lex) ;
+// Définition de la structure de données représentant la grille de caractères
+// Structure for the grid of characters
+// Structure for the grid of characters
+typedef struct
+{
+    int rows;
+    int cols;
+    char *letters;
+} Grid;
+
+// Linked list node structure
+typedef struct list List;
+struct list
+{
+    List *next;
+    void *data;
+};
