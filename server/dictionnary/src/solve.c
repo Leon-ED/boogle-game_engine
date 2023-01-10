@@ -1,130 +1,90 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "include/solve.h"
-
-
 /**
  * @brief Renvoi les mots valides de la grilel présents dans le dico.lex
+ * @bug marche pas (too bad)
  **/
 
 
-// Définition de la structure de données représentant la grille de caractères
-typedef struct
+// Create a new node for the linked list
+List *list_create(void *data)
 {
-    int rows;
-    int cols;
-    char *letters;
-} Grid;
-
-
-char **create_matrix(int num_lines, int num_columns, char **lettres) {
-    char **matrix = malloc(num_lines * sizeof(char *));
-    for (int i = 0; i < num_lines; i++) {
-        matrix[i] = malloc(num_columns * sizeof(char));
+    List *list = malloc(sizeof(list));
+    if (list)
+    {
+        list->data = data;
+        list->next = NULL;
     }
-    int k = 0;
-    for (int i = 0; i < num_lines; i++) {
-        for (int j = 0; j < num_columns; j++) {
-            matrix[i][j] = lettres[0][k];
-            k++;
-        }
-    }
-    return matrix;
+    return list;
 }
 
-
-void solve(int taille_mot, int rows, int cols, char *lettres, FILE *dico_lex) {
-
-printf("taille_mot : %d \n", taille_mot);
-printf("num_lines : %d \n", cols);
-printf("num_columns : %d \n", rows);
-printf("lettres : %s \n", lettres);
-printf("dico_lex : %s \n", dico_lex);
-
-    char **matrix = create_matrix(rows, cols, &lettres);
-    //Print matrix
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            printf("%c ", matrix[i][j]);
-        }
-        printf("\n");
-    }
-
+// Add a new node to the front of the linked list
+List *add(List *old, void *data)
+{
+    List *list = list_create(data);
+    if (list)
+        list->next = old;
+    return list;
 }
 
+#define MAX_WORD_SIZE 256
 
-void findAllPossibleWordsInGrid(Grid *grid, int row, int col, char *word, int len, FILE *dico_lex) {
+void searchWordInGrid(Grid *grid, int row, int col, char *path, int current_word_len, int MIN_WORD_LEN, List **list_all_words, FILE *dico_lex)
+{
+    if (current_word_len + 1 >= MIN_WORD_LEN)
+        return;
 
-    int index = 0;
+    if (row < 0 || row >= grid->rows || col < 0 || col >= grid->cols)
+        return;
 
-    // Creer la liste des mots trouvés
-    int n = 1000;
-    char** mots_trouves = malloc(n * sizeof(char*)); 
+    path[current_word_len] = grid->letters[row * grid->cols + col];
 
-    for (int i = 0; i < n; i++) {
-    mots_trouves[i] = NULL;
-    }
-    
-
-
-    // On ajoute la lettre actuelle au mot
-    word[len] = grid->letters[row*grid->cols + col];
-    len++;
-
-    if (dictionnary_lookup(dico_lex, word) == 0) {
-        printf("Mot trouvé : %s \n", word);
-        // get the size of word
-        int size = strlen(word);
-        // allocate memory for the word
-        mots_trouves[index] = malloc(size * sizeof(char));
-        strcpy(mots_trouves[index], word);
-        index++;
+    if (current_word_len + 1 >= 2 && dictionnary_lookup(dico_lex, path) == 0)
+    {
+        char *word = strdup(path);
+        if (!word)
+            return;
+        printf("%s", word);
+        printf(" curr word len : %d \n", current_word_len + 1);
+        *list_all_words = add(*list_all_words, word);
     }
 
-    // On affiche le mot actuel
-    printf("%s \n", word);
-
-
-    // On marque la case actuelle comme visitée
-    grid->letters[row*grid->cols + col] = '*';
-
-    // On parcourt les 8 cases adjacentes
-    for (int i = row-1; i <= row+1; i++) {
-        for (int j = col-1; j <= col+1; j++) {
-            // On vérifie que la case est dans la grille
-            if (i >= 0 && i < grid->rows && j >= 0 && j < grid->cols) {
-                // On vérifie que la case n'a pas déjà été visitée
-                if (grid->letters[i*grid->cols + j] != '*') {
-                    // On appelle la fonction récursive
-                    findAllPossibleWordsInGrid(grid, i, j, word, len, dico_lex);
-                }
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            int x = row + i;
+            int y = col + j;
+            if (x >= 0 && x < grid->rows && y >= 0 && y < grid->cols)
+            {
+                searchWordInGrid(grid, x, y, path, current_word_len + 1, MIN_WORD_LEN, list_all_words, dico_lex);
             }
         }
     }
-
-    // On démarque la case actuelle
-    grid->letters[row*grid->cols + col] = word[len-1];
-
-
-    for (int i = 0; i < n; i++) {
-        if (mots_trouves[i] != NULL) {
-            printf("Mot trouvé : %s \n", mots_trouves[i]);
-        }
-    }
-
+    path[current_word_len] = 0;
 }
 
+void findAllWordInGrid(Grid *grid, int start_row, int start_col, List **list_all_words, FILE *dico_lex, int taille_mot)
+{
+    if (!grid || !dico_lex)
+        return;
+    char path[MAX_WORD_SIZE] = {0};
+    // Recursively check all possible paths starting from (start_row, start_col)
+    searchWordInGrid(grid, start_row, start_col, path, 0, taille_mot, list_all_words, dico_lex);
+}
 
-
+/**
+ * @bug : MARCHE PAS
+ ***/
 int main(int argc, char const *argv[])
 {
-    if (argc < 6) {
+    if (argc < 6)
+    {
         printf("Usage: %s <dico.lex> <taille_mot> <num_lignes> <num_columns>\n", argv[0]);
         return 1;
     }
-
 
     FILE *dico_LEX = fopen(argv[1], "rb");
     if (dico_LEX == NULL)
@@ -132,37 +92,43 @@ int main(int argc, char const *argv[])
         printf("Erreur : Erreur lors de l'ouverture du fichier, le chemin spécifié (%s) est-il correct ? \n", argv[1]);
         return 0;
     }
-
     int taille_mot = atoi(argv[2]);
     int rows = atoi(argv[3]);
+    printf("rows : %d \n", rows);
     int cols = atoi(argv[4]);
-    char lettres[argc-4];
-
+    printf("cols : %d \n", cols);
     Grid grid;
     grid.rows = rows;
     grid.cols = cols;
-    grid.letters = malloc(rows*cols*sizeof(char));
-
-
-    for (int i =5; i<argc; i++) {
-        if (strcmp(argv[i], "QU") == 0)
-            lettres[i-5] = *"~";
-        else
-        lettres[i-5] = argv[i][0];
-    }
-
-    strcpy(grid.letters, lettres);
-    printf("\n");
-    // Affichage de la grille
-    printf("Grille de %d lignes et %d colonnes: ", rows, cols);
-    for (size_t i = 0; i < rows*cols; i++)
+    grid.letters = malloc(rows * cols * sizeof(char));
+    char letters[argc - 4];
+    for (int i = 5; i < argc; i++)
     {
-        printf("%c ", grid.letters[i]);
+        if ((i - 1) % 4 == 0 && i != 5)
+            printf("\n");
+
+        letters[i - 5] = argv[i][0];
+        if (strcmp(argv[i], "QU") == 0)
+        {
+            letters[i - 5] = '&';
+            printf("%c ", letters[i - 5]);
+            continue;
+        }
+        printf("%c ", letters[i - 5]);
+        letters[i - 5] = argv[i][0];
     }
-    printf("\n");
+    strcpy(grid.letters, letters);
 
-    findAllPossibleWordsInGrid(&grid, rows, cols, lettres, taille_mot, dico_LEX);
+    List *list_all_words = NULL;
 
-    solve(taille_mot, rows, cols, lettres, dico_LEX);
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            findAllWordInGrid(&grid, i, j, &list_all_words, dico_LEX, taille_mot);
+        }
+    }
 
+
+    // solve(taille_mot, num_lines, num_columns, lettres, dico_LEX);
 }
