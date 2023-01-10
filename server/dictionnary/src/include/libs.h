@@ -23,7 +23,7 @@ typedef struct
 int number_of_lines(FILE *file);
 Cell newCell(char letter, int first_child, int nSibling);
 FileHeader getFileHeader(FILE *export_FILE);
-#define UNKNOW_ERROR 255 
+#define UNKNOW_ERROR 255
 #define FILE_NOT_FOUND 254
 #define MISSING_PARAMS 253
 #define WRONG_PARAMS 252

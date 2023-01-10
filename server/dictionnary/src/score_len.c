@@ -6,8 +6,10 @@
 
 #define MAX_WORD_LENGTH 100
 
-
-
+/**
+ * @brief Calcule le score des mots fournis
+ * @details Le score total est égal à la somme des longueur de tous les mots fournis
+ */
 int main(int argc, char *argv[])
 {
     // Vérification du nombre d'arguments
@@ -18,13 +20,12 @@ int main(int argc, char *argv[])
     }
     int score = 0;
 
-    for (size_t i = 1; i < argc ; i++)
+    for (size_t i = 1; i < argc; i++)
     {
         char *word = argv[i];
         int len = strlen(word);
         score += len;
     }
     printf("%d\n", score);
-
-
+    return EXIT_SUCCESS;
 }

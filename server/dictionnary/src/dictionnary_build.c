@@ -11,7 +11,6 @@
  **/
 void insertWord(CSTree *t, char *word)
 {
-  ////printf("word: %s ", word);
   // Aucun élément trouvé alors on l'insère nous même
   if (*t == NULL)
   {
@@ -19,7 +18,7 @@ void insertWord(CSTree *t, char *word)
     if (word[1] != '\0')
       insertWord(&(*t)->firstChild, word + 1);
   }
-  // Si c'est la même lettre, on l'insère pas et on continue dans les fils avec la lettre suivante
+  // Si c'est la même lettre, on l'insère pas et on continue dans les fils avec la lettre suivante du mot
   else if ((*t)->elem == word[0])
   {
     if (word[1] != '\0')
@@ -71,15 +70,13 @@ void insertEOW(char *word, CSTree *t)
  * @param FileHeader Entête du fichier
  * @return void
  **/
-void writeStaticTree(StaticTree *t, FILE *dico_LEX,FileHeader header)
+void writeStaticTree(StaticTree *t, FILE *dico_LEX, FileHeader header)
 {
   fseek(dico_LEX, 0, SEEK_SET);
   fwrite(&header, sizeof(FileHeader), 1, dico_LEX);
   fwrite((*t).nodeArray, sizeof(ArrayCell), (*t).nNodes, dico_LEX);
   free((*t).nodeArray);
 }
-
-
 
 /**
  * @brief Construit le dictionnaire à partir du fichier dico.txt
@@ -91,8 +88,6 @@ int dictionnary_build(FILE *dico, FILE *dico_lex)
 {
   FileHeader header;
   header.nb_words = number_of_lines(dico);
-  ////printf("nb_words: %d \n", header.nb_words);
-  ////printf("nb_words: %d \n", header.nb_words);
 
   char line[256];
   CSTree tree = NULL;
@@ -102,25 +97,16 @@ int dictionnary_build(FILE *dico, FILE *dico_lex)
     if (line[strlen(line) - 1] == '\n')
     {
       line[strlen(line) - 1] = '\0';
-      ////printf("%c \n", line[strlen(line) - 1]);
     }
     insertWord(&tree, line);
     insertEOW(line, &tree);
   }
-  // replaceEOL(&tree);
 
-  ////printf("\n");
-  //printPrefix(tree);
   fclose(dico);
   StaticTree staticTree = exportStaticTree(tree);
-  //printStatic(staticTree, 0);
   header.cell_size = sizeof(ArrayCell);
   header.nb_Cells = staticTree.nNodes;
   header.size = sizeof(FileHeader);
-  //printf("cell_size: %d \n", header.cell_size);
-  //printf("size: %d \n", header.size);
-  //printf("nb_Cells: %d \n", header.nb_Cells);
-  //printf("nb_words: %d \n", header.nb_words);
   writeStaticTree(&staticTree, dico_lex, header);
   fclose(dico_lex);
   return OK;
@@ -128,25 +114,25 @@ int dictionnary_build(FILE *dico, FILE *dico_lex)
 
 int main(int argc, char *argv[])
 {
-  if(argc == 1){
+  if (argc == 1)
+  {
     printf("dictionnary_build : Usage : ./dictionnary_build <dico_INPUT_path> <dico_OUTPUT_path>\n");
     return MISSING_PARAMS;
   }
-  if(argc != 3){
+  if (argc != 3)
+  {
     printf("dictionnary_build : Usage : ./dictionnary_build <dico_INPUT_path> <dico_OUTPUT_path>\n");
     return WRONG_PARAMS;
   }
   FILE *dico_INPUT = fopen(argv[1], "r");
   FILE *dico_OUTPUT = fopen(argv[2], "wb");
-  if(dico_INPUT == NULL || dico_OUTPUT == NULL){
+  if (dico_INPUT == NULL || dico_OUTPUT == NULL)
+  {
     printf("dictionnary_build : Impossible de trouver l'un des deux fichiers, etes-vous sur de leur emplacement ? !\n");
     printf("Emplacement dico_INPUT : %s\n", argv[1]);
     printf("Emplacement dico_OUTPUT : %s\n", argv[2]);
     return FILE_NOT_FOUND;
   }
-  
 
   return dictionnary_build(dico_INPUT, dico_OUTPUT);
-
-
 }

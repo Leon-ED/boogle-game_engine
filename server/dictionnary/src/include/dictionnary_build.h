@@ -5,5 +5,4 @@
 #include "trees.h"
 #include "string.h"
 
-
 int dictionnary_build(FILE *dico, FILE *dico_lex);

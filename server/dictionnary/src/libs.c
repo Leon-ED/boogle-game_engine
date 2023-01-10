@@ -3,8 +3,8 @@
 
 /**
  * @brief      Compte le nombre de lignes dans un fichier
- * @param      file  Le fichier
- * @return     Le nombre de lignes
+ * @param FILE file  Le fichier
+ * @return int Le nombre de lignes
  */
 int number_of_lines(FILE *file)
 {
@@ -23,9 +23,9 @@ int number_of_lines(FILE *file)
 }
 
 /**
- * @brief      Renvoie le header du fichier
- * @param      export_FILE  Le fichier
- * @return     Le header
+ * @brief  Renvois le header du fichier
+ * @param FILE *export_FILE  Le fichier
+ * @return FileHeader Le header
  */
 FileHeader getFileHeader(FILE *export_FILE)
 {
@@ -37,9 +37,10 @@ FileHeader getFileHeader(FILE *export_FILE)
 
 /**
  * @brief Créé une cellule
- * @param letter : lettre de la cellule
- * @param first_child : index du premier enfant
- * @param nSibling : nombre de cellules frères
+ * @param char letter : lettre de la cellule
+ * @param int first_child : index du premier enfant
+ * @param int nSibling : nombre de cellules frères
+ * @return Cell La cellule créée
  **/
 Cell newCell(char letter, int first_child, int nSibling)
 {
@@ -49,4 +50,3 @@ Cell newCell(char letter, int first_child, int nSibling)
     cell.nSibling = nSibling;
     return cell;
 }
-

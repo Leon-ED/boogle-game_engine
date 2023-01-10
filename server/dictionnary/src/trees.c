@@ -1,4 +1,7 @@
 #include "include/trees.h"
+/**
+ * @brief Fonctions sur les arbres faites en TP
+ **/
 
 CSTree newTree(Element elem, CSTree firstChild, CSTree nextSibling)
 {
@@ -30,17 +33,18 @@ void printPrefix(CSTree t)
 }
 
 // Imprime le contenu d'un Static Tree (dans l'ordre du tableau)
-void printStatic(StaticTree t, unsigned int i) {
+void printStatic(StaticTree t, unsigned int i)
+{
     i = 0;
     printf("\nindex\t\tElement\t\tFirst Child\t\tsiblings\n");
-    while (i < t.nNodes) {
+    while (i < t.nNodes)
+    {
         // printf("%c \n",t.nodeArray[i].elem);
         // printf("i: %d \n",i);
         printf("%d\t\t%c\t\t%d\t\t%d\n", i, t.nodeArray[i].elem, t.nodeArray[i].firstChild, t.nodeArray[i].nSiblings);
-        i ++;
+        i++;
     }
 }
-
 
 int size(CSTree t)
 {
@@ -68,10 +72,10 @@ void exportStaticTreeRec(CSTree t, int *i, ArrayCell *nodeArray)
     {
         nodeArray[*i].elem = t->elem;
         // le 1er fils est après les frères et leurs fils
-        if(t->firstChild == NULL)
+        if (t->firstChild == NULL)
             nodeArray[*i].firstChild = NONE;
         else
-            nodeArray[*i].firstChild = *i + size(t->nextSibling) + 1 ;
+            nodeArray[*i].firstChild = *i + size(t->nextSibling) + 1;
         nodeArray[*i].nSiblings = nSibling(t) - 1;
         (*i)++;
         exportStaticTreeRec(t->nextSibling, i, nodeArray);
@@ -98,7 +102,6 @@ ArrayCell cons(Element e, int firstChild, int nSiblings)
     c.firstChild = firstChild;
     c.nSiblings = nSiblings;
     return c;
-
 }
 
 // Renvoie le premier frere de t contenant l’element e (ou t lui-mˆeme), NULL si aucun n’existe.

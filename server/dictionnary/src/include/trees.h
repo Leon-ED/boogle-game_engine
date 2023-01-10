@@ -17,7 +17,6 @@ typedef struct node
     struct node *nextSibling;
 } Node;
 
-
 typedef Node *CSTree;
 
 typedef struct
