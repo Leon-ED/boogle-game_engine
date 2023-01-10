@@ -1,7 +1,6 @@
 PROJDIR := $(realpath $(CURDIR)/..)
 SOURCEDIR := $(PROJDIR)/dictionnary/src
 BUILDDIR := $(PROJDIR)/dictionnary/executables
-VERBOSE = TRUE
 CC = gcc
 
 
