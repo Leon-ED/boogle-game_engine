@@ -63,7 +63,7 @@ public class NormalizedExtractor {
                     continue;
                 }
                 for (String type : categories) {
-                    if (categoriesJSON.has(type.trim())) {
+                    if (categoriesJSON.has(type)) {
                         String normalizedWord = DictionaryNormalized.normalize(definition.getString("title"));
                         wordSet.add(normalizedWord);
                         break;
