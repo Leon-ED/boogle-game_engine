@@ -18,9 +18,9 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 $DS = DIRECTORY_SEPARATOR;
 
 
-
-$word = $_GET["word"];
-$grille = implode(" ", explode(",", $_GET["grille"]));
+// Avoid not wanted word type
+$word = strtoupper($_GET["word"]);
+$grille = implode(" ", explode(",", strtoupper($_GET["grille"])));
 $nbCols = $_GET["nbCol"];
 $nbRows = $_GET["nbRows"];
 
