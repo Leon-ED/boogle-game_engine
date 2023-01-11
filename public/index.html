@@ -96,10 +96,10 @@
             .then((response) => response.json())
             .then((data) => {
                 if(data.code === 0){
-                    alert('Le mot est existe dans le dictionnaire');
+                    alert('Le mot est dans la grille et dans le dictionnaire');
                 }
                 else if(data.code === 1){
-                    alert('Le mot est un préfixe d\'un mot du dictionnaire');
+                    alert('Le mot n\'est pas dans la grille');
                 }else{
 
                     alert('Le mot n\'existe pas dans le dictionnaire');

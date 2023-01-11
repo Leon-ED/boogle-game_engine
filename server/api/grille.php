@@ -18,9 +18,9 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 }else{
     $ext = "";
 }
-$DS = DIRECTORY_SEPARATOR;
+$DS = DIRECTORY_SEPARATOR; 
 
-$cmd = "..".$DS."dictionnary".$DS."executables".$DS."grid_build".$ext. " ..".$DS."files".$DS."dumps".$DS."frequences.txt $nbCol $nbRows";
+$cmd = "..".$DS."dictionnary".$DS."executables".$DS."grid_build".$ext. " ..".$DS."files".$DS."frequences.txt $nbCol $nbRows";
 // ../files/dumps/frequences.txt $nbCol $nbRows
 // exec("../dictionnary/executables/grid_build.exe ../files/dumps/frequences.txt 4 4", $output, $return);
 exec($cmd, $output, $return);
