@@ -1,5 +1,6 @@
 package fr.uge.jdict;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,9 +104,12 @@ public record Parser(OutputFormat formatExport) {
         
         String jsonStr = json.toString() + "\n";
 
+        // Si il est impossible d'encoder la chaine en UTF-8 : 
         try {
             IndexMaker.getIndexMaker().addTitle(title, (int) (jsonStr).getBytes("UTF-8").length);
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException e) {
+            System.err.println("Impossible d'encoder la chaine en UTF-8");
+            System.err.println("Chaine : " + jsonStr);
             e.printStackTrace();
             System.exit(1);
         }
