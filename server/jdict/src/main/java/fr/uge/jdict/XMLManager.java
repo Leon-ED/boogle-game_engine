@@ -3,6 +3,7 @@ package fr.uge.jdict;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -50,11 +51,11 @@ class XMLManager {
     }
 
     public static boolean isValidtitle(String title) {
-        List<Character> bannedChars = 
-        List.of(':', '/', '\\', '?', '*', '<', '>', '|', '"', ' ','-','_',')',
-        '(','[',']','{','}','!','@','#',
-        '$','%','^','&','*','=','+','`','~',';','.',',','\'','0','1','2','3','4','5','6','7','8','9');
-        return  !title.chars().noneMatch(c -> bannedChars.contains((char) c)) || title.length() < 2;
+        List<Character> bannedChars = List.of(':', '/', '\\', '?', '*', '<', '>', '|', '"', ' ', '-', '_', ')',
+                '(', '[', ']', '{', '}', '!', '@', '#',
+                '$', '%', '^', '&', '*', '=', '+', '`', '~', ';', '.', ',', '\'', '0', '1', '2', '3', '4', '5', '6',
+                '7', '8', '9');
+        return !title.chars().noneMatch(c -> bannedChars.contains((char) c)) || title.length() < 2;
 
     }
 
@@ -64,10 +65,12 @@ class XMLManager {
                     StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
             System.out.println("Erreur lors de l'ouverture du fichier de sortie");
+            System.exit(1);
             return null;
         }
     }
 
+    @SuppressWarnings("unused")
     static void exportToFile(String inputPath, String outputPath, OutputFormat format, String langue)
             throws XMLStreamException {
         XMLStreamReader streamReader = open(inputPath);
@@ -92,7 +95,7 @@ class XMLManager {
         exportText.append(header.toString() + "\n");
         IndexMaker.getIndexMaker().setOffset(exportText.length());
 
-        try (BufferedWriter writer = openOutputFile(outputPath)) {  
+        try (BufferedWriter writer = openOutputFile(outputPath)) {
             writer.write(exportText.toString());
             while (streamReader.hasNext()) {
                 int event = streamReader.next();
@@ -107,8 +110,9 @@ class XMLManager {
                     // On sauvegarde le titre de la page
                     if (tagName.equals("title") && inPage) {
                         title = streamReader.getElementText();
-                        // On ne le prends pas s'il contient un espace, un ou plusieurs chiffres ou s'il fait moins de 2
-            
+                        // On ne le prends pas s'il contient un espace, un ou plusieurs chiffres ou s'il
+                        // fait moins de 2
+
                         if (isValidtitle(title)) {
                             title = "";
                             inPage = false;
@@ -141,11 +145,11 @@ class XMLManager {
                         writer.write(parser.toJSON(exportText, title, textPage.toString(), langue));
                         exportText.setLength(0);
                         // if (pageCounter == 2_500) {
-                        //     writer.append(exportText.toString());
-                        //     exportText.setLength(0);
+                        // writer.append(exportText.toString());
+                        // exportText.setLength(0);
                         // }
                         // if (pageCounter == 5000) {
-                        //     break;
+                        // break;
                         // }
 
                     }
@@ -158,8 +162,10 @@ class XMLManager {
 
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Erreur lors de l'écriture du fichier de sortie");
+            System.exit(1);
         }
 
     }

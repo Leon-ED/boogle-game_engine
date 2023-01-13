@@ -1,6 +1,5 @@
 package fr.uge.jdict;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +14,6 @@ public record Parser(OutputFormat formatExport) {
 
 
     public String toJSON(StringBuilder page, String title, String text, String langue) {
-        // !!! On return rien car on ajoute directement au StringBuilder passé en
-        // référence !!!
-        // if (title.equalsIgnoreCase("MANUTENTIONNAIRE")) {
-        //     System.out.println(title);
-        //     }
-
         JSONObject json = new JSONObject();
         json.put("title", title);
         int catDefCounter = 0;
@@ -64,11 +57,6 @@ public record Parser(OutputFormat formatExport) {
                 //     // On vide la liste des définitions pour en accueillir de nouvelles
                 // }
             }
-            // Si on recherche les définitions et que la ligne commence par '# ' on l'ajoute
-            // à la liste sauf le #
-            // if(title.equalsIgnoreCase("MANUTENTIONNAIRE")){
-            //     System.out.println(line);
-            // }
 
   
             if (lookingForDefinition && line.startsWith("#")  && !(line.startsWith("##") || line.startsWith("#*"))
