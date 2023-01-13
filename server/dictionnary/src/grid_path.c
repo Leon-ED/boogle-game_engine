@@ -7,14 +7,14 @@
 /**
  * @brief Vérifie si une position est dans la grille
  * @param Grid *grid - La structure grille à vérifier
- * @param int i - La position verticale
- * @param int j - La position horizontale
- * @return 1 si la position est dans la grille, 0 sinon
+ * @param int row - La position verticale
+ * @param int col - La position horizontale
+ * @return 0 si la position est dans la grille, 1 sinon
  *
  */
-int checkBounds(Grid *grid, int i, int j)
+int checkBounds(Grid *grid, int row, int col)
 {
-    return 1;
+    return (row < 0 || row >= grid->rows || col < 0 || col >= grid->cols);
 }
 
 /**
@@ -29,39 +29,38 @@ int checkBounds(Grid *grid, int i, int j)
  *
  *
  * **/
-int grid_path_continue(Grid *grid, int row, int col, const char *word, int *index_founded)
+int grid_path_continue(Grid *grid, int row, int col, const char *word, int *found_positions)
 {
     // Si le mot est vide, c'est qu'il a été entièrement trouvé dans la grille
     if (*word == '\0')
         return 1;
+ 
+    int position = row * grid->cols + col;
     // printf("%s ", word);
-    // Si la position actuelle est en dehors de la grille, on retourne 0
-    if (row < 0 || row >= grid->rows || col < 0 || col >= grid->cols)
-        return 0;
-
-    // Si le caractère de la grille ne correspond pas à celui du mot, on retourne 0
-    if (grid->letters[row * grid->cols + col] != *word)
+    // Si la position actuelle est en dehors de la grille ou si le caractère actuel n'est pas le même que le caractère du mot, on arrête la recherche
+    if (checkBounds(grid, row, col) || grid->letters[position] != *word)
         return 0;
 
     // On marque la position actuelle comme visitée
-    char tmp = grid->letters[row * grid->cols + col];
-    grid->letters[row * grid->cols + col] = '*';
+    // ca permet de ne pas revenir sur une position déjà visitée car on ne peut pas revenir sur une lettre déjà utilisée
+    char buffer = grid->letters[position];
+    grid->letters[position] = VISITED;
 
-    // On vérifie récursivement les positions adjacentes et diagonales
-    int found = grid_path_continue(grid, row + 1, col, word + 1, index_founded) ||
-                grid_path_continue(grid, row - 1, col, word + 1, index_founded) ||
-                grid_path_continue(grid, row, col + 1, word + 1, index_founded) ||
-                grid_path_continue(grid, row, col - 1, word + 1, index_founded) ||
-                grid_path_continue(grid, row + 1, col + 1, word + 1, index_founded) ||
-                grid_path_continue(grid, row - 1, col - 1, word + 1, index_founded) ||
-                grid_path_continue(grid, row + 1, col - 1, word + 1, index_founded) ||
-                grid_path_continue(grid, row - 1, col + 1, word + 1, index_founded);
+    // On check les voisins de la position actuelle
+    int found = grid_path_continue(grid, row + 1, col, word + 1, found_positions) ||
+                grid_path_continue(grid, row - 1, col, word + 1, found_positions) ||
+                grid_path_continue(grid, row, col + 1, word + 1, found_positions) ||
+                grid_path_continue(grid, row, col - 1, word + 1, found_positions) ||
+                grid_path_continue(grid, row + 1, col + 1, word + 1, found_positions) ||
+                grid_path_continue(grid, row - 1, col - 1, word + 1, found_positions) ||
+                grid_path_continue(grid, row + 1, col - 1, word + 1, found_positions) ||
+                grid_path_continue(grid, row - 1, col + 1, word + 1, found_positions);
 
-    // On remet le caractère de la grille à sa valeur initiale
-    grid->letters[row * grid->cols + col] = tmp;
+    grid->letters[position] = buffer;
 
+    // Si le mot a été trouvé, on ajoute la position actuelle à la liste des positions trouvées
     if (found)
-        index_founded[strlen(word) - 1] = grid->cols * row + col;
+        found_positions[strlen(word) - 1] = position;
 
     return found;
 }
@@ -188,8 +187,6 @@ int main(int argc, char **argv)
     // printGrid(&grid);
     int result = grid_path(word, &grid);
     free(grid.letters);
-    printf("%d", result);
-
-    
+    // printf("%d", result);
     return result;
 }
