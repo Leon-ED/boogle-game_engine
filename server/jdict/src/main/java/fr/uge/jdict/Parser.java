@@ -1,5 +1,6 @@
 package fr.uge.jdict;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,20 +100,17 @@ public record Parser(OutputFormat formatExport) {
         if(definitions.length() == 0){
             return "";
         }
-            
+        
+        String jsonStr = json.toString() + "\n";
 
         try {
-            IndexMaker.getIndexMaker().addTitle(title, (int) (json.toString() + "\n").getBytes("UTF-8").length);
+            IndexMaker.getIndexMaker().addTitle(title, (int) (jsonStr).getBytes("UTF-8").length);
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(1);
         }
-        // if(title.equalsIgnoreCase("ACCUEIL")){
-        // // System.out.println(json.toString());
-        // // System.out.println("ACCUEIL");
-        // // System.out.println((json.toString() + "\n").length());
-        // }
-        // page.append(json.toString() + "\n");
-        return json.toString() + "\n";
+
+        return jsonStr;
     }
 
 }
