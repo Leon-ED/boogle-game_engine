@@ -109,7 +109,7 @@ void cleanGrid(int argc, char **argv, char *letters)
  * @param Grid *grid - Structure de la grille à chercher
  * @return int 0 si le mot a été trouvé, 1 sinon
  **/
-int grid_path(char *word, Grid *grid)
+int grid_path(char *word, Grid *grid,int verbose)
 {
     int found_positions[strlen(word)];
 
@@ -118,7 +118,7 @@ int grid_path(char *word, Grid *grid)
     {
         for (int j = 0; j < grid->cols; j++)
         {
-            if (grid_path_continue(grid, i, j, word, found_positions))
+            if (grid_path_continue(grid, i, j, word, found_positions) && verbose)
             {
                 // printf("Mot trouvé en commençant par la position (%d, %d)\n", i, j);
                 // on a trouvé alors on affiche les positions dans le l'ordre (donc ordre inverse de la liste)
@@ -153,6 +153,7 @@ void printGrid(Grid *grid)
     }
 }
 
+#ifndef EXTERNAL_DRIVER
 int main(int argc, char **argv)
 {
     // Vérification du nombre d'arguments
@@ -185,8 +186,9 @@ int main(int argc, char **argv)
     cleanGrid(argc, argv, letters);
     strcpy(grid.letters, letters); // On met le résultat dans la struct
     // printGrid(&grid);
-    int result = grid_path(word, &grid);
+    int result = grid_path(word, &grid,1);
     free(grid.letters);
     // printf("%d", result);
     return result;
 }
+#endif

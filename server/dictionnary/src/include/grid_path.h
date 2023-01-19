@@ -16,4 +16,4 @@ typedef struct
     int size;
 } Grid;
 
-int grid_path(char *word, Grid *grid);
+int grid_path(char *word, Grid *grid,int verbose);
