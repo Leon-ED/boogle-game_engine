@@ -5,6 +5,7 @@
 #include "include/libs.h"
 #include <math.h>
 #include <time.h>
+#include <sys/time.h>
 
 /**
  * @brief Créé une grille de lettres aléatoires en fonction d'un fichier de lettres et de leur nombre d'occurence
@@ -43,8 +44,10 @@ int grid_build(FILE *file, int num_lines, int num_columns)
         // counts[i].count = total_count + counts[i].count;
         // printf("%s %f \n", counts[i].letter, counts[i].count);
     }
+    struct timeval tps;
+    gettimeofday(&tps, NULL);
     fclose(file);
-    srand(time(NULL));
+    srand((((long long)tps.tv_sec)*1000)+(tps.tv_usec/1000));
 
     for (int i = 0; i < num_lines; i++)
     {
