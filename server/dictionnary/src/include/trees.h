@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
@@ -42,3 +41,5 @@ StaticTree exportStaticTree(CSTree t);
 void printStatic(StaticTree t, unsigned int i);
 CSTree example();
 CSTree siblingLookup(CSTree t, Element e);
+StaticTree importStaticTreeFromFile(FILE *lex_FILE);
+CSTree importStaticTree(StaticTree t);

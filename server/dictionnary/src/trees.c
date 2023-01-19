@@ -1,4 +1,5 @@
 #include "include/trees.h"
+#include "include/libs.h"
 /**
  * @brief Fonctions sur les arbres faites en TP
  **/
@@ -6,13 +7,17 @@
 CSTree newTree(Element elem, CSTree firstChild, CSTree nextSibling)
 {
     CSTree t = malloc(sizeof(Node));
-    if (t == NULL)
+    if (t == NULL){
+        printf("Erreur d'allocation mémoire");
+        exit(1);
         return NULL;
+    }
     t->elem = elem;
     t->firstChild = firstChild;
     t->nextSibling = nextSibling;
     return t;
 }
+
 
 CSTree example()
 {
@@ -169,4 +174,72 @@ index_ siblingDichotomyLookupStatic(StaticTree t, Element e, index_ from, index_
     if (t.nodeArray[from + len / 2].elem > e)
         return siblingDichotomyLookupStatic(t, e, from, len / 2);
     return siblingDichotomyLookupStatic(t, e, from + len / 2 + 1, len - len / 2 - 1);
+}
+
+CSTree importStaticTreeRec(StaticTree t, int i) {
+    if (t.nodeArray[i].elem == NONE)
+        return NULL;
+    if(i >= t.nNodes){
+        printf("Error: index out of bounds in importStaticTreeRec\n");
+        return NULL;
+    }
+    // printf("i: %d \t elem: %c \t firstChild: %d \t nSiblings: %d \n", i, t.nodeArray[i].elem, t.nodeArray[i].firstChild, t.nodeArray[i].nSiblings);
+    CSTree tree = newTree(t.nodeArray[i].elem, NULL, NULL);
+
+    if(t.nodeArray[i].firstChild != NONE)
+        tree->firstChild = importStaticTreeRec(t, t.nodeArray[i].firstChild);
+    else
+        tree->firstChild = NULL;
+
+    if(t.nodeArray[i].nSiblings > 0)
+        tree->nextSibling = importStaticTreeRec(t, i + 1);
+    else
+        tree->nextSibling = NULL;
+    return tree;
+}
+
+
+CSTree importStaticTree(StaticTree t)
+{
+    int i = 0;
+    return importStaticTreeRec(t, 0);
+}
+
+
+StaticTree importStaticTreeFromFile(FILE *lex_FILE)
+{
+    if (lex_FILE == NULL)
+    {
+        printf("Erreur ouverture fichier");
+        exit(1);
+    }
+    FileHeader header = getFileHeader(lex_FILE);
+    StaticTree st;
+    st.nNodes = header.nb_Cells;
+    st.nodeArray = malloc(header.nb_Cells * header.cell_size);
+    fseek(lex_FILE, header.size, SEEK_SET);
+
+    for (size_t i = 0; i < header.nb_Cells; i++)
+    {
+        ArrayCell c;
+        fread(&c, header.cell_size, 1, lex_FILE);
+        st.nodeArray[i] = c;
+    }
+
+    // for (int i = 0; i < st.nNodes; i++)
+    // {
+    //     char elem;
+    //     int firstChild;
+    //     int nSiblings;
+    //     fscanf(lex_FILE, "%c %d %d", &elem, &firstChild, &nSiblings);
+    //     st.nodeArray[i] = cons(elem, firstChild, nSiblings);
+
+    // }
+    fclose(lex_FILE);
+    printf("Fichier lu\n");
+    printf("Nombre de noeuds : %d \n", st.nNodes);
+    printf("Premier noeud : %c \n", st.nodeArray[0].elem);
+    printf("Premier fils : %d \n", st.nodeArray[0].firstChild);
+    printf("Nombre de freres : %d \n", st.nodeArray[0].nSiblings);
+    return st;
 }
