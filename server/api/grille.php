@@ -23,6 +23,7 @@ $DS = DIRECTORY_SEPARATOR;
 $cmd = "..".$DS."dictionnary".$DS."executables".$DS."grid_build".$ext. " ..".$DS."files".$DS."frequences.txt $nbCol $nbRows";
 // ../files/dumps/frequences.txt $nbCol $nbRows
 // exec("../dictionnary/executables/grid_build.exe ../files/dumps/frequences.txt 4 4", $output, $return);
+
 exec($cmd, $output, $return);
 if($return != 0){
     http_response_code(500);
@@ -30,7 +31,6 @@ if($return != 0){
 }
 $output = implode(" ", $output);
 $output = explode(" ", $output);
-
 
 
 for($i = 0; $i < $nbRows; $i++){

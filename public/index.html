@@ -32,7 +32,10 @@
         <input type="submit" value="Chercher" id="word-submit">
 
     </section>
-    
+    <section id="word-list">
+        <h1> Mots trouvés : </h1>
+        
+    </section>    
     <script defer>
         const form = document.getElementById('form-submit');
         const nbCol = document.getElementById('nbCol');
@@ -77,11 +80,16 @@
         });
     </script>
     <script defer>
+        foundWords = [];
         const word = document.getElementById('word-submit');
         word.addEventListener('click', (e) => {
             e.preventDefault();
             const wordValue = document.getElementById('word').value;
-            console.log(wordValue);
+            // console.log(wordValue);
+            if(foundWords.includes(wordValue)){
+                alert('Le mot a déjà été trouvé');
+                return;
+            }
             const url = "../server/api/verify.php";
             const grille = document.getElementById('grille');
             const lettres = grille.querySelectorAll('.case');
@@ -97,6 +105,8 @@
             .then((data) => {
                 if(data.code === 0){
                     alert('Le mot est dans la grille et dans le dictionnaire');
+                    foundWords.push(wordValue);
+                    addWord(wordValue);
                 }
                 else if(data.code === 1){
                     alert('Le mot n\'est pas dans la grille');
@@ -111,7 +121,34 @@
             });
         });
 
+        function addWord(word) {
+            const wordList = document.getElementById('word-list');
+            const wordDiv = document.createElement('details');
+            const summary = document.createElement('summary');
+            summary.innerHTML = word;
+            wordDiv.appendChild(summary);
+            wordList.appendChild(wordDiv);
+            getDefinition(word, wordDiv);
+        }
+        function getDefinition(word, wordDiv){
+            const url = "../server/api/definition.php";            
+            const params = `?word=${word}`;
+            fetch(url + params)
+            .then((response) => response.json())
+            .then((data) => {
+                wordDiv.getElementsByTagName('details')[0];
+                const definition = document.createElement('div');
+                definition.innerHTML = JSON.stringify(data, null, 2);
+                wordDiv.appendChild(definition);
 
+
+            
+
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
 
     </script>
     <style>
