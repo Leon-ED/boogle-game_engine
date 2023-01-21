@@ -1,7 +1,10 @@
 package fr.uge.jdict;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Wrapper;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -9,9 +12,7 @@ import org.json.JSONObject;
 
 public record Parser(OutputFormat formatExport) {
 
-    private static final List<String> INVALID_CATEGORIES = 
-    List.of("onomatopée","symbole");
-
+    private static final HashSet<String> INVALID_CATEGORIES = new HashSet<>(Arrays.asList("onomatopée", "symbole"));
 
     public String toJSON(StringBuilder page, String title, String text, String langue) {
         JSONObject json = new JSONObject();
@@ -77,22 +78,26 @@ public record Parser(OutputFormat formatExport) {
         }
 
         json.put("definitions", definitions);
-        
+
+        // Si une catégorie n'a pas de définitions, on l'ajoute à la liste des
+        // catégories à supprimer
         List<String> toRemove = new ArrayList<>();
-        for (String string : definitions.keySet()) {
-            if(definitions.getJSONArray(string).length() == 0){
+        definitions.keySet().stream().forEach(string -> {
+            if (definitions.getJSONArray(string).length() == 0) {
                 toRemove.add(string);
             }
-        }
+        });
+
+        // On supprime les catégories vides
         toRemove.stream().forEach(definitions::remove);
-        
-        if(definitions.length() == 0){
+
+        if (definitions.length() == 0) {
             return "";
         }
-        
+
         String jsonStr = json.toString() + "\n";
 
-        // Si il est impossible d'encoder la chaine en UTF-8 : 
+        // Si il est impossible d'encoder la chaine en UTF-8 :
         try {
             IndexMaker.getIndexMaker().addTitle(title, (int) (jsonStr).getBytes("UTF-8").length);
         } catch (UnsupportedEncodingException e) {

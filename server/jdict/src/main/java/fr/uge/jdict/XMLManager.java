@@ -11,6 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
@@ -63,11 +65,12 @@ class XMLManager {
     }
 
     public static boolean isValidtitle(String title) {
-        List<Character> bannedChars = List.of(':', '/', '\\', '?', '*', '<', '>', '|', '"', ' ', '-', '_', ')',
+        HashSet<Character> BANNED_CHARS = new HashSet<>(Arrays.asList(':', '/', '\\', '?', '*', '<', '>', '|', '"', ' ',
+                '-', '_', ')',
                 '(', '[', ']', '{', '}', '!', '@', '#',
                 '$', '%', '^', '&', '*', '=', '+', '`', '~', ';', '.', ',', '\'', '0', '1', '2', '3', '4', '5', '6',
-                '7', '8', '9');
-        return !title.chars().noneMatch(c -> bannedChars.contains((char) c)) || title.length() < 2;
+                '7', '8', '9'));
+        return !title.chars().noneMatch(c -> BANNED_CHARS.contains((char) c)) || title.length() < 2;
 
     }
 

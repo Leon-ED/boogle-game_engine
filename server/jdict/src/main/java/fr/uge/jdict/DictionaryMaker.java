@@ -48,8 +48,8 @@ public class DictionaryMaker {
             System.exit(1);
         }
 
-        System.out.println("Fin du parsing en :" + (System.currentTimeMillis() - time) / 60000.000 + "min");
-        System.out.println("Soit : " + (System.currentTimeMillis() - time) / 1000.000 + "s");
+        System.out.print("Fin du parsing en :" + (System.currentTimeMillis() - time) / 60000.000 + " min, ");
+        System.out.println("soit : " + (System.currentTimeMillis() - time) / 1000.000 + "s");
         System.out.println("Début de la création de l'index");
 
         try {
@@ -60,9 +60,7 @@ public class DictionaryMaker {
             System.exit(1);
         }
 
-        System.out.println("Temps d'execution total: " + (System.currentTimeMillis() - time) + "ms");
-        System.out.println("Min: " + (System.currentTimeMillis() - time) / 60000.000 + "min");
-        System.out.println("SECONDES : " + (System.currentTimeMillis() - time) / 1000.000 + "s");
+        System.out.println("Fin, temps d'exécution total : " + (System.currentTimeMillis() - time) / 60000.000 + " min");
 
     }
 }

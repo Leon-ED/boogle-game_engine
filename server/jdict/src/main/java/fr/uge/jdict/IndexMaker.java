@@ -3,6 +3,7 @@ package fr.uge.jdict;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.Map;
@@ -58,15 +59,6 @@ public class IndexMaker {
 
     }
 
-    public static void main(String[] args) throws IOException {
-        IndexMaker indexMaker = getIndexMaker(
-                "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dictionary.index",
-                "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json");
-        // String output_PATH =
-        // "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json";
-        indexMaker.createIndex();
-    }
-
     public void createIndex() throws IOException {
         try (FileInputStream reader = new FileInputStream(json_PATH)) {
             Entry entry = null;
@@ -96,27 +88,19 @@ public class IndexMaker {
     }
 
     private void writeIndex(String out, Map<String, Integer[]> map) throws IOException {
-        System.out.println("Ecriture de l'index dans :" + out);
-        try (FileOutputStream writer = new FileOutputStream(out)) {
-            writer.write("DICTINDX".getBytes());
-            for (String word : map.keySet()) {
-                // Convertion en grand enboutiste
-                writer.write((map.get(word)[0] >> 24) & 0xFF);
-                writer.write((map.get(word)[0] >> 16) & 0xFF);
-                writer.write((map.get(word)[0] >> 8) & 0xFF);
-                writer.write(map.get(word)[0] & 0xFF);
-                writer.write((map.get(word)[1] >> 24) & 0xFF);
-                writer.write((map.get(word)[1] >> 16) & 0xFF);
-                writer.write((map.get(word)[1] >> 8) & 0xFF);
-                writer.write(map.get(word)[1] & 0xFF);
+        FileOutputStream writer = new FileOutputStream(out);
+        writer.write("DICTINDX".getBytes());
+        map.values().stream().forEach(liste -> {
+            try {
+                writer.write(ByteBuffer.allocate(4).putInt(liste[0]).array());
+                writer.write(ByteBuffer.allocate(4).putInt(liste[1]).array());
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
             }
+        });
 
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
+        writer.close();
     }
 
     // Méthode pour lire une ligne du fichier (en ignorant les retours à la ligne)
