@@ -14,6 +14,7 @@ public class DictionaryMaker {
         String langue;
         long time = System.currentTimeMillis();
 
+
         if (args.length < 4) {
             System.out.println(
                     "Usage: DictionaryMaker <langue> definitions <input.xml.bz2 | input.xml > <fichier_sortie>");

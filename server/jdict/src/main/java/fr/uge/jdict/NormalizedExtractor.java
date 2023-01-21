@@ -16,7 +16,7 @@ import org.json.JSONObject;
 public class NormalizedExtractor {
 
     public static void main(String[] args) {
-        String definition_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json";
+        String definition_PATH = null;
         boolean stdoutput = false;
         String definitionsCategories = null;
         // On teste si on récupère la sortie standard
@@ -34,6 +34,11 @@ public class NormalizedExtractor {
             definitionsCategories = args[2];
         }
 
+        File definition_FILE = new File(definition_PATH);
+        if (!definition_FILE.exists() || definition_FILE.isDirectory()) {
+            System.out.println("JDICT : Le fichier de définitions n'existe pas");
+            return;
+        }
         extract(definitionsCategories, definition_PATH, stdoutput);
 
     }

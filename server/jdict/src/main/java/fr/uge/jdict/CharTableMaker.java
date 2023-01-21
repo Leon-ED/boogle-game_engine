@@ -11,16 +11,16 @@ import java.util.TreeMap;
 class CharTableMaker {
 
     public static void main(String[] args) {
-        String definition_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-wikipedia.json";
-        String output_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\frequences.txt";
+        String definition_PATH = null;
+        String output_PATH = null;
         boolean stdoutput = false;
         if(System.console() == null) {
             stdoutput = true;
         }
         if (args.length < 1) {
             System.out.println("Usage: CharTableMaker <input.json>");
-            // System.exit(1);
-            // return;
+            System.exit(1);
+            return;
         } else if (args.length >= 2) {
             definition_PATH = args[0];
         }else{

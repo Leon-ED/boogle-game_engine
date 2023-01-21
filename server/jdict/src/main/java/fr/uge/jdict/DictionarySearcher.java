@@ -1,5 +1,6 @@
 package fr.uge.jdict;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
@@ -10,8 +11,8 @@ public class DictionarySearcher {
 
     public static void main(String[] args) throws Exception {
         DictionarySearcher searcher = new DictionarySearcher();
-        String definitions_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dump-test.json";
-        String index_PATH = "E:\\Emplacements\\Bureau\\boogle\\real\\server\\files\\dumps\\dictionary.index";
+        String definitions_PATH = null;
+        String index_PATH = null;
         String word = "";
         OutputFormat format = OutputFormat.JSON;
         if (args.length < 4) {
@@ -32,7 +33,18 @@ public class DictionarySearcher {
             index_PATH = args[2];
             definitions_PATH = args[3];
         }
-
+        File index_FILE = new File(index_PATH);
+        if (!index_FILE.exists() || !index_FILE.isFile()) {
+            System.out.println("Le fichier INDEX: " + index_PATH + " n'existe pas");
+            System.exit(1);
+        }
+        File definitions_FILE = new File(definitions_PATH);
+        if (!definitions_FILE.exists() || !definitions_FILE.isFile()) {
+            System.out.println("Le fichier DEFINITIONS: " + definitions_PATH + " n'existe pas");
+            System.exit(1);
+        }
+        index_FILE = null;
+        definitions_FILE = null;
         searcher.search(definitions_PATH, index_PATH, word, format);
 
     }
