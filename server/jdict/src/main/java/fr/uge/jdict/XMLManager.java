@@ -13,14 +13,12 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
 
-import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.json.JSONObject;
@@ -38,11 +36,11 @@ class XMLManager {
             System.exit(1);
             return null;
         }
+        // utf 8
 
         try {
-            // On vérifie si le fichier est compressé
-            if (file.toString().endsWith(".bz2")) {
 
+            if (path.endsWith(".bz2")) {
                 CompressorInputStream gzippedOut = new CompressorStreamFactory()
                         .createCompressorInputStream(CompressorStreamFactory.BZIP2, file);
                 XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -51,12 +49,8 @@ class XMLManager {
                 XMLInputFactory factory = XMLInputFactory.newInstance();
                 eventReader = factory.createXMLStreamReader(file, "UTF-8");
             }
-        } catch (XMLStreamException e) {
-            System.out.println("Le fichier a bien été trouvé mais il y a eu une erreur lors de sa lecture");
-            System.exit(1);
-            return null;
-        } catch (CompressorException e) {
-            System.out.println("Il y a eu une erreur avec le fichier compressé");
+        } catch (Exception e) {
+            System.out.println("Le fichier a bien été trouvé mais il y a eu une erreur lors de son ouverture");
             System.exit(1);
             return null;
         }
