@@ -25,7 +25,7 @@ public class IndexMaker {
         this.map = new TreeMap<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
-                return DictionaryNormalized.compareNormalized(o1, o2);
+                return DictionaryNormalizer.compareNormalized(o1, o2);
             }
         });
     }
@@ -54,8 +54,6 @@ public class IndexMaker {
     public void addTitle(String title, int length) {
         Integer[] array = new Integer[] { positionOffset, positionOffset + length };
         map.put(title, array);
-        if (title.equalsIgnoreCase("ACCUEIL"))
-            System.out.println(title + " : " + array[0] + " - " + array[1]);
         positionOffset += length;
 
     }
@@ -87,7 +85,6 @@ public class IndexMaker {
 
                 Integer[] array = new Integer[] { startPOS, endPOS };
                 map.put(title, array);
-                // System.out.println(title + " : "+ startPOS + " - " + endPOS);
             }
         }
         writeIndex(index_PATH, map);
@@ -99,8 +96,7 @@ public class IndexMaker {
     }
 
     private void writeIndex(String out, Map<String, Integer[]> map) throws IOException {
-        System.out.println("Writing index");
-        System.out.println("Ecriture dans :" + out);
+        System.out.println("Ecriture de l'index dans :" + out);
         try (FileOutputStream writer = new FileOutputStream(out)) {
             writer.write("DICTINDX".getBytes());
             for (String word : map.keySet()) {
@@ -113,13 +109,8 @@ public class IndexMaker {
                 writer.write((map.get(word)[1] >> 16) & 0xFF);
                 writer.write((map.get(word)[1] >> 8) & 0xFF);
                 writer.write(map.get(word)[1] & 0xFF);
-
-                if (word.equalsIgnoreCase("ACCUEIL")) {
-                    System.out.println(word + " : " + map.get(word)[0] + " - " + map.get(word)[1]);
-                }
             }
 
-            System.out.println("Ecriture dans :" + out);
 
         } catch (IOException e) {
             e.printStackTrace();

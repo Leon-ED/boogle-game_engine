@@ -61,7 +61,7 @@ public class DictionarySearcher {
     public void getDefinition(RandomAccessFile index, RandomAccessFile definitions, String word, boolean searchSiblings,
             OutputFormat format) {
         if (searchSiblings) {
-            word = DictionaryNormalized.normalize(word);
+            word = DictionaryNormalizer.normalize(word);
         }
         String normalizedTitle = "";
         try {
@@ -89,7 +89,7 @@ public class DictionarySearcher {
 
                 // Si on veut chercher les mêmes mots normalisés
                 if (searchSiblings) {
-                    normalizedTitle = DictionaryNormalized.normalize(title);
+                    normalizedTitle = DictionaryNormalizer.normalize(title);
 
                 } else {
                     normalizedTitle = title;
@@ -110,7 +110,7 @@ public class DictionarySearcher {
                     }
                 }
 
-                if (DictionaryNormalized.compareNormalized(word, normalizedTitle) > 0) {
+                if (DictionaryNormalizer.compareNormalized(word, normalizedTitle) > 0) {
                     startPos = midPos + 1;
                 } else {
                     endPos = midPos - 1;
@@ -138,7 +138,7 @@ public class DictionarySearcher {
             String definition = new String(definitions.readLine().getBytes(), StandardCharsets.UTF_8);
             JSONObject json = new JSONObject(definition);
             String title = json.getString("title");
-            String normalizedTitle = DictionaryNormalized.normalize(title);
+            String normalizedTitle = DictionaryNormalizer.normalize(title);
             // System.out.println("word : " + word + " title : " + normalizedTitle);
             if (normalizedTitle.equals(word)) {
                 // System.out.println("Word found : ");
@@ -160,7 +160,7 @@ public class DictionarySearcher {
             String definition = new String(definitions.readLine().getBytes(), StandardCharsets.UTF_8);
             JSONObject json = new JSONObject(definition);
             String title = json.getString("title");
-            String normalizedTitle = DictionaryNormalized.normalize(title);
+            String normalizedTitle = DictionaryNormalizer.normalize(title);
             // System.out.println("word : " + word + " title : " + normalizedTitle);
             if (normalizedTitle.equals(word)) {
                 // System.out.println("Word found : ");

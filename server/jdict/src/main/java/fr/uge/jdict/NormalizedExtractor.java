@@ -44,7 +44,7 @@ public class NormalizedExtractor {
         Set<String> wordSet = new TreeSet<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
-                return DictionaryNormalized.compareNormalized(o1, o2);
+                return DictionaryNormalizer.compareNormalized(o1, o2);
             }
         });
         String line;
@@ -58,13 +58,13 @@ public class NormalizedExtractor {
                 }
                 JSONObject categoriesJSON = definition.getJSONObject("definitions");
                 if(categories == null){
-                    String normalizedWord = DictionaryNormalized.normalize(definition.getString("title"));
+                    String normalizedWord = DictionaryNormalizer.normalize(definition.getString("title"));
                     wordSet.add(normalizedWord);
                     continue;
                 }
                 for (String type : categories) {
                     if (categoriesJSON.has(type)) {
-                        String normalizedWord = DictionaryNormalized.normalize(definition.getString("title"));
+                        String normalizedWord = DictionaryNormalizer.normalize(definition.getString("title"));
                         wordSet.add(normalizedWord);
                         break;
                     }
