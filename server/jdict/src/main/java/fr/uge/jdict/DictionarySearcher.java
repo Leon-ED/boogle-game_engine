@@ -68,6 +68,7 @@ public class DictionarySearcher {
 
         indexFile.close();
         definitionsFile.close();
+        System.exit(0);
     }
 
     public void getDefinition(RandomAccessFile index, RandomAccessFile definitions, String word, boolean searchSiblings,
@@ -130,7 +131,7 @@ public class DictionarySearcher {
             }
 
             System.out.println("Aucune définition trouvée pour le mot " + word + "");
-            System.exit(1);
+            System.exit(2);
         } catch (IOException e) {
             e.printStackTrace();
         }
