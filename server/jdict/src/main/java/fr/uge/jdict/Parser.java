@@ -1,7 +1,6 @@
 package fr.uge.jdict;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.Wrapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,7 +25,8 @@ public record Parser(OutputFormat formatExport) {
 
             // Ligne de définition en français
             if (line.startsWith("=== {{") || line.startsWith("==={{")) {
-                if (line.contains("|" + langue + "|") || line.endsWith("|" + langue + "}} ===") || line.endsWith("|" + langue + "}}===")) {
+                if (line.contains("|" + langue + "|") || line.endsWith("|" + langue + "}} ===")
+                        || line.endsWith("|" + langue + "}}===")) {
                     String[] category = line.split("\\|");
                     categoryTitle = category[1];
                     catDefCounter = 0;
@@ -42,31 +42,30 @@ public record Parser(OutputFormat formatExport) {
                         definitions.put(categoryTitle, new JSONArray());
                     }
                     lookingForDefinition = true;
-                }else{
+                } else {
                     lookingForDefinition = false;
-                    if(catDefCounter == 0 && categoryTitle != null){
-                        if(definitions.has(categoryTitle) && definitions.getJSONArray(categoryTitle).length() == 0){
+                    if (catDefCounter == 0 && categoryTitle != null) {
+                        if (definitions.has(categoryTitle) && definitions.getJSONArray(categoryTitle).length() == 0) {
                             definitions.remove(categoryTitle);
                         }
                     }
 
-
                 }
                 // // Ligne ne contenant pas de définition en français
-                // if (!line.contains("|" + langue + "|") && !line.endsWith("|" + langue + "}} ===")) {
-                //     lookingForDefinition = false;
-                //     // On vide la liste des définitions pour en accueillir de nouvelles
+                // if (!line.contains("|" + langue + "|") && !line.endsWith("|" + langue + "}}
+                // ===")) {
+                // lookingForDefinition = false;
+                // // On vide la liste des définitions pour en accueillir de nouvelles
                 // }
             }
 
-  
-            if (lookingForDefinition && line.startsWith("#")  && !(line.startsWith("##") || line.startsWith("#*"))
-            && line.length() > 2) {
-                if(categoryTitle == null){
+            if (lookingForDefinition && line.startsWith("#") && !(line.startsWith("##") || line.startsWith("#*"))
+                    && line.length() > 2) {
+                if (categoryTitle == null) {
                     System.out.println(line);
                     throw new RuntimeException("categoryTitle is null");
                 }
-                if(!definitions.has(categoryTitle)){
+                if (!definitions.has(categoryTitle)) {
                     System.out.println(line);
                     System.out.println(categoryTitle);
                     throw new RuntimeException("categoryTitle is not in definitions");
