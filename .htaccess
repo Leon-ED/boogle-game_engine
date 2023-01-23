@@ -1,4 +1,4 @@
 Options -Indexes
-RedirectMatch 404 .c
-RedirectMatch 404 .h
-RedirectMatch 404 .java
+RedirectMatch 404 .c$
+RedirectMatch 404 .h$
+RedirectMatch 404 .java$
