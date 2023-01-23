@@ -17,10 +17,10 @@ foreach($_GET as $key => $value) {
 $word = strtoupper($_GET["word"]);
 
 $DS = DIRECTORY_SEPARATOR;
-$jarPath = "E:".$DS."www".$DS."boogle".$DS."server".$DS."jdict".$DS."target".$DS."jdict-jar-with-dependencies.jar";
+$jarPath = "..".$DS."jdict".$DS."target".$DS."jdict-jar-with-dependencies.jar";
 $className = "fr.uge.jdict.DictionarySearcher";
-$jsonPath = "E:".$DS."www".$DS."boogle".$DS."server".$DS."files".$DS."definitions_fr.json";
-$indexPath = "E:".$DS."www".$DS."boogle".$DS."server".$DS."files".$DS."dictionary.index";
+$jsonPath = "..".$DS."files".$DS."definitions_fr.json";
+$indexPath = "..".$DS."files".$DS."dictionary.index";
 
 $cmd = "java -cp $jarPath $className definitions $word $indexPath $jsonPath";
 
