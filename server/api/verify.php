@@ -30,7 +30,7 @@ $nbCols = $_GET["nbCol"];
 $nbRows = $_GET["nbRows"];
 
 // var_dump($grille);
-$cmd = "..".$DS."dictionnary".$DS."executables".$DS."dictionnary_lookup ..".$DS."files".$DS."dumps".$DS."dico_lexe.lex $word";
+$cmd = "..".$DS."dictionnary".$DS."executables".$DS."dictionnary_lookup ..".$DS."files".$DS."dico_fr.lex $word";
 // var_dump($cmd);
 exec($cmd, $output, $return);
 $output = intval($output[0]);

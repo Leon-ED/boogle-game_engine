@@ -43,11 +43,14 @@ for($i = 0; $i < $nbRows; $i++){
         $grille[$i][$j] = $output[$i * $nbCol + $j];
     }
 }
+date_default_timezone_set('Europe/Paris');
+  $time = date('Y-m-d H:i:s');
+
 if(isset($_SESSION["partie"])){
     if($_SESSION["partie"] )
 
     $partie = unserialize($_SESSION["partie"]);
-    $partie->setTimeStampFin(date("Y-m-d H:i:s", time()));
+    $partie->setTimeStampFin($time);
     $partie->savePartie($conn);
 }
 
@@ -55,7 +58,7 @@ $partie = new Partie();
 $partie->setDimensions($nbRows, $nbCol);
 $partie->setGrille($grille);
 $partie->addJoueur($_SESSION["idUser"]);
-$partie->setTimeStampDebut(date("Y-m-d H:i:s", time()));
+$partie->setTimeStampDebut($time);
 
 $_SESSION["partie"] = serialize($partie);
 
