@@ -28,7 +28,6 @@ $jsonPath = "..".$DS."files".$DS."definitions_fr.json";
 $indexPath = "..".$DS."files".$DS."dictionary.index";
 
 $cmd = "java -cp $jarPath $className definitions $word $indexPath $jsonPath";
-print_r($cmd);
 
 exec($cmd, $output, $return);
 

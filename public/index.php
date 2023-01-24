@@ -249,7 +249,41 @@ if(!isset($_SESSION["user"])){
                     li.appendChild(details);
                     details.appendChild(summary);
 
-                    // Pour chaque définition
+                    // Pour chaque définition on affiche les exemples (chaque clé de l'objet)
+                    const ul2 = document.createElement('ul');
+                    details.appendChild(ul2);
+                    for (const [key, value] of Object.entries(element)) {
+                        console.log(value);
+                        if(key !== "title"){
+                            const li2 = document.createElement('li');
+                            li2.innerHTML = key;
+                            ul2.appendChild(li2);
+                            const details2 = document.createElement('details');
+                            const summary2 = document.createElement('summary');
+                            li2.appendChild(details2);
+                            details2.appendChild(summary2);
+                            
+                            const ul3 = document.createElement('ul');
+                            details2.appendChild(ul3);
+                            for (const [key2, value2] of Object.entries(value)) {
+                                const li3 = document.createElement('li');
+                                li3.innerHTML = key2;
+                                ul3.appendChild(li3);
+                                const details3 = document.createElement('details');
+                                const summary3 = document.createElement('summary');
+                                li3.appendChild(details3);
+                                details3.appendChild(summary3);
+                                const ul4 = document.createElement('ul');
+                                details3.appendChild(ul4);
+                                for (const [key3, value3] of Object.entries(value2)) {
+                                    const li4 = document.createElement('li');
+                                    li4.innerHTML = value3;
+                                    ul4.appendChild(li4);
+                                }
+                            }
+
+                        }
+                    }
                     
                 });
                 //definition.innerHTML = JSON.stringify(data, null, 2);
