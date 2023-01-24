@@ -7,6 +7,87 @@
     <title>Boogle</title>
 </head>
 <body>
+    <style>
+        .tree{
+  --spacing : 1.5rem;
+  --radius  : 10px;
+}
+
+.tree li{
+  display      : block;
+  position     : relative;
+  padding-left : calc(2 * var(--spacing) - var(--radius) - 2px);
+}
+
+.tree ul{
+  margin-left  : calc(var(--radius) - var(--spacing));
+  padding-left : 0;
+}
+
+.tree ul li{
+  border-left : 2px solid #ddd;
+}
+
+.tree ul li:last-child{
+  border-color : transparent;
+}
+
+.tree ul li::before{
+  content      : '';
+  display      : block;
+  position     : absolute;
+  top          : calc(var(--spacing) / -2);
+  left         : -2px;
+  width        : calc(var(--spacing) + 2px);
+  height       : calc(var(--spacing) + 1px);
+  border       : solid #ddd;
+  border-width : 0 0 2px 2px;
+}
+
+.tree summary{
+  display : block;
+  cursor  : pointer;
+}
+
+.tree summary::marker,
+.tree summary::-webkit-details-marker{
+  display : none;
+}
+
+.tree summary:focus{
+  outline : none;
+}
+
+.tree summary:focus-visible{
+  outline : 1px dotted #000;
+}
+
+.tree li::after,
+.tree summary::before{
+  content       : '';
+  display       : block;
+  position      : absolute;
+  top           : calc(var(--spacing) / 2 - var(--radius));
+  left          : calc(var(--spacing) - var(--radius) - 1px);
+  width         : calc(2 * var(--radius));
+  height        : calc(2 * var(--radius));
+  border-radius : 50%;
+  background    : #ddd;
+}
+
+.tree summary::before{
+  content     : '+';
+  z-index     : 1;
+  background  : #696;
+  color       : #fff;
+  line-height : calc(2 * var(--radius) - 2px);
+  text-align  : center;
+}
+
+.tree details[open] > summary::before{
+  content : '−';
+}
+    </style>
     <h1>Choisir données:</h1>
     <div id="form-Choose">
         <div>
@@ -123,11 +204,18 @@
 
         function addWord(word) {
             const wordList = document.getElementById('word-list');
+            const ul = document.createElement('ul');
+            ul.classList.add('tree')
+            const li = document.createElement('li');
+            const ul2 = document.createElement('ul');
             const wordDiv = document.createElement('details');
             const summary = document.createElement('summary');
             summary.innerHTML = word;
+            wordList.appendChild(ul);
+            ul.appendChild(li);
+            li.appendChild(wordDiv);
             wordDiv.appendChild(summary);
-            wordList.appendChild(wordDiv);
+            
             getDefinition(word, wordDiv);
         }
         function getDefinition(word, wordDiv){
@@ -136,10 +224,28 @@
             fetch(url + params)
             .then((response) => response.json())
             .then((data) => {
-                wordDiv.getElementsByTagName('details')[0];
-                const definition = document.createElement('div');
-                definition.innerHTML = JSON.stringify(data, null, 2);
-                wordDiv.appendChild(definition);
+                //const detailDiv = wordDiv.querySelector('details');
+                //const definition = document.createElement('div');
+                //detailDiv.appendChild(definition);
+                console.log(data);
+                console.log(wordDiv);
+                const ul = document.createElement('ul');
+                wordDiv.appendChild(ul);
+                data.forEach(element => {
+
+                    const li = document.createElement('li');
+                    const details = document.createElement('details');
+                    const summary = document.createElement('summary');
+                    summary.innerHTML = element["title"];
+                    ul.appendChild(li);
+                    li.appendChild(details);
+                    details.appendChild(summary);
+
+                    // Pour chaque définition
+                    
+                });
+                //definition.innerHTML = JSON.stringify(data, null, 2);
+                //wordDiv.appendChild(definition);
 
 
             
