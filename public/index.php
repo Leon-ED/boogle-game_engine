@@ -109,7 +109,7 @@ if(!isset($_SESSION["user"])){
             <label for="nbRows">Nombre de lignes</label>
             <input type="number" name="nbRows" id="nbRows" value="4" min="2" max="10">           
         </div>
-        <input type="submit" value="Valider" id="form-submit">
+        <input type="submit" value="Nouvelle partie" id="form-submit">
     </div>
     <h1>Grille :</h1>
     <section>
@@ -121,8 +121,8 @@ if(!isset($_SESSION["user"])){
         <input type="submit" value="Chercher" id="word-submit">
 
     </section>
+    <h1> Mots trouvés : </h1>
     <section id="word-list">
-        <h1> Mots trouvés : </h1>
         
     </section>    
     <script defer>
@@ -133,6 +133,7 @@ if(!isset($_SESSION["user"])){
 
         form.addEventListener('click', (e) => {
             e.preventDefault();
+            document.getElementById('word-list').innerHTML = '';
             const nbColValue = nbCol.value;
             const nbRowsValue = nbRows.value;
             const langueValue = langue.value;
