@@ -50,7 +50,7 @@ exec($cmd, $output, $return);
 // var_dump($return);
 if(isset($_SESSION["partie"])){
     $partie = unserialize($_SESSION["partie"]);
-    $partie->addMot($word);
+    $partie->addMot($word,$_SESSION["idUser"],0);
     $_SESSION["partie"] = serialize($partie);
 }
 

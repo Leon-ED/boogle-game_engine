@@ -47,6 +47,7 @@ if(isset($_SESSION["partie"])){
     if($_SESSION["partie"] )
 
     $partie = unserialize($_SESSION["partie"]);
+    $partie->setTimeStampFin(date("Y-m-d H:i:s", time()));
     $partie->savePartie($conn);
 }
 
@@ -54,6 +55,7 @@ $partie = new Partie();
 $partie->setDimensions($nbRows, $nbCol);
 $partie->setGrille($grille);
 $partie->addJoueur($_SESSION["idUser"]);
+$partie->setTimeStampDebut(date("Y-m-d H:i:s", time()));
 
 $_SESSION["partie"] = serialize($partie);
 
