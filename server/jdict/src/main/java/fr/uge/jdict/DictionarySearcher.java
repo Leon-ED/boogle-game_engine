@@ -3,13 +3,13 @@ package fr.uge.jdict;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 
 import org.json.JSONObject;
 
 public class DictionarySearcher {
 
     public static void main(String[] args) throws Exception {
-        System.setProperty("file.encoding","UTF-8");
         DictionarySearcher searcher = new DictionarySearcher();
         String definitions_PATH = null;
         String index_PATH = null;
@@ -73,7 +73,6 @@ public class DictionarySearcher {
 
     public void getDefinition(RandomAccessFile index, RandomAccessFile definitions, String word, boolean searchSiblings,
             OutputFormat format) {
-                
         if (searchSiblings) {
             word = DictionaryNormalizer.normalize(word);
         }
@@ -146,12 +145,10 @@ public class DictionarySearcher {
             // on lit l'index
             index.seek(start * 8);
             int startDef = index.readInt();
-            int endDef = index.readInt();
-            byte[] b = new byte[endDef - startDef + 1];
-            definitions.read(b);
-            // String definition = new String(definitions.readLine().getBytes(),
-            // StandardCharsets.UTF_8);
-            String definition = new String(b, "UTF-8");
+
+            // on lit la définition
+            definitions.seek(startDef);
+            String definition = new String(definitions.readLine().getBytes(), StandardCharsets.UTF_8);
             JSONObject json = new JSONObject(definition);
             String title = json.getString("title");
             String normalizedTitle = DictionaryNormalizer.normalize(title);
@@ -167,14 +164,13 @@ public class DictionarySearcher {
         }
         start = midPos - 1;
         while (true) {
+            // on lit l'index
             index.seek(start * 8);
             int startDef = index.readInt();
-            int endDef = index.readInt();
-            byte[] b = new byte[endDef - startDef + 1];
-            definitions.read(b);
-            // String definition = new String(definitions.readLine().getBytes(),
-            // StandardCharsets.UTF_8);
-            String definition = new String(b, "UTF-8");
+
+            // on lit la définition
+            definitions.seek(startDef);
+            String definition = new String(definitions.readLine().getBytes(), StandardCharsets.UTF_8);
             JSONObject json = new JSONObject(definition);
             String title = json.getString("title");
             String normalizedTitle = DictionaryNormalizer.normalize(title);
