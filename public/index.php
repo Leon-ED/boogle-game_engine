@@ -96,6 +96,7 @@ if(!isset($_SESSION["user"])){
   content : '−';
 }
     </style>
+    <h3><a href="account.php"> Mon compte</a></h3>
     <h1>Choisir données:</h1>
     <div id="form-Choose">
         <div>
