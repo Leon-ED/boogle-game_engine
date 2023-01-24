@@ -4,6 +4,7 @@ dumps/
 target/
 *.xml
 *.exe
+credentials.php
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

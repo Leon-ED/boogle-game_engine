@@ -1,4 +1,10 @@
 <?php
+require_once("../../public/controller/Partie.php");
+require_once("../../public/config/config.php");
+if(!isset($_SESSION["user"])){
+    http_response_code(401);
+    die;
+}
 if(!array_key_exists("word", $_GET)) {
     echo "No word provided";
     exit;
@@ -13,7 +19,6 @@ foreach($_GET as $key => $value) {
 
 }
 
-
 $word = strtoupper($_GET["word"]);
 
 $DS = DIRECTORY_SEPARATOR;
@@ -23,6 +28,7 @@ $jsonPath = "..".$DS."files".$DS."definitions_fr.json";
 $indexPath = "..".$DS."files".$DS."dictionary.index";
 
 $cmd = "java -cp $jarPath $className definitions $word $indexPath $jsonPath";
+print_r($cmd);
 
 exec($cmd, $output, $return);
 

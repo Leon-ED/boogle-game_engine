@@ -1,6 +1,10 @@
 <?php
-
-
+require_once("../../public/controller/Partie.php");
+require_once("../../public/config/config.php");
+if(!isset($_SESSION["user"])){
+    http_response_code(401);
+    die;
+}
 // ?nbCol=${nbColValue}&nbRows=${nbRowsValue}&langue=${langueValue}`;
 
 if(!isset($_GET["nbCol"]) || !isset($_GET["nbRows"]) || !isset($_GET["langue"])){
@@ -39,6 +43,19 @@ for($i = 0; $i < $nbRows; $i++){
         $grille[$i][$j] = $output[$i * $nbCol + $j];
     }
 }
+if(isset($_SESSION["partie"])){
+    if($_SESSION["partie"] )
+
+    $partie = unserialize($_SESSION["partie"]);
+    $partie->savePartie($conn);
+}
+
+$partie = new Partie();
+$partie->setDimensions($nbRows, $nbCol);
+$partie->setGrille($grille);
+$partie->addJoueur($_SESSION["idUser"]);
+
+$_SESSION["partie"] = serialize($partie);
 
 echo json_encode(array(
     "grille" => $grille,

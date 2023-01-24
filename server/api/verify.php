@@ -1,5 +1,10 @@
 <?php
-
+require_once("../../public/controller/Partie.php");
+require_once("../../public/config/config.php");
+if(!isset($_SESSION["user"])){
+    http_response_code(401);
+    die;
+}
 
 // ?nbCol=${nbColValue}&nbRows=${nbRowsValue}&langue=${langueValue}`;
 
@@ -43,6 +48,11 @@ $cmd = "..".$DS."dictionnary".$DS."executables".$DS."grid_path".$ext." $word $nb
 exec($cmd, $output, $return);
 // var_dump($output);
 // var_dump($return);
+if(isset($_SESSION["partie"])){
+    $partie = unserialize($_SESSION["partie"]);
+    $partie->addMot($word);
+    $_SESSION["partie"] = serialize($partie);
+}
 
 
 echo json_encode(array(
