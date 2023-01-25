@@ -60,7 +60,7 @@ if (isset($_SESSION['user'])) {
 
                     </div>
                     <div class="form-group">
-                        <label for="password_confirm">confirmer mot de passe</label>
+                        <label for="password_confirm">Confirmer mot de passe</label>
                         <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Mot de passe" required>
 
                     </div>
