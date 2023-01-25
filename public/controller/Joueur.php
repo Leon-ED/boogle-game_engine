@@ -99,4 +99,35 @@ class Joueur
                 </div>";
         }
     }
+
+    public function getStatPartie($id_partie, $userId) {
+        global $conn;
+        $sql = "SELECT * FROM partie p, jouer j WHERE p.idPartie = j.idPartie AND j.idUser = ? AND p.idPartie = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $userId);
+        $stmt->bindParam(2, $id_partie);
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        $result = $stmt->fetch();
+        return $result;
+    }
+
+    public function getListMotsTrouves($id_partie, $idUser) {
+        global $conn;
+        $sql = "SELECT * FROM proposemots WHERE idPartie = ? AND idUser = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $id_partie);
+        $stmt->bindParam(2, $idUser);
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        $result = $stmt->fetchAll();
+        return $result;
+    }
+
 }
