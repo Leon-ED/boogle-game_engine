@@ -4,22 +4,23 @@ Module s'occupant de la connexion et de l'inscription des utilistateurs
 */
 require_once("../config/config.php");
 
-if(!isset($_POST["action"])){
+if (!isset($_POST["action"])) {
     header("Location: ../login.php");
     exit();
 }
 
 $action = $_POST["action"];
-if($action == "login"){
+if ($action == "login") {
     login();
-}else if ($action == "register"){
+} else if ($action == "register") {
     register();
-}else{
+} else {
     header("Location: ../login.php");
     exit();
 }
 
-function login(){
+function login()
+{
     global $conn;
 
     $login = $_POST["login"];
@@ -30,36 +31,32 @@ function login(){
         ":login" => $login
     ));
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    $goodPassword = password_verify($password,$user["password"]);
-    if(!$user){
+    $goodPassword = password_verify($password, $user["password"]);
+    if (!$user) {
         header("Location: ../login.php?error=1");
         exit();
     }
-    if($goodPassword){
+    if ($goodPassword) {
         session_start();
         $_SESSION["user"] = $user;
         $_SESSION["idUser"] = $user["idUser"];
         header("Location: ../index.php");
         exit();
-    }else{
+    } else {
         header("Location: ../login.php?error=1");
-        exit(); 
+        exit();
     }
-
-
-
-
-
 }
 
-function register(){
+function register()
+{
     global $conn;
 
     $login = $_POST["login"];
     $password = $_POST["password"];
     $password_confirm = $_POST["password_confirm"];
 
-    if($password != $password_confirm){
+    if ($password != $password_confirm) {
         header("Location: ../login.php?error=1");
         exit();
     }

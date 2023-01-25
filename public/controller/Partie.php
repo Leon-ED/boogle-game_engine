@@ -117,8 +117,4 @@ class Partie
             }
         }
     }
-
-
-
-
 }

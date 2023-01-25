@@ -1,6 +1,7 @@
 <?php
 
-class Joueur{
+class Joueur
+{
     /*
         Objet PHP représentant un joueur de Boogle
     */
@@ -11,26 +12,28 @@ class Joueur{
     private $noDatas = "<i class='erreur'>Non disponible</i>";
 
 
-    public function __construct($idUser){
+    public function __construct($idUser)
+    {
         $this->idUser = $idUser;
     }
 
 
-    public function nombrePartiesJouees(){
+    public function nombrePartiesJouees()
+    {
         global $conn;
         $sql = "SELECT COUNT(*) FROM jouer WHERE idUser = :idUser";
         $stmt = $conn->prepare($sql);
         $stmt->execute(["idUser" => $this->idUser]);
         $result = $stmt->fetch();
-        if($result[0] == 0)
+        if ($result[0] == 0)
             $this->noStats = true;
         return $result[0];
-    
     }
 
 
-    public function partiePlusLongue(){
-        if($this->noStats)
+    public function partiePlusLongue()
+    {
+        if ($this->noStats)
             return $this->noDatas;
         global $conn;
         $sql = "SELECT DateFinPartie - DateDebutPartie FROM partie WHERE idPartie IN (SELECT idPartie FROM jouer WHERE idUser = :idUser) ORDER BY DateFinPartie - DateDebutPartie DESC LIMIT 1";
@@ -38,37 +41,38 @@ class Joueur{
         $stmt->execute(["idUser" => $this->idUser]);
         $result = $stmt->fetch();
         $temps = $result[0];
-        $msg = $temps / 60 ." minutes ($temps secondes)";
+        $msg = $temps / 60 . " minutes ($temps secondes)";
         return $msg;
-    
     }
-    
-    public function partiePlusRapide(){
-        if($this->noStats)
-        return $this->noDatas;
+
+    public function partiePlusRapide()
+    {
+        if ($this->noStats)
+            return $this->noDatas;
         global $conn;
         $sql = "SELECT DateFinPartie - DateDebutPartie FROM partie WHERE idPartie IN (SELECT idPartie FROM jouer WHERE idUser = :idUser) ORDER BY DateFinPartie - DateDebutPartie ASC LIMIT 1";
         $stmt = $conn->prepare($sql);
         $stmt->execute(["idUser" => $this->idUser]);
         $result = $stmt->fetch();
         $temps = $result[0];
-        $msg = $temps / 60 ." minutes ($temps secondes)";
+        $msg = $temps / 60 . " minutes ($temps secondes)";
         // convert temps to minutes
-        return $msg; 
+        return $msg;
     }
 
-    public function getParties($nombre){
+    public function getParties($nombre)
+    {
         global $conn;
         $sql = "SELECT * FROM partie WHERE idPartie IN (SELECT idPartie FROM jouer WHERE idUser = ?) LIMIT ?";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(1, $this->idUser);
         $stmt->bindParam(2, $nombre, PDO::PARAM_INT);
-        try{
-        $stmt->execute();
-        }catch(PDOException $e){
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
             echo $e->getMessage();
         }
-        while($result = $stmt->fetch()){
+        while ($result = $stmt->fetch()) {
             $date = date("d/m/Y", strtotime($result["DateDebutPartie"]));
             $heure = date("H:i", strtotime($result["DateDebutPartie"]));
             $temps = date("U", strtotime($result["DateFinPartie"])) - date("U", strtotime($result["DateDebutPartie"]));
@@ -94,9 +98,5 @@ class Joueur{
                     <a href='partie.php?idPartie=$idPartie'>Voir la partie</a>
                 </div>";
         }
-
-        
     }
-
-   
 }

@@ -37,9 +37,9 @@ if (!isset($_SESSION["user"])) {
         </section>
         <section>
             <h1>Vos 5 dernières parties :</h1>
-                <?php
-                    $joueur->getParties(5);
-                ?>
+            <?php
+            $joueur->getParties(5);
+            ?>
         </section>
     </main>
 </body>

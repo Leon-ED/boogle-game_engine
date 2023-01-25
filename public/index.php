@@ -45,11 +45,11 @@ if (!isset($_SESSION["user"])) {
                 <?php
                 // Sur certains serveur notamment sur ceux de l'université on ne peut pas exécuter du JAVA on affiche donc ce bandeau
                 // à activer dans le fichier config.php
-                if(!DEF_DISPO){
+                if (!DEF_DISPO) {
                     echo "<div class='error'><p>En raison d'un problème lié au gestionnaire d'infrastructure du réseau<br>l'affichage des définitions n'est pas disponible.</p></div>";
                 }
-?>
-                </section>
+                ?>
+        </section>
         <section id="grille-section" class="flex-column hidden">
             <div id="grille">
 
@@ -64,9 +64,6 @@ if (!isset($_SESSION["user"])) {
         <section id="word-list" class="hidden">
         </section>
     </main>
-
-
-
 </body>
 
 </html>

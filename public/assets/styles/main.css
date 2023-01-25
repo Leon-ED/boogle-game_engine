@@ -13,48 +13,48 @@ Feuille CSS principale pour le proje
     --white: #fbfdf7;
     --orange: #be7c00;
     --gray: #a9a9a9;
-}   
+}
 
-body{
+body {
     background-color: var(--bg_color);
     font-family: 'Roboto', sans-serif;
     margin: 0;
 }
 
-a{
+a {
     text-decoration: none;
     color: var(--green);
 }
 
-.flex-column{
+.flex-column {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.flex-row{
+.flex-row {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
 
-.grid-columns{
+.grid-columns {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: flex-start;
 }
 
-main{
+main {
     margin-left: 5px;
     margin-right: 5px;
 }
 
-.hidden{
+.hidden {
     display: none;
 }
 
-nav{
+nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -63,20 +63,21 @@ nav{
     margin-bottom: 20px;
 }
 
-nav .left:hover{
+nav .left:hover {
     cursor: pointer;
 }
 
-.left{
+.left {
     display: flex;
     align-items: center;
 
 }
-.right *{
+
+.right * {
     margin: 5px;
 }
 
-.error{
+.error {
     color: var(--white);
     margin: 5px;
     padding-left: 3px;
@@ -85,17 +86,17 @@ nav .left:hover{
     border-radius: 5px;
 }
 
-.logout{
+.logout {
     color: var(--red) !important;
 }
 
-nav img{
+nav img {
     width: 50px;
     height: 50px;
     border-radius: 10px;
 }
 
-section{
+section {
     background-color: var(--white);
     width: fit-content;
     margin: 0 auto;
@@ -104,31 +105,31 @@ section{
     margin-bottom: 20px;
 }
 
-.param-section{
+.param-section {
 
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.form-elems{
+.form-elems {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
-.form-elems input{
+.form-elems input {
     margin: 10px 0;
 }
 
-input{
+input {
     border: 1px solid var(--gray);
     width: 100px;
     border-radius: 5px;
     padding: 5px;
 }
 
-input[type="submit"]{
+input[type="submit"] {
     width: 100px;
     background-color: var(--green);
     color: var(--white);
@@ -137,14 +138,15 @@ input[type="submit"]{
     padding: 5px;
     margin: 0 auto;
 }
-.ligne{
+
+.ligne {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 10px;
 }
 
 
-.case{
+.case {
     display: inline-block;
     border: 1px solid var(--green);
     font-size: 30px;
@@ -159,18 +161,18 @@ input[type="submit"]{
 }
 
 
-.case:hover{
+.case:hover {
     background-color: var(--yellow);
     border-radius: 5px;
 }
 
 
-.stat{
-    color:var(--green);
+.stat {
+    color: var(--green);
     font-weight: bolder;
 }
 
-.partie{
+.partie {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -179,6 +181,6 @@ input[type="submit"]{
     margin: 10px;
 }
 
-.partie a{
+.partie a {
     align-self: center;
 }

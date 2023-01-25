@@ -24,6 +24,7 @@ if (isset($_SESSION['user'])) {
 
 
 ?>
+
 <body>
     <style>
         body {
@@ -31,6 +32,7 @@ if (isset($_SESSION['user'])) {
             background-size: 47%;
 
         }
+
         section {
             font-weight: bold;
         }
@@ -58,13 +60,13 @@ if (isset($_SESSION['user'])) {
                         <label for="password">Mot de passe</label>
                         <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe" required>
                         <a href="#" id="click-password" onclick="showPassword()">
-                            <input type="checkbox" id="cb-password">Afficher le mot de passe 
+                            <input type="checkbox" id="cb-password">Afficher le mot de passe
                         </a>
                     </div>
                     <br>
                     <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre mot de passe avec qui que ce soit, faites-en de même</small>
                     <br>
-                    <button type="submit" class="btn btn-primary">  Se connecter </button>
+                    <button type="submit" class="btn btn-primary"> Se connecter </button>
                     <input type="hidden" name="action" value="login">
                 </form>
             </fieldset>

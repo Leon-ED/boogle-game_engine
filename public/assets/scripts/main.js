@@ -5,7 +5,7 @@ const langue = document.getElementById('langue');
 
 
 // Remplis la grille grâce au JSON renvoyé par le serveur
-function populateGrid(json,nbRowsValue,nbColValue){
+function populateGrid(json, nbRowsValue, nbColValue) {
     const grille = document.getElementById('grille');
     grille.innerHTML = '';
 
@@ -44,7 +44,7 @@ form.addEventListener('click', (e) => {
         .then((data) => {
             console.log(data);
             data = data.grille
-            populateGrid(data,nbRowsValue,nbColValue);
+            populateGrid(data, nbRowsValue, nbColValue);
 
         })
         .catch((error) => {
