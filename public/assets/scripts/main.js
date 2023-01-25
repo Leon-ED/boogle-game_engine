@@ -3,6 +3,8 @@ const nbCol = document.getElementById('nbCol');
 const nbRows = document.getElementById('nbRows');
 const langue = document.getElementById('langue');
 
+const PROBA_RENVERSEE = 20;
+const LETTRES_AMBIGUES = ['M','W']
 
 // Remplis la grille grâce au JSON renvoyé par le serveur
 function populateGrid(json, nbRowsValue, nbColValue) {
@@ -18,6 +20,10 @@ function populateGrid(json, nbRowsValue, nbColValue) {
             console.log(lettre);
             const div = document.createElement('div');
             div.classList.add('case');
+            if(PROBA_RENVERSEE > Math.floor(Math.random() * 100) && !LETTRES_AMBIGUES.includes(lettre)) {
+                const rotation = Math.floor(Math.random() * 4) * 90;
+                div.style.transform = 'rotate(' + rotation + 'deg)';
+            }
             div.innerHTML = lettre;
             line.appendChild(div);
         }
