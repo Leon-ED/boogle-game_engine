@@ -3,6 +3,9 @@
 dumps/
 target/
 *.xml
+*.json
+*.lex
+*.index
 *.exe
 credentials.php
 pom.xml.tag
