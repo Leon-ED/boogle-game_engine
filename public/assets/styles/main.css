@@ -1,0 +1,143 @@
+:root {
+    --bg_color: #F1F1F1;
+    --green: #006d3a;
+    --blue: #00456d;
+    --sub_blue: #006d8c;
+    --white_sub: #e6e6e6;
+    --yellow: #ceb307;
+    --red: #bb113b;
+    --white: #fbfdf7;
+    --orange: #be7c00;
+    --gray: #a9a9a9;
+}   
+
+body{
+    background-color: var(--bg_color);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+}
+
+a{
+    text-decoration: none;
+    color: var(--green);
+}
+
+.flex-column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+.grid-columns{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: flex-start;
+}
+
+main{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.hidden{
+    display: none;
+}
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    background-color: var(--white);
+    margin-bottom: 20px;
+}
+
+.left{
+    display: flex;
+    align-items: center;
+
+}
+
+nav img{
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+section{
+    background-color: var(--white);
+    width: fit-content;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.param-section{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-elems{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.form-elems input{
+    margin: 10px 0;
+}
+
+input{
+    border: 1px solid var(--gray);
+    width: 100px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+input[type="submit"]{
+    width: 100px;
+    background-color: var(--green);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0 auto;
+}
+.ligne{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+
+
+.case{
+    display: inline-block;
+    border: 1px solid var(--green);
+    font-size: 30px;
+    flex-direction: column;
+    align-items: center;
+    margin: 3px;
+    line-height: 50px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+
+}
+
+
+.case:hover{
+    background-color: var(--yellow);
+    border-radius: 5px;
+}
+
+
