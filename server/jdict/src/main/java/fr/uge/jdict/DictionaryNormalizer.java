@@ -13,13 +13,10 @@ public class DictionaryNormalizer {
     }
 
     public static String normalize(String word) {
-        String string = 
-        Normalizer
-        .normalize(word, Normalizer.Form.NFD)
-        .replaceAll("[^\\p{ASCII}]", "");
+        String string = Normalizer
+                .normalize(word, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "");
         return string.toUpperCase();
     }
-
-
 
 }

@@ -4,7 +4,7 @@ function logout() {
 
         return this.responseText;
     };
-    oReq.open("GET", "../../server/api/logout.php?action=logout", false);
+    oReq.open("GET", "../server/api/logout.php?action=logout", false);
 
     oReq.send();
 

@@ -14,7 +14,7 @@ class CharTableMaker {
         String definition_PATH = null;
         String output_PATH = null;
         boolean stdoutput = false;
-        if(System.console() == null) {
+        if (System.console() == null) {
             stdoutput = true;
         }
         if (args.length < 1) {
@@ -23,18 +23,18 @@ class CharTableMaker {
             return;
         } else if (args.length >= 2) {
             definition_PATH = args[0];
-        }else{
+        } else {
             definition_PATH = args[0];
         }
-        File definition_FILE  = new File(definition_PATH);
-        if(!definition_FILE.exists() || definition_FILE.isDirectory()) {
+        File definition_FILE = new File(definition_PATH);
+        if (!definition_FILE.exists() || definition_FILE.isDirectory()) {
             System.out.println("JDICT : Le fichier de définitions n'existe pas");
             return;
         }
-        if(args.length >= 2) {
+        if (args.length >= 2) {
             output_PATH = args[1];
-        }else{
-        output_PATH = Paths.get(definition_PATH).getParent().toString() + File.separator + "frequences.txt";
+        } else {
+            output_PATH = Paths.get(definition_PATH).getParent().toString() + File.separator + "frequences.txt";
         }
 
         TreeMap<String, Float> freqs = createCharTable(definition_PATH);
@@ -43,11 +43,10 @@ class CharTableMaker {
         }
         if (stdoutput) {
             freqs.forEach((k, v) -> System.out.println(k + "  " + v));
-        }else{
-        writeCharTable(freqs, output_PATH );
+        } else {
+            writeCharTable(freqs, output_PATH);
         }
     }
-
 
     private static void convertToPercent(TreeMap<String, Float> charTable) {
         int sum = 0;
@@ -55,9 +54,10 @@ class CharTableMaker {
             sum += charTable.get(key);
         }
         for (String key : charTable.keySet()) {
-            charTable.put(key, charTable.get(key)*100.0f / sum);
+            charTable.put(key, charTable.get(key) * 100.0f / sum);
         }
     }
+
     /***
      * {@summary} Crée une table de fréquences des lettres et des paires de lettres
      * 
@@ -69,9 +69,9 @@ class CharTableMaker {
         TreeMap<String, Float> charTable = new TreeMap<>();
         try (BufferedReader reader = Files.newBufferedReader(Path.of(definition_PATH))) {
             while (reader.readLine() != null) {
-            
+
                 String line = reader.readLine();
-                if(line == null) {
+                if (line == null) {
                     break;
                 }
                 line = line.toUpperCase();
@@ -80,7 +80,6 @@ class CharTableMaker {
                     if (!Character.isLetter(character) || !isPrintable(character)) {
                         continue;
                     }
-
 
                     String elem = character + "";
                     if (line.charAt(i) == 'Q' && line.charAt(i + 1) == 'U') {
