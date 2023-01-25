@@ -45,7 +45,7 @@ public class NormalizedExtractor {
 
     private static void extract(String categoriesARG, String definitions_PATH, boolean stdoutput) {
         String language = null;
-        String categories[] = categoriesARG == null ? null : categoriesARG.split(","); 
+        String categories[] = categoriesARG == null ? null : categoriesARG.split(",");
         Set<String> wordSet = new TreeSet<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
@@ -62,7 +62,7 @@ public class NormalizedExtractor {
                     continue;
                 }
                 JSONObject categoriesJSON = definition.getJSONObject("definitions");
-                if(categories == null){
+                if (categories == null) {
                     String normalizedWord = DictionaryNormalizer.normalize(definition.getString("title"));
                     wordSet.add(normalizedWord);
                     continue;
@@ -89,7 +89,8 @@ public class NormalizedExtractor {
                 System.out.println(word);
             }
         } else {
-            String saveFile_PATH = Paths.get(definitions_PATH).getParent().toString() + File.separator +"words_list_" + language
+            String saveFile_PATH = Paths.get(definitions_PATH).getParent().toString() + File.separator + "words_list_"
+                    + language
                     + ".txt";
             saveToFile(wordSet, Path.of(saveFile_PATH));
         }

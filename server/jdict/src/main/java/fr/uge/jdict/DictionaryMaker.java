@@ -14,7 +14,6 @@ public class DictionaryMaker {
         String langue;
         long time = System.currentTimeMillis();
 
-
         if (args.length < 4) {
             System.out.println(
                     "Usage: DictionaryMaker <langue> definitions <input.xml.bz2 | input.xml > <fichier_sortie>");
@@ -61,7 +60,8 @@ public class DictionaryMaker {
             System.exit(1);
         }
 
-        System.out.println("Fin, temps d'exécution total : " + (System.currentTimeMillis() - time) / 60000.000 + " min");
+        System.out
+                .println("Fin, temps d'exécution total : " + (System.currentTimeMillis() - time) / 60000.000 + " min");
 
     }
 }
