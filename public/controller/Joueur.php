@@ -41,7 +41,7 @@ class Joueur
         $stmt->execute(["idUser" => $this->idUser]);
         $result = $stmt->fetch();
         $temps = $result[0];
-        $msg = $temps / 60 . " minutes ($temps secondes)";
+        $msg = round($temps / 60,1) . " minutes ($temps secondes)";
         return $msg;
     }
 
@@ -55,7 +55,7 @@ class Joueur
         $stmt->execute(["idUser" => $this->idUser]);
         $result = $stmt->fetch();
         $temps = $result[0];
-        $msg = $temps / 60 . " minutes ($temps secondes)";
+        $msg = round($temps / 60,1)  . " minutes ($temps secondes)";
         // convert temps to minutes
         return $msg;
     }
