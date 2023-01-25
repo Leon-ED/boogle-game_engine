@@ -1,26 +1,36 @@
 foundWords = [];
+
+
+
+// Lorsque l'on clique sur le bouton "Vérifier" 
 const word = document.getElementById('word-submit');
 word.addEventListener('click', (e) => {
     e.preventDefault();
     const wordValue = document.getElementById('word').value;
     // console.log(wordValue);
+    // on vérifie que le mot n'a pas déjà été trouvé
     if (foundWords.includes(wordValue)) {
         alert('Le mot a déjà été trouvé');
         return;
     }
+    // Sinon on prépare l'appel à l'API
     const url = "../server/api/verify.php";
     const grille = document.getElementById('grille');
     const lettres = grille.querySelectorAll('.case');
     const nbCol = document.getElementById('nbCol');
     const nbRows = document.getElementById('nbRows');
+    // On prépare l'envoi de la grille au serveur
     let grilleArray = [];
     lettres.forEach((lettre) => {
         grilleArray.push(lettre.innerHTML);
     });
+
+    // On envoie l'appel à l'API
     const params = `?word=${wordValue}&grille=${grilleArray}&nbCol=${nbCol.value}&nbRows=${nbRows.value}`;
     fetch(url + params)
         .then((response) => response.json())
         .then((data) => {
+            // Code 0 = mot trouvé, code 1 = mot non trouvé mais existe dans le dictionnaire, code 2 = mot non existant
             if (data.code === 0) {
                 document.getElementById('word-list').classList.remove('hidden');
                 foundWords.push(wordValue);
@@ -38,6 +48,7 @@ word.addEventListener('click', (e) => {
         });
 });
 
+// Ajoute une mot dans la liste des mots trouvés
 function addWord(word) {
     const wordList = document.getElementById('word-list');
     const ul = document.createElement('ul');
@@ -55,6 +66,7 @@ function addWord(word) {
     getDefinition(word, wordDiv);
 }
 
+// Récupère la définition du mot grâce à l'API de dictionnaire et l'affiche dans la liste des mots trouvés sous la forme d'un arbre de définitions
 function getDefinition(word, wordDiv) {
     const url = "../server/api/definition.php";
     const params = `?word=${word}`;

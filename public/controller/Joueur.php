@@ -1,6 +1,9 @@
 <?php
 
 class Joueur{
+    /*
+        Objet PHP représentant un joueur de Boogle
+    */
 
 
     private $idUser;

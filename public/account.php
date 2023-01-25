@@ -1,4 +1,7 @@
 <?php
+// Page du compte d'un joueur, permet de voir ses statistiques et ses dernières parties ainsi que d'accéder en détails à ces dernières
+// TODO : Ajouter un bouton pour supprimer son compte, ses données conformément à la RGPD et à la loi informatique et liberté (voir https://www.cnil.fr/fr/rgpd-et-loi-informatique-et-libertes)
+// TODO : Ajouter un bouton pour modifier ses informations
 require_once("config/config.php");
 require_once("controller/Joueur.php");
 $joueur = new Joueur($_SESSION["idUser"]);

@@ -1,3 +1,9 @@
+/* 
+Fichier CSS pour afficher l'arbre des catégories
+pour les définitions
+
+*/
+
 .tree {
     --spacing: 1.5rem;
     --radius: 10px;

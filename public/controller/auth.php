@@ -1,4 +1,7 @@
 <?php
+/*
+Module s'occupant de la connexion et de l'inscription des utilistateurs
+*/
 require_once("../config/config.php");
 
 if(!isset($_POST["action"])){

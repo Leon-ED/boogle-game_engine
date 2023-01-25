@@ -4,6 +4,7 @@ const nbRows = document.getElementById('nbRows');
 const langue = document.getElementById('langue');
 
 
+// Remplis la grille grâce au JSON renvoyé par le serveur
 function populateGrid(json,nbRowsValue,nbColValue){
     const grille = document.getElementById('grille');
     grille.innerHTML = '';
@@ -27,6 +28,7 @@ function populateGrid(json,nbRowsValue,nbColValue){
 
 }
 
+// Fais un appel au serveur pour récupérer la grille selon les données
 form.addEventListener('click', (e) => {
     e.preventDefault();
     document.getElementById('word-list').innerHTML = "<h1>Mots trouvés</h1>";

@@ -22,26 +22,6 @@ if (isset($_SESSION['user'])) {
     exit();
 }
 
-$display = "none";
-$alert = "alert-danger";
-$message = "Attention : Ceci est votre dernier essai";
-
-$bloquer_formulaire = false;
-
-if (isset($_SESSION["wrong_auth"])) {
-    if ($_SESSION["wrong_auth"] == 2) {
-        $display = "block";
-    } else {
-        $display = "none";
-    }
-}
-if (isset($_SESSION["connexion_blocked"]) && $_SESSION["connexion_blocked"] == true) {
-    $display = "block";
-    $alert = "alert-danger";
-    $message = "Vous avez entré trop de mauvais identifiants. Vous êtes bloqué";
-    $bloquer_formulaire = true;
-}
-
 
 ?>
 <body>

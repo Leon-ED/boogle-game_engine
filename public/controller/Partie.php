@@ -2,6 +2,9 @@
 
 class Partie
 {
+    /*
+        Objet PHP représentant une partie de Boogle
+    */
 
     private $idPartie;
     private $listeIdJoueurs = array();
@@ -26,6 +29,7 @@ class Partie
         $this->grille = $grille;
     }
 
+    // Ajout d'un joueur à une partie
     function addJoueur($idJoueur)
     {
         if (!isset($this->listeIdJoueurs))
@@ -34,6 +38,8 @@ class Partie
         if (!in_array($idJoueur, $this->listeIdJoueurs))
             $this->listeIdJoueurs[] = $idJoueur;
     }
+
+    // On ajoute un mot trouvé par un joueur, on vérifie que le mot n'est pas déjà dans la liste
     function addMot($mot, $idUser)
     {
         if (!isset($this->listeMotsTrouves))
@@ -50,16 +56,19 @@ class Partie
         $this->langue = $langue;
     }
 
+    // On sauvegarde le début de la partie
     function setTimeStampDebut($timeStamp)
     {
         $this->dateDebutPartie = $timeStamp;
     }
 
+    // On sauvegarde la fin de la partie
     function setTimeStampFin($timeStamp)
     {
         $this->dateFinPartie = $timeStamp;
     }
 
+    // Permet d'enregistrer la partie dans la base de données
     function savePartie($conn)
     {
         // Aucun mots dans la partie, pas intéressant à sauvegarder

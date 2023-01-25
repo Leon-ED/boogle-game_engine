@@ -1,4 +1,5 @@
 <?php
+// Page principale du jeu Boogle
 require_once("config/config.php");
 if (!isset($_SESSION["user"])) {
     header("Location: login.php");
@@ -42,6 +43,8 @@ if (!isset($_SESSION["user"])) {
                     <input type="submit" value="Nouvelle partie" id="form-submit">
                 </div>
                 <?php
+                // Sur certains serveur notamment sur ceux de l'université on ne peut pas exécuter du JAVA on affiche donc ce bandeau
+                // à activer dans le fichier config.php
                 if(!DEF_DISPO){
                     echo "<div class='error'><p>En raison d'un problème lié au gestionnaire d'infrastructure du réseau<br>l'affichage des définitions n'est pas disponible.</p></div>";
                 }
@@ -61,12 +64,7 @@ if (!isset($_SESSION["user"])) {
         <section id="word-list" class="hidden">
         </section>
     </main>
-    <script defer>
-       
-    </script>
-    <script defer>
 
-    </script>
 
 
 </body>

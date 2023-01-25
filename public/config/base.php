@@ -1,6 +1,6 @@
 <?php
 
-
+// Fichier de configuration de la base de données
 require('credentials.php');
 
 try {
