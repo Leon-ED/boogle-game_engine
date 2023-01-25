@@ -64,6 +64,13 @@ nav{
     align-items: center;
 
 }
+.right *{
+    margin: 5px;
+}
+
+.logout{
+    color: var(--red) !important;
+}
 
 nav img{
     width: 50px;
