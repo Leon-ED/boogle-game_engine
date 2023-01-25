@@ -3,6 +3,30 @@ const nbCol = document.getElementById('nbCol');
 const nbRows = document.getElementById('nbRows');
 const langue = document.getElementById('langue');
 
+
+function populateGrid(json,nbRowsValue,nbColValue){
+    const grille = document.getElementById('grille');
+    grille.innerHTML = '';
+
+    for (var i = 0; i < nbRowsValue; i++) {
+        const line = document.createElement('div');
+        console.log(line);
+        line.classList.add('ligne');
+        for (var j = 0; j < nbColValue; j++) {
+            var lettre = json[i][j];
+            console.log(lettre);
+            const div = document.createElement('div');
+            div.classList.add('case');
+            div.innerHTML = lettre;
+            line.appendChild(div);
+        }
+        grille.appendChild(line);
+    }
+
+
+
+}
+
 form.addEventListener('click', (e) => {
     e.preventDefault();
     document.getElementById('word-list').innerHTML = "<h1>Mots trouvés</h1>";
@@ -18,23 +42,7 @@ form.addEventListener('click', (e) => {
         .then((data) => {
             console.log(data);
             data = data.grille
-            const grille = document.getElementById('grille');
-            grille.innerHTML = '';
-
-            for (var i = 0; i < nbRowsValue; i++) {
-                const line = document.createElement('div');
-                console.log(line);
-                line.classList.add('ligne');
-                for (var j = 0; j < nbColValue; j++) {
-                    var lettre = data[i][j];
-                    console.log(lettre);
-                    const div = document.createElement('div');
-                    div.classList.add('case');
-                    div.innerHTML = lettre;
-                    line.appendChild(div);
-                }
-                grille.appendChild(line);
-            }
+            populateGrid(data,nbRowsValue,nbColValue);
 
         })
         .catch((error) => {

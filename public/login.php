@@ -62,6 +62,9 @@ if (isset($_SESSION["connexion_blocked"]) && $_SESSION["connexion_blocked"] == t
         <div>
             <h1>Se connecter</h1>
         </div>
+        <div>
+            <span>Pas de compte ? <a href="register.php">Pas de problème</a></span>
+        </div>
         <section class="login-section" style="width: 30%; ">
             <fieldset id="fieldset" <?php if ($bloquer_formulaire) {
                                         echo "disabled";

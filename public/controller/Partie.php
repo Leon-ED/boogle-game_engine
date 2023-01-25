@@ -70,7 +70,7 @@ class Partie
         $idPartie = md5(uniqid(rand(), true));
 
         // On sauvegarde la partie
-        $sql = "INSERT INTO partie(idPartie, NbMotsTrouves, idVainqueur, Grille, NomDicoUtilise, DateDebutPartie, DateFinPartie) VALUES(?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO partie(idPartie, NbMotsTrouves, idVainqueur,dimensionsGrille, Grille, NomDicoUtilise, DateDebutPartie, DateFinPartie) VALUES(?, ?, ?, ?, ? , ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $this->idPartie = $idPartie;
 
@@ -83,6 +83,7 @@ class Partie
                 $idPartie,
                 $nbMotsTrouves,
                 $idVainqueur,
+                $this->nbRows . "x" . $this->nbCol,
                 $grille,
                 $nomDicoUtilise,
                 $this->dateDebutPartie,
@@ -107,4 +108,8 @@ class Partie
             }
         }
     }
+
+
+
+
 }

@@ -59,6 +59,10 @@ nav{
     margin-bottom: 20px;
 }
 
+nav .left:hover{
+    cursor: pointer;
+}
+
 .left{
     display: flex;
     align-items: center;
@@ -66,6 +70,15 @@ nav{
 }
 .right *{
     margin: 5px;
+}
+
+.error{
+    color: var(--white);
+    margin: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+    background-color: var(--red);
+    border-radius: 5px;
 }
 
 .logout{
@@ -148,3 +161,20 @@ input[type="submit"]{
 }
 
 
+.stat{
+    color:var(--green);
+    font-weight: bolder;
+}
+
+.partie{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: var(--white_sub);
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.partie a{
+    align-self: center;
+}

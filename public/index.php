@@ -41,7 +41,12 @@ if (!isset($_SESSION["user"])) {
                     </div>
                     <input type="submit" value="Nouvelle partie" id="form-submit">
                 </div>
-        </section>
+                <?php
+                if(!DEF_DISPO){
+                    echo "<div class='error'><p>En raison d'un problème lié au gestionnaire d'infrastructure du réseau<br>l'affichage des définitions n'est pas disponible.</p></div>";
+                }
+?>
+                </section>
         <section id="grille-section" class="flex-column hidden">
             <div id="grille">
 

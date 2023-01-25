@@ -24,6 +24,7 @@ if (isset($_SESSION['user'])) {
 
 
 ?>
+
 <body>
     <style>
         body {
@@ -31,6 +32,7 @@ if (isset($_SESSION['user'])) {
             background-size: 47%;
 
         }
+
         section {
             font-weight: bold;
         }
@@ -40,10 +42,13 @@ if (isset($_SESSION['user'])) {
             <h1><strong> Créez votre compte Boogle !</strong></h1>
         </section>
         <div>
-            <h1>Se connecter</h1>
+            <h1>S'inscrire</h1>
+            <div>
+                <span>Un compte ? <a href="register.php">Pas de problème</a></span>
+            </div>
         </div>
         <section class="login-section" style="width: 30%; ">
-            <fieldset id="fieldset" >
+            <fieldset id="fieldset">
                 <form class="form" method="POST" action="controller/auth.php" disabled>
                     <div class="form-group">
                         <label for="login">Identifiant</label>
@@ -62,12 +67,12 @@ if (isset($_SESSION['user'])) {
                     <br>
                     <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre mot de passe avec qui que ce soit, faites-en de même</small>
                     <br>
-                    <button type="submit" class="btn btn-primary">  Créer compte </button>
+                    <button type="submit" class="btn btn-primary"> Créer compte </button>
                     <input type="hidden" name="action" value="register">
                 </form>
             </fieldset>
 
         </section>
     </main>
-   
+
 </body>
