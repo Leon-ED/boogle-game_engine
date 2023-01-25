@@ -1,4 +1,5 @@
 ReadMe pour le JDict :
+Groupe Alter_SAE_3 : EDMEE Léon, DELMAS Denis, MOTUEL Valentin
 
 Compilation :
 Lors de la Compilation avec mvn package, le fichier sera généré dans le dossier target sous le nom jdict-jar-with-dependencies.jar
