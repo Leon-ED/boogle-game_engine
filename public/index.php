@@ -7,6 +7,8 @@ if (!isset($_SESSION["user"])) {
 }
 
 ?>
+<script src="./controller/functions.js" defer></script>
+
 <!DOCTYPE html>
 <html lang="fr">
 
