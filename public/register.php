@@ -44,7 +44,7 @@ if (isset($_SESSION['user'])) {
         <div>
             <h1>S'inscrire</h1>
             <div>
-                <span>Un compte ? <a href="register.php">Pas de problème</a></span>
+                <span>Un compte ? <a href="login.php">Pas de problème</a></span>
             </div>
         </div>
         <section class="login-section" style="width: 30%; ">

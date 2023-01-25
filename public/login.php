@@ -48,9 +48,7 @@ if (isset($_SESSION['user'])) {
             <span>Pas de compte ? <a href="register.php">Pas de problème</a></span>
         </div>
         <section class="login-section" style="width: 30%; ">
-            <fieldset id="fieldset" <?php if ($bloquer_formulaire) {
-                                        echo "disabled";
-                                    }   ?>>
+            <fieldset id="fieldset" >
                 <form class="form" method="POST" action="controller/auth.php" disabled>
                     <div class="form-group">
                         <label for="login">Identifiant</label>
@@ -70,10 +68,6 @@ if (isset($_SESSION['user'])) {
                     <input type="hidden" name="action" value="login">
                 </form>
             </fieldset>
-            <!-- bootstrap alert -->
-            <div class="alert <?= $alert ?>" role="alert" style="display: <?= $display ?>; margin-top: 10px;">
-                <?= $message ?>
-            </div>
         </section>
     </main>
     <script>

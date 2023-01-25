@@ -1,6 +1,11 @@
 <?php
 require_once("../../public/controller/Partie.php");
 require_once("../../public/config/config.php");
+
+/*
+Récupère les définitions d'un mot depuis le module JAVA (DictionarySearcher) (non disponible sur tous les systèmes)
+*/
+
 if(!isset($_SESSION["user"])){
     http_response_code(401);
     die;
@@ -31,15 +36,14 @@ $cmd = "java -cp $jarPath $className definitions $word $indexPath $jsonPath";
 
 exec($cmd, $output, $return);
 
+
+// On réencode en UTF-8, et on remplace les caractères unicode par leur équivalent UTF-8
 $output = implode("\n", $output);
-// convert to utf-8
 $output = mb_convert_encoding($output, 'UTF-8', mb_detect_encoding($output, 'UTF-8, ISO-8859-1', true));
-// convert unicode codes to chars
 $output = preg_replace_callback('/\\\\u([0-9a-f]{4})/i', function($match) {
     return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
 }, $output);
 
-// replace all }{ by },{ to make it a valid json array
 $output = preg_replace('/}\s*{/', '},{', $output);
 
 
