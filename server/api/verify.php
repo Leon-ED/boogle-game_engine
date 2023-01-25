@@ -36,11 +36,12 @@ exec($cmd, $output, $return);
 $output = intval($output[0]);
 // var_dump($output);
 // var_dump($return);
-if($output == 2):
+if($output == 2 || $output == 1):
 echo json_encode(array(
     "word" => $word,
     "code" => $output,
 ));
+
 die;
 endif;
 
