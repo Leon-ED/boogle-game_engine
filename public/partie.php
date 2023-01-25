@@ -29,7 +29,8 @@ if (!isset($_SESSION["user"])) {
     <?php require_once("include/nav_bar.html"); 
     
     $partie = $joueur->getStatPartie($_GET["idPartie"], $_SESSION["idUser"]);
-    $nbMotsTrouves = $partie["NbMotsTrouves"];
+    $motsTrouves = $joueur->getListMotsTrouves($_GET["idPartie"], $_SESSION["idUser"]);
+    $nbMotsTrouves = count($motsTrouves);
     $dureePartie = date("U", strtotime($partie["DateFinPartie"])) - date("U", strtotime($partie["DateDebutPartie"]));
     $dureePartie = $dureePartie / 60;
     $dureePartie = round($dureePartie, 2);
@@ -50,8 +51,6 @@ if (!isset($_SESSION["user"])) {
             <p> Voici la liste des mots que vous avez trouvés : </p>
             <ul>
                 <?php
-                
-                $motsTrouves = $joueur->getListMotsTrouves($_GET["idPartie"], $_SESSION["idUser"]);
                 foreach ($motsTrouves as $mot) {
                     echo "<li>" . $mot["MotsPropose"] . "</li>";
                 }
