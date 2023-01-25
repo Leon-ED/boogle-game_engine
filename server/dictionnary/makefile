@@ -24,6 +24,9 @@ score_len: $(SOURCEDIR)/score_len.c
 	$(CC) -o $(BUILDDIR)/score_len $(SOURCEDIR)/score_len.c
 
 
+solve : $(SOURCEDIR)/solve.c $(SOURCEDIR)/libs.c $(SOURCEDIR)/trees.c $(SOURCEDIR)/grid_path.c
+	$(CC) -o $(BUILDDIR)/solve $(SOURCEDIR)/solve.c $(SOURCEDIR)/libs.c $(SOURCEDIR)/trees.c $(SOURCEDIR)/grid_path.c -DEXTERNAL_DRIVER
+
 clean:
 	rm -f $(SOURCEDIR)/*.o
 
