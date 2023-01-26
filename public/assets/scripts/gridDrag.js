@@ -33,6 +33,15 @@ function onCellMouseDown(event) {
     addWordToInput(cell);
 }
 
+function leaveGrid(){
+    liste = document.querySelectorAll('.case');
+    liste.forEach(function (cell) {
+        cell.classList.remove('selected');
+    });
+    selectedCells = [];
+    inSelection = false;
+}
+
 function addWordToInput(cell){
 
     var word = cell.querySelectorAll('span')[0].innerHTML;
@@ -62,7 +71,7 @@ function dragEnter(event) {
 function initGridDrag() {
 
     var cells = document.querySelectorAll('.case');
-
+    document.getElementById("grille").addEventListener("mouseleave", leaveGrid);
     cells.forEach(function (cell) {
         //console.log(cell);
         cell.addEventListener('mouseenter', dragEnter);
