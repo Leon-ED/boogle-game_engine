@@ -9,9 +9,12 @@ const TIMER_PH = "%MIN%:%SEC%";
 const TIMER_ORIGIN = "03:00";
 var temps_fini = false;
 
+
+
 function updateTimer(reset = false){
     if(reset) {
         document.getElementById("word").removeAttribute("disabled");
+        document.getElementById("word-submit").removeAttribute("disabled");
         document.getElementById('timer-ph').innerHTML = TIMER_ORIGIN;
         return;
     }
@@ -30,14 +33,21 @@ function updateTimer(reset = false){
     document.getElementById('timer-ph').innerHTML = TIMER_PH.replace('%MIN%', newMin).replace('%SEC%', newSec);
     if(date.getMinutes() === 0 && date.getSeconds() === 0) {
         document.getElementById("word").setAttribute("disabled", "disabled");
+        document.getElementById("word-submit").setAttribute("disabled", "disabled");
         temps_fini = true;
-        alert('Temps écoulé');
+        document.getElementById('timer-ph').innerHTML = "Le temps est expiré !";
         return;
     }
 
 }
 
-setInterval(updateTimer, 1000);
+// set interval only on first populateGrid call
+var interval = null;
+function initTimer() {
+    if(interval === null) {
+        interval = setInterval(updateTimer, 1000);
+    }
+}
 
 // Remplis la grille grâce au JSON renvoyé par le serveur
 function populateGrid(json, nbRowsValue, nbColValue) {
@@ -70,6 +80,7 @@ function populateGrid(json, nbRowsValue, nbColValue) {
 
 // Fais un appel au serveur pour récupérer la grille selon les données
 form.addEventListener('click', (e) => {
+    initTimer();
     e.preventDefault();
     document.getElementById('word-list').innerHTML = "<h1>Mots trouvés</h1>";
     const nbColValue = nbCol.value;
