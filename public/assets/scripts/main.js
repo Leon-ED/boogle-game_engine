@@ -6,11 +6,12 @@ const langue = document.getElementById('langue');
 const PROBA_RENVERSEE = 20;
 const LETTRES_AMBIGUES = ['M','W']
 const TIMER_PH = "%MIN%:%SEC%";
-const TIMER_ORIGIN = "3:00";
+const TIMER_ORIGIN = "03:00";
 var temps_fini = false;
 
 function updateTimer(reset = false){
     if(reset) {
+        document.getElementById("word").removeAttribute("disabled");
         document.getElementById('timer-ph').innerHTML = TIMER_ORIGIN;
         return;
     }
@@ -25,6 +26,7 @@ function updateTimer(reset = false){
 
     date.setSeconds(date.getSeconds() - 1);
     if(date.getMinutes() === 0 && date.getSeconds() === 0) {
+        document.getElementById("word").setAttribute("disabled", "disabled");
         temps_fini = true;
         alert('Temps écoulé');
         return;
