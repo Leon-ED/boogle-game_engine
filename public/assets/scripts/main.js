@@ -25,17 +25,15 @@ function updateTimer(reset = false){
     date.setSeconds(sec);
 
     date.setSeconds(date.getSeconds() - 1);
+    const newMin = date.getMinutes();
+    const newSec = date.getSeconds();
+    document.getElementById('timer-ph').innerHTML = TIMER_PH.replace('%MIN%', newMin).replace('%SEC%', newSec);
     if(date.getMinutes() === 0 && date.getSeconds() === 0) {
         document.getElementById("word").setAttribute("disabled", "disabled");
         temps_fini = true;
         alert('Temps écoulé');
         return;
     }
-
-    const newMin = date.getMinutes();
-    const newSec = date.getSeconds();
-
-    document.getElementById('timer-ph').innerHTML = TIMER_PH.replace('%MIN%', newMin).replace('%SEC%', newSec);
 
 }
 
