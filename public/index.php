@@ -18,6 +18,7 @@ if (!isset($_SESSION["user"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/styles/main.css">
     <link rel="stylesheet" href="assets/styles/definitions.css">
+    <script src="assets/scripts/gridDrag.js" defer></script>
     <script src="assets/scripts/main.js" defer></script>
     <script src="assets/scripts/words.js" defer></script>
     <title>Boogle - Le jeu !</title>

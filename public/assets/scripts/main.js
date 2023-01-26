@@ -10,7 +10,6 @@ const LETTRES_AMBIGUES = ['M','W']
 function populateGrid(json, nbRowsValue, nbColValue) {
     const grille = document.getElementById('grille');
     grille.innerHTML = '';
-
     for (var i = 0; i < nbRowsValue; i++) {
         const line = document.createElement('div');
         line.classList.add('ligne');
@@ -32,7 +31,7 @@ function populateGrid(json, nbRowsValue, nbColValue) {
         grille.appendChild(line);
     }
 
-
+    initGridDrag();
 
 }
 
@@ -43,19 +42,19 @@ form.addEventListener('click', (e) => {
     const nbColValue = nbCol.value;
     const nbRowsValue = nbRows.value;
     const langueValue = langue.value;
-    console.log(nbColValue, nbRowsValue, langueValue);
+    //console.log(nbColValue, nbRowsValue, langueValue);
     const url = "../server/api/grille.php";
     const params = `?nbCol=${nbColValue}&nbRows=${nbRowsValue}&langue=${langueValue}`;
     document.getElementById('grille-section').classList.remove('hidden');
     fetch(url + params)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
+            //console.log(data);
             data = data.grille
             populateGrid(data, nbRowsValue, nbColValue);
 
         })
         .catch((error) => {
-            console.error('Error:', error);
+            //console.error('Error:', error);
         });
 });

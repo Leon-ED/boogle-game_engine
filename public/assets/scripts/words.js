@@ -7,7 +7,7 @@ const word = document.getElementById('word-submit');
 word.addEventListener('click', (e) => {
     e.preventDefault();
     const wordValue = document.getElementById('word').value;
-    // console.log(wordValue);
+    // //console.log(wordValue);
     // on vérifie que le mot n'a pas déjà été trouvé
     if (foundWords.includes(wordValue)) {
         alert('Le mot a déjà été trouvé');
@@ -31,12 +31,14 @@ word.addEventListener('click', (e) => {
         .then((response) => response.json())
         .then((data) => {
             // Code 0 = mot trouvé, code 1 = mot non trouvé mais existe dans le dictionnaire, code 2 = mot non existant
+            document.getElementById('word').value = '';
             if (data.code === 0) {
                 document.getElementById('word-list').classList.remove('hidden');
                 foundWords.push(wordValue);
                 addWord(wordValue);
             } else if (data.code === 1) {
                 alert('Le mot n\'est pas dans la grille');
+
             } else {
 
                 alert('Le mot n\'existe pas dans le dictionnaire');
@@ -44,7 +46,7 @@ word.addEventListener('click', (e) => {
 
         })
         .catch((error) => {
-            console.error('Error:', error);
+            //console.error('Error:', error);
         });
 });
 
@@ -76,8 +78,8 @@ function getDefinition(word, wordDiv) {
             //const detailDiv = wordDiv.querySelector('details');
             //const definition = document.createElement('div');
             //detailDiv.appendChild(definition);
-            console.log(data);
-            console.log(wordDiv);
+            //console.log(data);
+            //console.log(wordDiv);
             const ul = document.createElement('ul');
             wordDiv.appendChild(ul);
             data.forEach(element => {
@@ -94,7 +96,7 @@ function getDefinition(word, wordDiv) {
                 const ul2 = document.createElement('ul');
                 details.appendChild(ul2);
                 for (const [key, value] of Object.entries(element)) {
-                    console.log(value);
+                    //console.log(value);
                     if (key !== "title") {
                         const li2 = document.createElement('li');
                         li2.innerHTML = key;
@@ -135,6 +137,6 @@ function getDefinition(word, wordDiv) {
 
         })
         .catch((error) => {
-            console.error('Error:', error);
+            //console.error('Error:', error);
         });
 }
