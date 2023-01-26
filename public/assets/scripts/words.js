@@ -37,11 +37,11 @@ word.addEventListener('click', (e) => {
                 foundWords.push(wordValue);
                 addWord(wordValue);
             } else if (data.code === 1) {
-                alert('Le mot n\'est pas dans la grille');
+                alert('Le mot n\'est pas dans la grille et/ou le dictionnaire');
 
             } else {
 
-                alert('Le mot n\'existe pas dans le dictionnaire');
+                alert('Le mot n\'est pas dans la grille et/ou le dictionnaire');
             }
 
         })

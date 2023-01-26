@@ -54,6 +54,7 @@ if (!isset($_SESSION["user"])) {
                 ?>
         </section>
         <section id="grille-section" class="flex-column hidden">
+            <h3 class="timer">Temps : <span id="timer-ph">03:00</span></h3>
             <div id="grille">
 
             </div>

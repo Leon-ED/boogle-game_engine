@@ -5,6 +5,39 @@ const langue = document.getElementById('langue');
 
 const PROBA_RENVERSEE = 20;
 const LETTRES_AMBIGUES = ['M','W']
+const TIMER_PH = "%MIN%:%SEC%";
+const TIMER_ORIGIN = "3:00";
+var temps_fini = false;
+
+function updateTimer(reset = false){
+    if(reset) {
+        document.getElementById('timer-ph').innerHTML = TIMER_ORIGIN;
+        return;
+    }
+    if(temps_fini) return;
+    const timer = document.getElementById('timer-ph').innerHTML;
+    const min = parseInt(timer.split(':')[0]);
+    const sec = parseInt(timer.split(':')[1]);
+
+    const date = new Date();
+    date.setMinutes(min);
+    date.setSeconds(sec);
+
+    date.setSeconds(date.getSeconds() - 1);
+    if(date.getMinutes() === 0 && date.getSeconds() === 0) {
+        temps_fini = true;
+        alert('Temps écoulé');
+        return;
+    }
+
+    const newMin = date.getMinutes();
+    const newSec = date.getSeconds();
+
+    document.getElementById('timer-ph').innerHTML = TIMER_PH.replace('%MIN%', newMin).replace('%SEC%', newSec);
+
+}
+
+setInterval(updateTimer, 1000);
 
 // Remplis la grille grâce au JSON renvoyé par le serveur
 function populateGrid(json, nbRowsValue, nbColValue) {
@@ -44,6 +77,8 @@ form.addEventListener('click', (e) => {
     const langueValue = langue.value;
     //console.log(nbColValue, nbRowsValue, langueValue);
     const url = "../server/api/grille.php";
+    temps_fini = false;
+    updateTimer(true);
     const params = `?nbCol=${nbColValue}&nbRows=${nbRowsValue}&langue=${langueValue}`;
     document.getElementById('grille-section').classList.remove('hidden');
     fetch(url + params)
