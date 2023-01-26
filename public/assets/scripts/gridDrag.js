@@ -11,15 +11,19 @@ function onCellMouseDown(event) {
 
         cell = cell.parentElement;
     }
+
+
     if(clearBox){
         document.getElementById('word').value = "";
         clearBox = false;
     }
    
     if (cell.classList.contains('selected')) {
+
         selectedCells = selectedCells.filter(function (selectedCell) {
             return selectedCell !== cell;
         });
+        return;
     } else {
         selectedCells.push(cell);
     }
