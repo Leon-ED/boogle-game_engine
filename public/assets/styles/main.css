@@ -96,6 +96,11 @@ nav img {
     border-radius: 10px;
 }
 
+.renversee span{
+    width: 50px;
+    border-bottom: 2px solid black ;
+}
+
 section {
     background-color: var(--white);
     width: fit-content;
@@ -162,7 +167,7 @@ input[type="submit"] {
 
 
 .case:hover {
-    background-color: var(--yellow);
+    background-color: var(--white_sub);
     border-radius: 5px;
 }
 

@@ -22,7 +22,7 @@ word.addEventListener('click', (e) => {
     // On prépare l'envoi de la grille au serveur
     let grilleArray = [];
     lettres.forEach((lettre) => {
-        grilleArray.push(lettre.innerHTML);
+        grilleArray.push(lettre.querySelector('span').innerHTML);
     });
 
     // On envoie l'appel à l'API

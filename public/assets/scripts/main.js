@@ -13,18 +13,20 @@ function populateGrid(json, nbRowsValue, nbColValue) {
 
     for (var i = 0; i < nbRowsValue; i++) {
         const line = document.createElement('div');
-        console.log(line);
         line.classList.add('ligne');
         for (var j = 0; j < nbColValue; j++) {
             var lettre = json[i][j];
-            console.log(lettre);
             const div = document.createElement('div');
             div.classList.add('case');
             if(PROBA_RENVERSEE > Math.floor(Math.random() * 100) && !LETTRES_AMBIGUES.includes(lettre)) {
                 const rotation = Math.floor(Math.random() * 4) * 90;
                 div.style.transform = 'rotate(' + rotation + 'deg)';
+                div.classList.add('renversee');
             }
-            div.innerHTML = lettre;
+            
+            const span_lettre = document.createElement('span');
+            span_lettre.innerHTML = lettre;
+            div.appendChild(span_lettre);
             line.appendChild(div);
         }
         grille.appendChild(line);
