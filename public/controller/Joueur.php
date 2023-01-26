@@ -63,7 +63,7 @@ class Joueur
     public function getParties($nombre)
     {
         global $conn;
-        $sql = "SELECT * FROM partie WHERE idPartie IN (SELECT idPartie FROM jouer WHERE idUser = ?) LIMIT ?";
+        $sql = "SELECT * FROM partie WHERE idPartie IN (SELECT idPartie FROM jouer WHERE idUser = ?) ORDER BY DateFinPartie DESC LIMIT ? ";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(1, $this->idUser);
         $stmt->bindParam(2, $nombre, PDO::PARAM_INT);
