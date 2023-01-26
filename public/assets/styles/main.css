@@ -189,3 +189,19 @@ input[type="submit"] {
 .partie a {
     align-self: center;
 }
+
+@media screen and (max-width: 768px) {
+    .grid-columns {
+        display: block;
+    }
+
+    section {
+        width: 80%;
+    }
+    section h1{
+        text-align: center;
+
+    }
+
+}
+    
