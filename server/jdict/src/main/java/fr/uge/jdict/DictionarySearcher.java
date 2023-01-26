@@ -92,11 +92,8 @@ public class DictionarySearcher {
                 definitions.seek(start);
                 byte[] b = new byte[end - start + 1];
                 definitions.read(b);
-                // String definition = new String(definitions.readLine().getBytes(),
-                // StandardCharsets.UTF_8);
                 String definition = new String(b, "UTF-8");
 
-                // System.out.println("definition : " + definition);
                 JSONObject json = new JSONObject(definition);
                 String title = json.getString("title");
 
@@ -107,11 +104,8 @@ public class DictionarySearcher {
                 } else {
                     normalizedTitle = title;
                 }
-                // System.out.println("word : " + word + " title : " + normalizedTitle);
 
                 if (normalizedTitle.equals(word)) {
-                    // System.out.println("Word found : ");
-                    // System.out.println(json.toString());
                     System.out.println(OutputFormat.convert(json.toString(), format));
 
                     // On a trouvé notre élément et on ne veut pas de frères
@@ -152,9 +146,7 @@ public class DictionarySearcher {
             JSONObject json = new JSONObject(definition);
             String title = json.getString("title");
             String normalizedTitle = DictionaryNormalizer.normalize(title);
-            // System.out.println("word : " + word + " title : " + normalizedTitle);
             if (normalizedTitle.equals(word)) {
-                // System.out.println("Word found : ");
                 System.out.println(OutputFormat.convert(json.toString(), format));
 
             } else {
@@ -174,9 +166,7 @@ public class DictionarySearcher {
             JSONObject json = new JSONObject(definition);
             String title = json.getString("title");
             String normalizedTitle = DictionaryNormalizer.normalize(title);
-            // System.out.println("word : " + word + " title : " + normalizedTitle);
             if (normalizedTitle.equals(word)) {
-                // System.out.println("Word found : ");
                 System.out.println(OutputFormat.convert(json.toString(), format));
 
             } else {
