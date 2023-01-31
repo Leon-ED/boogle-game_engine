@@ -20,6 +20,9 @@ if (!isset($_SESSION["user"])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/styles/main.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+
     <title>Boogle - Le compte </title>
 </head>
 
@@ -41,6 +44,7 @@ if (!isset($_SESSION["user"])) {
             <p>La partie la plus rapide a duré <span class="stat"><?php echo $joueur->partiePlusRapide(); ?></span>.</p>
             </div>
         </section>
+        <div class="flex-row container-compte">
         <section class="section-partie">
             
             <h1>Vos 5 dernières parties :</h1>
@@ -50,6 +54,14 @@ if (!isset($_SESSION["user"])) {
             ?>
             </div>
         </section>
+        <section class="friend-list">
+            <h1>Gestion des amis</h1>
+            <?php
+            $joueur->echoFriendsList();
+            ?>
+
+        </section>
+        </div>
     </main>
 </body>
 

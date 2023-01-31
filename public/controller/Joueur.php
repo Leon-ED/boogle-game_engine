@@ -8,6 +8,9 @@ class Joueur
 
 
     private $idUser;
+    private $email;
+    private $login;
+    private $pseudo;
     private $noStats = false;
     private $noDatas = "<i class='erreur'>Non disponible</i>";
 
@@ -15,7 +18,16 @@ class Joueur
     public function __construct($idUser)
     {
         $this->idUser = $idUser;
+        global $conn;
+        $sql = "SELECT * FROM utilisateur WHERE idUser = :idUser";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(["idUser" => $this->idUser]);
+        $result = $stmt->fetch();
+        $this->email = $result["email"];
+        $this->login = $result["login"];
+        $this->pseudo = $result["pseudoUser"];
     }
+
 
 
     public function nombrePartiesJouees()
@@ -41,7 +53,7 @@ class Joueur
         $stmt->execute(["idUser" => $this->idUser]);
         $result = $stmt->fetch();
         $temps = $result[0];
-        $msg = round($temps / 60,1) . " minutes ($temps secondes)";
+        $msg = round($temps / 60, 1) . " minutes ($temps secondes)";
         return $msg;
     }
 
@@ -55,9 +67,21 @@ class Joueur
         $stmt->execute(["idUser" => $this->idUser]);
         $result = $stmt->fetch();
         $temps = $result[0];
-        $msg = round($temps / 60,1)  . " minutes ($temps secondes)";
+        $msg = round($temps / 60, 1)  . " minutes ($temps secondes)";
         // convert temps to minutes
         return $msg;
+    }
+
+    public function echoInFriendList()
+    {
+        $hash = md5(strtolower(trim($this->email)));
+        echo "<div class='friend'>
+        <div class='friend-header'>
+        <img src='https://www.gravatar.com/avatar/{$hash}?s=200&d=identicon' alt='Profile picture' height='50' />
+            <a href='compte.php?{$this->idUser}' ><h2 class='friendName'>{$this->pseudo}</h2></a>
+            <i class='fas fa-comment-alt-lines'></i>
+        </div>
+        </div>";
     }
 
     public function getParties($nombre)
@@ -100,7 +124,8 @@ class Joueur
         }
     }
 
-    public function getStatPartie($id_partie, $userId) {
+    public function getStatPartie($id_partie, $userId)
+    {
         global $conn;
         $sql = "SELECT * FROM partie p, jouer j WHERE p.idPartie = j.idPartie AND j.idUser = ? AND p.idPartie = ?";
         $stmt = $conn->prepare($sql);
@@ -115,7 +140,8 @@ class Joueur
         return $result;
     }
 
-    public function getListMotsTrouves($id_partie, $idUser) {
+    public function getListMotsTrouves($id_partie, $idUser)
+    {
         global $conn;
         $sql = "SELECT * FROM proposemots WHERE idPartie = ? AND idUser = ?";
         $stmt = $conn->prepare($sql);
@@ -130,9 +156,38 @@ class Joueur
         return $result;
     }
 
-    public function getProfilePicture() {
-        $hash = md5(strtolower(trim($_SESSION["email"])));
-        echo "<img src='https://www.gravatar.com/avatar/{$hash}?s=200&d=identicon' alt='Profile picture' height='150px' />";
+    public function echoFriendsList()
+    {
+        global $conn;
+        $sql = "SELECT * FROM amis WHERE idUser1 = ? OR idUser2 = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $this->idUser);
+        $stmt->bindParam(2, $this->idUser);
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        $result = $stmt->fetchAll();
+        if (count($result) == 0) {
+            echo "<p>Vous n'avez pas encore d'amis</p>";
+        } else {
+            foreach ($result as $friend) {
+                if ($friend["idUser1"] == $this->idUser) {
+                    $id = $friend["idUser2"];
+                } else {
+                    $id = $friend["idUser1"];
+                }
+                $user = new Joueur($id);
+                $user->echoInFriendList();
+            }
+        }
     }
 
+
+    public function getProfilePicture($taille = 150)
+    {
+        $hash = md5(strtolower(trim($this->email)));
+        echo "<img src='https://www.gravatar.com/avatar/{$hash}?s=200&d=identicon' alt='Profile picture' height='{$taille}' />";
+    }
 }

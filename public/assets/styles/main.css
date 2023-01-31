@@ -183,8 +183,10 @@ input[type="submit"] {
 
 
 .section-partie{
-    width: 60%;
+    width: 61%;
     text-align: center;
+    margin-left: auto;
+    margin-right: 0;
 
 }
 
@@ -230,6 +232,33 @@ button:disabled{
     align-self: center;
 }
 
+.container-compte{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+
+.friend{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px;
+    width: 100%;
+}
+
+.friend-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px;
+    gap: 10px;
+    width: 100%;
+}
+
+
+
 .selected{
     background-color: var(--red) !important;
     border-radius: 5px;
@@ -241,11 +270,24 @@ button:disabled{
     }
 
     section {
-        width: 80%;
+        width: 90%;
     }
     section h1{
         text-align: center;
 
+    }
+    .container-compte{
+        flex-direction: column;
+        align-items: center;
+        gap:20px;
+        justify-content: center;
+    }
+    .section-partie{
+        width: 90%;
+        margin: 0;
+    }
+    .partie{
+        width: 100%;
     }
 
 }
