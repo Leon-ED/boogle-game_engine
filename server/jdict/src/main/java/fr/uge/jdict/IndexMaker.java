@@ -54,6 +54,9 @@ public class IndexMaker {
 
     public void addTitle(String title, int length) {
         Integer[] array = new Integer[] { positionOffset, positionOffset + length };
+        if(map.containsKey(title)){
+            title = title + "a";
+        }
         map.put(title, array);
         positionOffset += length;
 

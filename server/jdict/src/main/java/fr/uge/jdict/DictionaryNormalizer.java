@@ -12,7 +12,19 @@ public class DictionaryNormalizer {
         return i;
     }
 
+
+    public static String lightNormalize(String word){
+        word = word.replaceAll("œ", "oe").replaceAll("œ".toUpperCase(), "OE");
+        word = word.replaceAll("æ", "ae").replaceAll("æ".toUpperCase(), "AE");
+        
+        return word;
+    }
+
     public static String normalize(String word) {
+        word = word.toLowerCase();
+        word = lightNormalize(word);
+    
+
         String string = Normalizer
                 .normalize(word, Normalizer.Form.NFD)
                 .replaceAll("[^\\p{ASCII}]", "");

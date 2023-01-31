@@ -52,6 +52,9 @@ public class DictionarySearcher {
     public void search(String definitions_PATH, String index_PATH, String word, OutputFormat format) throws Exception {
         RandomAccessFile indexFile = new RandomAccessFile(index_PATH, "r");
         boolean searchSiblings = (word.equals(word.toUpperCase()));
+        if(!searchSiblings){
+            word = DictionaryNormalizer.lightNormalize(word);
+        }
         // On vérifie que le fichier d'index est valide
         byte[] magic = new byte[8];
         indexFile.read(magic);

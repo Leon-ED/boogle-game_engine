@@ -60,11 +60,18 @@ class XMLManager {
 
     public static boolean isValidtitle(String title) {
         HashSet<Character> BANNED_CHARS = new HashSet<>(Arrays.asList(':', '/', '\\', '?', '*', '<', '>', '|', '"', ' ',
-                '-', '_', ')',
+                '-', '_', ')','`','’','·',
                 '(', '[', ']', '{', '}', '!', '@', '#',
                 '$', '%', '^', '&', '*', '=', '+', '`', '~', ';', '.', ',', '\'', '0', '1', '2', '3', '4', '5', '6',
                 '7', '8', '9'));
-        return !title.chars().noneMatch(c -> BANNED_CHARS.contains((char) c)) || title.length() < 2;
+        return !BANNED_CHARS.stream().anyMatch(c -> title.contains(c + ""));
+
+    }
+    public static boolean isFrenchWord(String title){
+        // return true if the string only contains latin characters
+        title = DictionaryNormalizer.lightNormalize(title);
+        return title.chars().allMatch(c -> (c >= 65 && c <= 90) || (c >= 97 && c <= 122));
+
 
     }
 
@@ -118,11 +125,11 @@ class XMLManager {
                     }
                     // On sauvegarde le titre de la page
                     if (tagName.equals("title") && inPage) {
-                        title = streamReader.getElementText();
+                        title = DictionaryNormalizer.lightNormalize(streamReader.getElementText());
                         // On ne le prends pas s'il contient un espace, un ou plusieurs chiffres ou s'il
                         // fait moins de 2
 
-                        if (isValidtitle(title)) {
+                        if (!isValidtitle(title) && !isFrenchWord(title) || title.length() < 2) {
                             title = "";
                             inPage = false;
                             continue;

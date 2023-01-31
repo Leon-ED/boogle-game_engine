@@ -7,9 +7,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
@@ -33,6 +35,7 @@ public class NormalizedExtractor {
         if (args.length >= 3) {
             definitionsCategories = args[2];
         }
+        // convert definitionsCategories to ArrayList
 
         File definition_FILE = new File(definition_PATH);
         if (!definition_FILE.exists() || definition_FILE.isDirectory()) {
@@ -45,8 +48,8 @@ public class NormalizedExtractor {
 
     private static void extract(String categoriesARG, String definitions_PATH, boolean stdoutput) {
         String language = null;
-        String categories[] = categoriesARG == null ? null : categoriesARG.split(",");
-        Set<String> wordSet = new TreeSet<>(new Comparator<String>() {
+        ArrayList<String> categoriesList =  categoriesARG == null ? null : new ArrayList<>(Arrays.asList(categoriesARG.split(",")));
+        TreeSet<String> wordSet = new TreeSet<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
                 return DictionaryNormalizer.compareNormalized(o1, o2);
@@ -55,26 +58,26 @@ public class NormalizedExtractor {
         String line;
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(definitions_PATH), StandardCharsets.UTF_8)) {
             while ((line = reader.readLine()) != null) {
-
                 JSONObject definition = new JSONObject(line);
                 if (!definition.has("title")) {
                     language = definition.getString("language");
                     continue;
                 }
                 JSONObject categoriesJSON = definition.getJSONObject("definitions");
-                if (categories == null) {
+
+                if(categoriesList == null) {
                     String normalizedWord = DictionaryNormalizer.normalize(definition.getString("title"));
                     wordSet.add(normalizedWord);
                     continue;
                 }
-                for (String type : categories) {
-                    if (categoriesJSON.has(type)) {
-                        String normalizedWord = DictionaryNormalizer.normalize(definition.getString("title"));
-                        wordSet.add(normalizedWord);
-                        break;
-                    }
 
-                }
+                categoriesList.stream().map(String::trim).filter(categoriesJSON::has).findFirst().ifPresent(s -> {
+                    String normalizedWord = DictionaryNormalizer.normalize(definition.getString("title"));
+                    wordSet.add(normalizedWord);
+                });
+
+
+
 
             }
 
@@ -97,7 +100,7 @@ public class NormalizedExtractor {
 
     }
 
-    private static void saveToFile(Set<String> wordSet, Path saveFile_PATH) {
+    private static void saveToFile(TreeSet<String> wordSet, Path saveFile_PATH) {
         try (BufferedWriter writer = Files.newBufferedWriter(saveFile_PATH, StandardCharsets.UTF_8)) {
             for (String word : wordSet) {
                 writer.write(word);
