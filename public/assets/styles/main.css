@@ -181,6 +181,13 @@ input[type="submit"] {
     font-weight: bolder;
 }
 
+
+.section-partie{
+    width: 60%;
+    text-align: center;
+
+}
+
 .partie {
     display: flex;
     flex-direction: column;
@@ -188,8 +195,37 @@ input[type="submit"] {
     background-color: var(--white_sub);
     border-radius: 10px;
     margin: 10px;
+    width: 30%;
 }
 
+.left-profile{
+    margin: 30px;
+
+}
+
+.left-profile button{
+    background-color: var(--green);
+    color: var(--white);
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+}
+
+button:disabled{
+    background-color: var(--gray);
+    cursor: not-allowed;
+}
+
+.partie-liste{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+}
 .partie a {
     align-self: center;
 }

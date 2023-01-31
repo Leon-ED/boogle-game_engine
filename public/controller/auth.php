@@ -40,6 +40,8 @@ function login()
         session_start();
         $_SESSION["user"] = $user;
         $_SESSION["idUser"] = $user["idUser"];
+        $_SESSION["email"] = $user["email"];
+
         header("Location: ../index.php");
         exit();
     } else {
@@ -55,6 +57,7 @@ function register()
     $login = $_POST["login"];
     $password = $_POST["password"];
     $password_confirm = $_POST["password_confirm"];
+    $email = $_POST["email"];
 
     if ($password != $password_confirm) {
         header("Location: ../login.php?error=1");
@@ -63,11 +66,12 @@ function register()
 
     $password = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO utilisateur (pseudoUser,login, password) VALUES (:login,:login, :password)";
+    $sql = "INSERT INTO utilisateur (pseudoUser,login, password,email) VALUES (:login,:login, :password, :email)";
     $stmt = $conn->prepare($sql);
     $stmt->execute(array(
         ":login" => $login,
-        ":password" => $password
+        ":password" => $password,
+        ":email" => $email
     ));
     header("Location: ../login.php");
     exit();

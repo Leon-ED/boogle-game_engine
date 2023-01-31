@@ -55,6 +55,11 @@ if (isset($_SESSION['user'])) {
                         <input type="text" class="form-control" id="login" name="login" aria-describedby="emailHelp" placeholder="Identifiant" required>
                     </div>
                     <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="email@domaine.tld" required>
+
+                    </div>
+                    <div class="form-group">
                         <label for="password">Mot de passe</label>
                         <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe" required>
 

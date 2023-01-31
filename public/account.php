@@ -28,18 +28,27 @@ if (!isset($_SESSION["user"])) {
 
 
     <main class="flex-column">
-        <section>
+        <section class="flex-row">
+            <div class="left-profile flex-column">
+                <?php $joueur->getProfilePicture(); ?>
+                <button class="btn btn-primary" disabled>Modifier la photo de profil</button>
+            </div>
+            <div class="right-profile">
             <h1>Mon compte</h1>
             <p>Bonjour <?php echo $_SESSION["user"]["pseudoUser"]; ?>, voici quelques informations en rapport avec votre compte :</p>
             <p>Vous avez joué <span class="stat"><?php echo $joueur->nombrePartiesJouees(); ?></span> parties.</p>
             <p>La partie la plus longue a duré <span class="stat"><?php echo $joueur->partiePlusLongue(); ?></span>.</p>
             <p>La partie la plus rapide a duré <span class="stat"><?php echo $joueur->partiePlusRapide(); ?></span>.</p>
+            </div>
         </section>
-        <section>
+        <section class="section-partie">
+            
             <h1>Vos 5 dernières parties :</h1>
+            <div class="partie-liste">
             <?php
             $joueur->getParties(5);
             ?>
+            </div>
         </section>
     </main>
 </body>

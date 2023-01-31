@@ -130,4 +130,9 @@ class Joueur
         return $result;
     }
 
+    public function getProfilePicture() {
+        $hash = md5(strtolower(trim($_SESSION["email"])));
+        echo "<img src='https://www.gravatar.com/avatar/{$hash}?s=200&d=identicon' alt='Profile picture' height='150px' />";
+    }
+
 }
